@@ -1,0 +1,38 @@
+1 Создание поля и создание простых компонентов
+2 Создание свойств,
+3 Сохранение свойств
+------------------------------------------------------------------------
+
+1 Запилить простое vue приложение  и внедрить в него rete компоненты
+
+ (тулбар слева, поле справа, на тулбаре кнопка +, при нажатии добавляется компонент,
+		вероятно кнопка добавить связь, кажется в rete она не обязательна).
+
+
+ Схема:
+ (Скорее всего vuejs и rete внесут в эту схему свои коррективы)
+ 
+ Приложение эксплуатирует компонент - редактор схемы
+ 
+ Внутри компонента:
+		
+  TollbarController - клики на кнопках тулбара
+  EditorController - все действия пользователя с компонентами
+  
+  TollbarController и EditorController общаются между собой через посредник
+   (паттерн Mediator).
+  
+
+2 Все компоненты наследуются от BotSchemeEditorComponentBase (extends ReteComponent иликакегонасамомиделезвать)
+
+BotSchemeEditorComponentBase
+ - BotSchemeEditorComponentStart
+ - BotSchemeEditorComponentMessage
+ - BotSchemeEditorComponentTimer
+ - BotSchemeEditorComponentCondition
+ - BotSchemeEditorComponentAction
+
+3 Создание / редактирование свойств и сохранение
+ - Точно рано думать, пока не посмотрю, что там  у rete с экспортом в JSON.
+
+4 Экспорт в JSON
