@@ -14,7 +14,6 @@ const i18n = new VueI18n({
 });
 //end Интернациализация
 
-
 window.app = new Vue({
 	i18n : i18n,
 	el: '#app',
