@@ -1,7 +1,7 @@
 window.jQuery = window.$ = window.jquery = require('jquery');
 window.Vue = require('vue');
 
-Vue.component('bse', require('./views/botSchemeEditor.vue').default);
+Vue.component('bot-scheme-editor', require('./views/botSchemeEditor.vue').default);
 
 
 //Интернациализация

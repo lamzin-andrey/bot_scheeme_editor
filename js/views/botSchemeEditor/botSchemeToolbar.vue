@@ -1,6 +1,10 @@
 <template>
 	<div>
-		<bot-scheme-toolbar-button icon-image="/images/bot-scheme-toolbar/add32.png"></bot-scheme-toolbar-button>
+		<bot-scheme-toolbar-button 
+			@click="onClickAddComponent"
+			@touchstart="onTouchStartAddComponent"
+			:title="$t('app.addComponentHint')"
+			icon_image="/images/bot-scheme-toolbar/add32.png"></bot-scheme-toolbar-button>
 	</div>
 </template>
 <script>
@@ -23,10 +27,23 @@
 		//
 		methods:{
 			/**
-			 * @description
+			 * @description Обработка события touchstart для планшетных устройств
 			*/
-			on() {
-				this.params.onOk.f.call(this.params.onOk.context);
+			onTouchStartAddComponent(event) {
+				//Чтобы не вызвался ещё и onclick
+				event.preventDefault();
+				event.stopImmediatelePropaganation();
+				this._onClickAddComponent();
+			},
+			/**
+			 * @description Обработка события click для desktop устройств
+			*/
+			onClickAddComponent(event) {
+				event.preventDefault();
+				this._onClickAddComponent();
+			},
+			_onClickAddComponent() {
+				this.$emit('toolbarevent', {name: 'addComponentButtonClicked'});
 			}
 		},//end methods
 		//вызывается после data, поля из data видны "напрямую" как this.fieldName

@@ -1,0 +1,12 @@
+First run:
+
+npm install #download node_modules
+
+Next runs (See package.json):
+
+npm run prod # compile minimize output js
+npm run dev # compile debug output js
+npm run watch # watch
+npm run watch-poll # "super" watch
+
+
