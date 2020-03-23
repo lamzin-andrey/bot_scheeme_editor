@@ -30,7 +30,10 @@
 		},
 		//вызывается раньше чем mounted
 		data: function(){return {
-			
+			/** @property {Boolean} isCurrentSchemeModify принимает true когда схема в редакторе изменена, но не сохранена*/
+			isCurrentSchemeModify: false,
+			/** @property {Boolean} isSchemeLoaded принимает true когда в редактор загружена схема */
+			isSchemeLoaded: false,
 		}; },
 		//
 		methods:{
@@ -39,10 +42,60 @@
 			*/
 			onToolbarEvent(event) {
 				switch (event.name) {
+					case 'newSchemeButtonClicked':
+						this.onClickNewSchemeButton();
+						break;
+
 					case 'addComponentButtonClicked':
-						this.$refs.editorArea.addNewComponent();
+						this.onClickAddComponentButton();
 						break;
 				}
+			},
+			/**
+			 * @description Обработка кликов на кнопке Создать новую схему
+			*/
+			onClickAddComponentButton(){
+				if (!this.isSchemeLoaded) {
+					this.loadNewScheme();
+				}
+				this.$refs.editorArea.addNewComponent();
+				
+			},
+			/**
+			 * @description Обработка кликов на кнопке Создать новую схему
+			*/
+			onClickNewSchemeButton(){
+				if (this.isCurrentSchemeModify) {
+					if (this.confirm($t('app.currentSchemeIsChangedDoSaveCurrentScheme'))) {
+						/** @property {Boolean} needCreateNewScheme принимает true когда необходимо создать новую схему после сохранения текущей */
+						this.needCreateNewScheme = true;
+						this.showExportSchemeDialog();
+
+						return;
+					}
+				}
+				this.loadNewScheme();
+			},
+			/**
+			 * @description Показывает диалог экспорта схемы в json
+			*/
+			showExportSchemeDialog() {
+				//TODO
+			},
+			/**
+			 * @description Загружает в редактор шаблон новой схемы по умолчанию (на данный момент это схема с одним блоком "Начало")
+			*/
+			loadNewScheme() {
+				//TODO
+				this.isSchemeLoaded = true;
+			},
+			/**
+			 * @description Показать диалог с вопросом о подтверждении действия
+			 * @param {String} s
+			 * @return Boolean
+			*/
+			confirm(s) {
+				return confirm(s);
 			}
 		},//end methods
 		//вызывается после data, поля из data видны "напрямую" как this.fieldName
@@ -56,6 +109,7 @@
 		border-right-color: #3E97C4;
 		float: left;
 		min-width: 63px;
+		width: 64px;
 		height: 99.5vh;
 		background-color: #ece9d8;
 		text-align: center;
