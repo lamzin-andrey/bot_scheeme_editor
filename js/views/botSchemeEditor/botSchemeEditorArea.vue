@@ -98,6 +98,12 @@
 						'Clone': false,
 					};
 				}
+				if (node.name === 'BeginComponent') {
+					return {
+						'Delete': false,
+						'Clone': false,
+					};
+				}
 				return { 
 					'Click me'(){ console.log('Works for node!') }
 				}
@@ -123,6 +129,19 @@
 			this.editor.use(ConnectionPlugin);
 			this.editor.use(VueRenderPlugin);
 			this.editor.use(ContextMenuPlugin, {
+				searchBar: false, // true by default
+				searchKeep: title => true, // leave item when searching, optional. For example, title => ['Refresh'].includes(title)
+				delay: 100,
+				allocate(component) {
+					//return ['Submenu'];
+				},
+				rename(component) {
+					return component.name;
+				},
+				items: {
+					//'Click me'(){ console.log('Works!') }
+				},
+
 				nodeItems: node => { 
 					return this.configureContextMenu(node);
 				}
