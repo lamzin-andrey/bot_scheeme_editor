@@ -10,7 +10,7 @@
 			<bot-scheme-toolbar @toolbarevent="onToolbarEvent"></bot-scheme-toolbar>
 		</div>
 		<div class="editorarea-wrapper">
-			<bot-scheme-editor-area ref="editorArea"></bot-scheme-editor-area>
+			<bot-scheme-editor-area ref="editorArea" @nodeisaddedevent="onAddedNode"></bot-scheme-editor-area>
 		</div>
 		<div class="clearfix"></div>
 	</div>
@@ -46,19 +46,19 @@
 						this.onClickNewSchemeButton();
 						break;
 
-					case 'addComponentButtonClicked':
-						this.onClickAddComponentButton();
+					case 'addMessageBlockButtonClicked':
+						this.onClickAddMessageButton();
 						break;
 				}
 			},
 			/**
 			 * @description Обработка кликов на кнопке Создать новую схему
 			*/
-			onClickAddComponentButton(){
+			onClickAddMessageButton(){
 				if (!this.isSchemeLoaded) {
 					this.loadNewScheme();
 				}
-				this.$refs.editorArea.addNewComponent();
+				this.$refs.editorArea.addNewMessageBlock();
 				
 			},
 			/**
@@ -66,7 +66,7 @@
 			*/
 			onClickNewSchemeButton(){
 				if (this.isCurrentSchemeModify) {
-					if (this.confirm($t('app.currentSchemeIsChangedDoSaveCurrentScheme'))) {
+					if (this.confirm(this.$t('app.currentSchemeIsChangedWantSaveCurrentScheme'))) {
 						/** @property {Boolean} needCreateNewScheme принимает true когда необходимо создать новую схему после сохранения текущей */
 						this.needCreateNewScheme = true;
 						this.showExportSchemeDialog();
@@ -81,12 +81,15 @@
 			*/
 			showExportSchemeDialog() {
 				//TODO
+				alert(`Вы должны были увидеть интерфейс для экспорта в JSON или даже должна была
+				начаться загрузка JSON файла, но это пока не готово.`);
 			},
 			/**
 			 * @description Загружает в редактор шаблон новой схемы по умолчанию (на данный момент это схема с одним блоком "Начало")
 			*/
 			loadNewScheme() {
-				//TODO
+				this.$refs.editorArea.clear();
+				this.$refs.editorArea.addBeginBlock();
 				this.isSchemeLoaded = true;
 			},
 			/**
@@ -96,6 +99,9 @@
 			*/
 			confirm(s) {
 				return confirm(s);
+			},
+			onAddedNode() {
+				this.isCurrentSchemeModify = true;
 			}
 		},//end methods
 		//вызывается после data, поля из data видны "напрямую" как this.fieldName

@@ -1,7 +1,22 @@
+https://codepen.io/Ni55aN/pen/MOYPEz
+https://codepen.io/Ni55aN/pen/rpOKNb
+https://www.npmjs.com/package/rete-context-menu-plugin
+
 1 Создание поля и создание простых компонентов
 2 Создание свойств,
 3 Сохранение свойств
 ------------------------------------------------------------------------
+
+Так как связи нет, пока не ломимся в открытую дверь (это в основном касается плагина к.меню).
+Делаем как легче, не забывая однако о лёгкости конфигурации и поддержки.
+createNode не надо чтобы что-то возвращал, это лишнее.
+
+
+
+При загрузке готовой схемы устанавливать blockCounter!
+
+
+
 
 1 Запилить простое vue приложение  и внедрить в него rete компоненты
 
@@ -23,16 +38,30 @@
    (паттерн Mediator).
   
 
-2 Все компоненты наследуются от BotSchemeEditorComponentBase (extends ReteComponent иликакегонасамомиделезвать)
+2 Часть компонентов наследуется от Rete.Component
 
-BotSchemeEditorComponentBase
+Rete.Component
  - BotSchemeEditorComponentStart
  - BotSchemeEditorComponentMessage
  - BotSchemeEditorComponentTimer
+ 
+BotSchemeEditorCompositeComponent extends Rete.Component (так как они составные, могут иметь несколько условий или действий)
  - BotSchemeEditorComponentCondition
  - BotSchemeEditorComponentAction
+ 
+2.1 Общие методы базового класса BotSchemeEditorCompositeComponent
+   addItemInList(String)
+   setType(String)
+   
+   
+   
+   
+   
 
 3 Создание / редактирование свойств и сохранение
  - Точно рано думать, пока не посмотрю, что там  у rete с экспортом в JSON.
 
 4 Экспорт в JSON
+
+
+* Проверить свойство title в JSON объекте, может там всё круто вообще

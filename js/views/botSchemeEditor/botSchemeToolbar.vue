@@ -7,10 +7,10 @@
 			icon_image="/images/bot-scheme-toolbar/new32.png"></bot-scheme-toolbar-button>
 
 		<bot-scheme-toolbar-button 
-			@click="onClickAddComponent"
-			@touchstart="onTouchStartAddComponent"
-			:title="$t('app.addComponentHint')"
-			icon_image="/images/bot-scheme-toolbar/add32.png"></bot-scheme-toolbar-button>
+			@click="onClickAddMessageBlock"
+			@touchstart="onTouchStartAddMessageBlock"
+			:title="$t('app.addMessageBlockHint')"
+			icon_image="/images/bot-scheme-toolbar/addMessage32.png"></bot-scheme-toolbar-button>
 	</div>
 </template>
 <script>
@@ -35,18 +35,18 @@
 			/**
 			 * @description Обработка события touchstart для планшетных устройств
 			*/
-			onTouchStartAddComponent(event) {
+			onTouchStartAddMessageBlock(event) {
 				//Чтобы не вызвался ещё и onclick
 				event.preventDefault();
 				event.stopImmediatelePropaganation();
-				this._emitToolbarEvent('addComponentButtonClicked');
+				this._emitToolbarEvent('addMessageBlockButtonClicked');
 			},
 			/**
 			 * @description Обработка события click для desktop устройств
 			*/
-			onClickAddComponent(event) {
+			onClickAddMessageBlock(event) {
 				event.preventDefault();
-				this._emitToolbarEvent('addComponentButtonClicked');
+				this._emitToolbarEvent('addMessageBlockButtonClicked');
 			},
 			/**
 			 * @description Обработка события touchstart для планшетных устройств
