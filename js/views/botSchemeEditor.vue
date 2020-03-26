@@ -10,11 +10,15 @@
 			<bot-scheme-toolbar @toolbarevent="onToolbarEvent"></bot-scheme-toolbar>
 		</div>
 		<div class="editorarea-wrapper">
-			<bot-scheme-editor-area ref="editorArea" @nodeisaddedevent="onAddedNode"></bot-scheme-editor-area>
+			<bot-scheme-editor-area ref="editorArea" 
+				@nodeisaddedevent="onAddedNode"
+				@nodenotfoundevent="onNodeNotFound"
+				@editnodeevent="onStartEditNodeContent"
+			></bot-scheme-editor-area>
 		</div>
 		<div class="clearfix"></div>
-		<div class="message-text-editor-wrapper">
-			<bot-scheme-message-editor @toolbarevent="onToolbarEvent"></bot-scheme-message-editor>
+		<div class="message-text-editor-wrapper" :style="{'display':cssMessageEditorVisible}">
+			<bot-scheme-message-editor ref="messageEditor"  @editorpropertyrevent="onPropertyEditorEvent"></bot-scheme-message-editor>
 		</div>
 	</div>
 </template>
@@ -38,6 +42,8 @@
 			isCurrentSchemeModify: false,
 			/** @property {Boolean} isSchemeLoaded принимает true когда в редактор загружена схема */
 			isSchemeLoaded: false,
+			/** @property {String} cssMessageEditorVisible отвечает за отображение редактора текста сообщения */
+			cssMessageEditorVisible : 'none',
 		}; },
 		//
 		methods:{
@@ -63,7 +69,6 @@
 					this.loadNewScheme();
 				}
 				this.$refs.editorArea.addNewMessageBlock();
-				
 			},
 			/**
 			 * @description Обработка кликов на кнопке Создать новую схему
@@ -104,8 +109,54 @@
 			confirm(s) {
 				return confirm(s);
 			},
-			onAddedNode() {
+			/**
+			 * @description Показать сообщение
+			 * @param {String} s
+			*/
+			alert(s) {
+				alert(s);
+			},
+			/**
+			 * @description Событие, когда на схему добавлен новый узел
+			*/
+			onAddedNode(event) {
 				this.isCurrentSchemeModify = true;
+				this.$refs.messageEditor.setBlockId(event.id);
+				this.$refs.messageEditor.setMessageText('');
+				this.cssMessageEditorVisible = 'block';
+			},
+			/**
+			 * @description Событие, когда на схеме не найден узел с тем или иным идентификатором
+			 * @param {Object} event {id:Number}
+			*/
+			onNodeNotFound(event) {
+				this.alert(event.msg);
+			},
+			/**
+			 * @description Событие, когда надо начать редактирование свойств узла
+			 * @param {Object} event {id:Number, nodeType:String, nodeData: Object}
+			*/
+			onStartEditNodeContent(event) {
+				switch (event.nodeType) {
+					case 'MessageComponent':
+						this.$refs.messageEditor.setBlockId(event.id);
+						this.$refs.messageEditor.setMessageText(event.nodeData.msg);
+						this.cssMessageEditorVisible = 'block';
+						break;
+				}
+			},
+			/**
+			 * @description Событие, когда произошли какие-то действия в редакторе свойств блока
+			*/
+			onPropertyEditorEvent(event) {
+				switch (event.type) {
+					case 'saveMessage':
+						this.$refs.editorArea.updateBlockMessageText(event.id, event.message);
+						break;
+					case 'close':
+						this.cssMessageEditorVisible = 'none';//TODO
+						break;
+				}
 			}
 		},//end methods
 		//вызывается после data, поля из data видны "напрямую" как this.fieldName
@@ -132,5 +183,11 @@
 	}
 	.clearfix {
 		clear:both;
+	}
+	.message-text-editor-wrapper{
+		position:absolute;
+		right:0px;
+		top:0px;
+		z-index:1;
 	}
 </style>

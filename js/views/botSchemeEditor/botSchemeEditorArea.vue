@@ -42,8 +42,8 @@
 			 * @description Добавление блока сообщения
 			*/
 			addNewMessageBlock() {
-				this.addBlock('MessageComponent');
-				this.$emit('nodeisaddedevent');
+				let id = this.addBlock('MessageComponent');
+				this.$emit('nodeisaddedevent', {id});
 			},
 			/**
 			 * @description Удаляет всё со схемы
@@ -68,22 +68,24 @@
 			/**
 			 * @description Добавляет на поле элемент
 			 * @param {String} sBlockType
+			 * @return {Number} id созданного узла
 			*/
 			addBlock(sBlockType) {
-				let oSchemeData = this.editor.toJSON();
-				//Добавим данные для создания блока
-				let o = {
-					id: this.blockCounter.toString(10),
-					data: {},
-					group: null,
-					inputs: {},
-					outputs: {},
-					position: [0, 0],
-					name: sBlockType
-				};
+				let oSchemeData = this.editor.toJSON(),
+					//Добавим данные для создания блока
+					o = {
+						id: this.blockCounter.toString(10),
+						data: {},
+						group: null,
+						inputs: {},
+						outputs: {},
+						position: [0, 0],
+						name: sBlockType
+					};
 				oSchemeData.nodes[this.blockCounter.toString(10)] = o;
 				this.blockCounter++;
 				this.refresh(oSchemeData);
+				return o.id;
 			},
 			/**
 			 * @description Удаляет с поля элемент по id
@@ -93,6 +95,36 @@
 				let oSchemeData = this.editor.toJSON();
 				delete oSchemeData.nodes[nId];
 				this.refresh(oSchemeData);
+			},
+			/**
+			 * @description Ищет данные блока и отправляет их посреднику,
+			 * 				чтобы тот загрузил их в соответсвующий редактор свойств
+			 * @param {Number} nId
+			*/
+			emitEditBlockEvent(nId) {
+				let oSchemeData = this.editor.toJSON(),
+					eventData = {id: nId};
+				if (!oSchemeData.nodes[nId]) {
+					this.$emit('nodenotfoundevent', {msg: 'Unable find node with id ' + nId, noSavedData: null});
+					return;
+				}
+				eventData.nodeType =  oSchemeData.nodes[nId].name;
+				eventData.nodeData = oSchemeData.nodes[nId].data;
+				this.$emit('editnodeevent', eventData);
+			},
+			/**
+			 * @description Сохранить данные сообщения на схеме
+			 * @property {Number} nId
+			 * @property {String} sMessage
+			*/
+			updateBlockMessageText(nId, sMessage) {
+				let oSchemeData = this.editor.toJSON();
+				if (oSchemeData.nodes[nId]) {
+					oSchemeData.nodes[nId].data.msg = sMessage;
+					this.refresh(oSchemeData);
+				} else {
+					this.$emit('nodenotfoundevent', {msg: 'Unable find node with id ' + nId, noSavedData: sMessage});
+				}
 			},
 			/**
 			 * @description Это функция, которая вызывается в объекте конфигурации ContextMenuPlugin 
@@ -106,7 +138,7 @@
 							that.removeBlockById(node.id);
 						},
 						'Редактировать'() {
-							console.log('Wil edit');
+							that.emitEditBlockEvent(node.id);
 						},
 						'Delete': false,
 						'Clone': false,
