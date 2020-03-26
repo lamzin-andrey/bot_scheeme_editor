@@ -13,6 +13,9 @@
 			<bot-scheme-editor-area ref="editorArea" @nodeisaddedevent="onAddedNode"></bot-scheme-editor-area>
 		</div>
 		<div class="clearfix"></div>
+		<div class="message-text-editor-wrapper">
+			<bot-scheme-message-editor @toolbarevent="onToolbarEvent"></bot-scheme-message-editor>
+		</div>
 	</div>
 </template>
 <script>
@@ -20,6 +23,7 @@
 		name: 'botSchemeEditor',
 		
 		components:{
+			'bot-scheme-message-editor': require('./botSchemeEditor/botSchemeMessageEditor.vue').default,
 			'bot-scheme-toolbar': require('./botSchemeEditor/botSchemeToolbar.vue').default,
 			'bot-scheme-editor-area': require('./botSchemeEditor/botSchemeEditorArea.vue').default
 		},
