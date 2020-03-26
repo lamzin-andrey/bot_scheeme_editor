@@ -7,9 +7,10 @@
 	import Rete from "rete";
 	import ConnectionPlugin from 'rete-connection-plugin';
 	import ContextMenuPlugin from 'rete-context-menu-plugin';
+	import AlightRenderPlugin from 'rete-alight-render-plugin';
 	import VueRenderPlugin from 'rete-vue-render-plugin';
-	import BotSchemeEditorMessageComponent from '../../classes/botschemeeditormessagecomponent';
-	import BotSchemeEditorBeginComponent from '../../classes/botschemeeditorbegincomponent';
+	import BotSchemeEditorMessageComponent from '../../classes/retecomponents/botschemeeditormessagecomponent';
+	import BotSchemeEditorBeginComponent from '../../classes/retecomponents/botschemeeditorbegincomponent';
 	// /Rete
 
 
@@ -58,6 +59,7 @@
 			 * @param {Object} oSchemeData Данные схемы
 			*/
 			refresh(oSchemeData) {
+				oSchemeData = oSchemeData ? oSchemeData : this.editor.toJSON();
 				this.editor.fromJSON(oSchemeData).then(() => {
 					this.editor.view.resize();
 					this.compile();
@@ -74,8 +76,8 @@
 					id: this.blockCounter.toString(10),
 					data: {},
 					group: null,
-					inputs: {},  //Это надо делать, невозможно подцепить связь
-					outputs: {}, //Это генерится автоматически
+					inputs: {},
+					outputs: {},
 					position: [0, 0],
 					name: sBlockType
 				};
@@ -84,15 +86,27 @@
 				this.refresh(oSchemeData);
 			},
 			/**
+			 * @description Удаляет с поля элемент по id
+			 * @param {Number} nId
+			*/
+			removeBlockById(nId) {
+				let oSchemeData = this.editor.toJSON();
+				delete oSchemeData.nodes[nId];
+				this.refresh(oSchemeData);
+			},
+			/**
 			 * @description Это функция, которая вызывается в объекте конфигурации ContextMenuPlugin 
 			 * для nodeItems
 			*/
 			configureContextMenu(node) {
+				let that = this;
 				if (node.name === 'MessageComponent') {
 					return {
 						'Удалить'() {
-							this.removeBlockById(node.id);//TODO
-							console.log('Works for add node!');
+							that.removeBlockById(node.id);
+						},
+						'Редактировать'() {
+							console.log('Wil edit');
 						},
 						'Delete': false,
 						'Clone': false,
@@ -126,8 +140,10 @@
 			console.log(this.container);
 			this.editor = new Rete.NodeEditor('demo@0.1.0', this.container);
 
+			this.editor.use(AlightRenderPlugin);
 			this.editor.use(ConnectionPlugin);
-			this.editor.use(VueRenderPlugin);
+			//this.editor.use(VueRenderPlugin);
+			
 			this.editor.use(ContextMenuPlugin, {
 				searchBar: false, // true by default
 				searchKeep: title => true, // leave item when searching, optional. For example, title => ['Refresh'].includes(title)
