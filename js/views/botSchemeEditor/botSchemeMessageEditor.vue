@@ -48,6 +48,13 @@
 				this.editNodeId = id;
 			},
 			/**
+			 * @description Получить идентификатор узла, данные которого загружены в редактор
+			 * @return Number
+			*/
+			getBlockId() {
+				return this.editNodeId;
+			},
+			/**
 			 * @description Установить текст сообщения
 			 * @property  {String} text
 			*/
@@ -93,7 +100,7 @@
 	}
 	.bot-scheme-editor-property-editor-textarea {
 		resize: vertical;
-		width:100%;
+		width:98%;
 	}
 	.bot-scheme-editor-property-editor-button {
 		border:rgb(100, 89, 89) 2px solid;

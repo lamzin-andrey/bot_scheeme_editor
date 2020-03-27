@@ -1,19 +1,28 @@
 import Rete from "rete";
+import BotSchemeEditorCompoundControl from "../retecontrols/botschemeeditorcompoundcontrol";
 
 /**
- * @class BotSchemeEditorCompositeComponent базовый для компонентов условий и действий
+ * @class BotSchemeEditorCompoundComponent базовый для компонентов условий и действий
 */
-class BotSchemeEditorCompositeComponent extends Rete.Component{
+class BotSchemeEditorCompoundComponent extends Rete.Component{
 	/**
 	 * @param {String} sComponentId string id компонента. На схеме могут быть один или несколько блоков такого "класса"
 	 * @param {Rete.Socket} oSocket Сокет для соединения компонентов
-	 * @param {VueI18n} translator 
+	 * @param {VueI18n} translator
 	*/
-	constructor(sComponentId, oSocket) {
+	constructor(sComponentId, oSocket, translator) {
 		super(sComponentId);
+		/** @property {String} sLabelOfType Текст "Условие" или "Действие", определяется в Child */
+		this.sLabelOfType = '';
+		/** @property {String} sTypeInfo например текст "По всем" или "Достаточно одного", определяется в Child */
+		this.sTypeInfo = '';
+		/** @property {String} sDefaultDescriptionText например текст "Краткое описание условия" или "Краткое описание действия", определяется в Child */
+		this.sDefaultDescriptionText = '';
+
 		this.sComponentId = sComponentId;
 		this.socket = oSocket;
-        this.$t = translator;
+		this.$t = translator;
+		
 
 		/* Возможно, что-то подобное понадобится
 		this.task = {
@@ -36,9 +45,16 @@ class BotSchemeEditorCompositeComponent extends Rete.Component{
 	builder(node) {
         let outputYes = new Rete.Output('yes', this.$t('app.Yes'), this.socket, false),
             outputNo = new Rete.Output('no', this.$t('app.No'), this.socket, false),
-			input = new Rete.Input('input', this.$t('app.Enter'), this.socket, false);
+            outputParralels = new Rete.Output('parallelExecuting', this.$t('app.parallelExecuting'), this.socket, false),
+			input = new Rete.Input('input', this.$t('app.Enter'), this.socket, true),
+			ctrl = new BotSchemeEditorCompoundControl(this.editor, node.data.interval,
+														 this.$t, this.sLabelOfType, this.sTypeInfo);
+			ctrl.setDefaultDescription(this.sDefaultDescriptionText);
+		
+		node.addControl(ctrl);
 		node.addOutput(outputYes);
 		node.addOutput(outputNo);
+		node.addOutput(outputParralels);
 		node.addInput(input);
     }
     /**
@@ -63,4 +79,4 @@ class BotSchemeEditorCompositeComponent extends Rete.Component{
 		return {key: outputs};
 	}
 }
-export default BotSchemeEditorCompositeComponent;
+export default BotSchemeEditorCompoundComponent;

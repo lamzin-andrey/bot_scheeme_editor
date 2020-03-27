@@ -14,6 +14,7 @@
 				@nodeisaddedevent="onAddedNode"
 				@nodenotfoundevent="onNodeNotFound"
 				@editnodeevent="onStartEditNodeContent"
+				@deletenodeevent="onNodeDeleted"
 			></bot-scheme-editor-area>
 		</div>
 		<div class="clearfix"></div>
@@ -59,7 +60,46 @@
 					case 'addMessageBlockButtonClicked':
 						this.onClickAddMessageButton();
 						break;
+
+					case 'addTimerBlockButtonClicked':
+						this.onClickAddTimerButton();
+						break;
+
+					case 'addConditionBlockButtonClicked':
+						this.onClickAddConditionButton();
+						break;
+
+					case 'addActionBlockButtonClicked':
+						this.onClickAddActionButton();
+						break;
 				}
+			},
+			/**
+			 * @description Обработка кликов на кнопке Добавить действие
+			*/
+			onClickAddActionButton(){
+				if (!this.isSchemeLoaded) {
+					this.loadNewScheme();
+				}
+				this.$refs.editorArea.addNewActionBlock();
+			},
+			/**
+			 * @description Обработка кликов на кнопке Добавить условие
+			*/
+			onClickAddConditionButton(){
+				if (!this.isSchemeLoaded) {
+					this.loadNewScheme();
+				}
+				this.$refs.editorArea.addNewConditionBlock();
+			},
+			/**
+			 * @description Обработка кликов на кнопке Добавить таймер
+			*/
+			onClickAddTimerButton(){
+				if (!this.isSchemeLoaded) {
+					this.loadNewScheme();
+				}
+				this.$refs.editorArea.addNewTimerBlock();
 			},
 			/**
 			 * @description Обработка кликов на кнопке Создать новую схему
@@ -90,7 +130,7 @@
 			*/
 			showExportSchemeDialog() {
 				//TODO
-				alert(`Вы должны были увидеть интерфейс для экспорта в JSON или даже должна была
+				this.alert(`Вы должны были увидеть интерфейс для экспорта в JSON или даже должна была
 				начаться загрузка JSON файла, но это пока не готово.`);
 			},
 			/**
@@ -121,9 +161,11 @@
 			*/
 			onAddedNode(event) {
 				this.isCurrentSchemeModify = true;
-				this.$refs.messageEditor.setBlockId(event.id);
-				this.$refs.messageEditor.setMessageText('');
-				this.cssMessageEditorVisible = 'block';
+				if (event.type == 'MessageComponent') {
+					this.$refs.messageEditor.setBlockId(event.id);
+					this.$refs.messageEditor.setMessageText('');
+					this.cssMessageEditorVisible = 'block';
+				}
 			},
 			/**
 			 * @description Событие, когда на схеме не найден узел с тем или иным идентификатором
@@ -131,6 +173,15 @@
 			*/
 			onNodeNotFound(event) {
 				this.alert(event.msg);
+			},
+			/**
+			 * @description Событие, когда со схемы удалён узел
+			 * @param {Object} event {id:Number}
+			*/
+			onNodeDeleted(event) {
+				if (this.$refs.messageEditor.getBlockId() == event.id) {
+					this.cssMessageEditorVisible = 'none';
+				}
 			},
 			/**
 			 * @description Событие, когда надо начать редактирование свойств узла
@@ -178,7 +229,7 @@
 	.editorarea-wrapper {
 		/*border: solid 1px #AAFF00;*/
 		float:left;
-		min-width: calc(100% - 70px);
+		width: calc(100% - 70px);
 		height: 99.5vh;
 	}
 	.clearfix {

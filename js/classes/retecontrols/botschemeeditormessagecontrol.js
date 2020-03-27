@@ -12,6 +12,7 @@ class BotSchemeEditorMessageControl extends Rete.Control {
     }
 
     update() {
+        //putData Устанавливает в данных узла редактора node.data.msg
         this.putData('msg', this.scope.value);
         this.emitter.trigger('process');
         this._alight.scan();

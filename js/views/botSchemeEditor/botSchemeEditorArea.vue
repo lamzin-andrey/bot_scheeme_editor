@@ -8,10 +8,13 @@
 	import ConnectionPlugin from 'rete-connection-plugin';
 	import ContextMenuPlugin from 'rete-context-menu-plugin';
 	import AlightRenderPlugin from 'rete-alight-render-plugin';
-	import VueRenderPlugin from 'rete-vue-render-plugin';
+	//import VueRenderPlugin from 'rete-vue-render-plugin';
+	// /Rete
 	import BotSchemeEditorMessageComponent from '../../classes/retecomponents/botschemeeditormessagecomponent';
 	import BotSchemeEditorBeginComponent from '../../classes/retecomponents/botschemeeditorbegincomponent';
-	// /Rete
+	import BotSchemeEditorTimerComponent from '../../classes/retecomponents/botschemeeditortimercomponent';
+	import BotSchemeEditorConditionComponent from '../../classes/retecomponents/botschemeeditorconditioncomponent';
+	import BotSchemeEditorActionComponent from '../../classes/retecomponents/botschemeeditoractioncomponent';
 
 
 	export default {
@@ -42,8 +45,29 @@
 			 * @description Добавление блока сообщения
 			*/
 			addNewMessageBlock() {
-				let id = this.addBlock('MessageComponent');
-				this.$emit('nodeisaddedevent', {id});
+				let type = 'MessageComponent', id = this.addBlock(type);
+				this.$emit('nodeisaddedevent', {id, type});
+			},
+			/**
+			 * @description Добавление блока действия
+			*/
+			addNewActionBlock() {
+				let type = 'ActionComponent', id = this.addBlock(type);
+				this.$emit('nodeisaddedevent', {id, type});
+			},
+			/**
+			 * @description Добавление блока условия
+			*/
+			addNewConditionBlock() {
+				let type = 'ConditionComponent', id = this.addBlock(type);
+				this.$emit('nodeisaddedevent', {id, type});
+			},
+			/**
+			 * @description Добавление блока таймера
+			*/
+			addNewTimerBlock() {
+				let type = 'TimerComponent', id = this.addBlock(type);
+				this.$emit('nodeisaddedevent', {id, type});
 			},
 			/**
 			 * @description Удаляет всё со схемы
@@ -95,6 +119,7 @@
 				let oSchemeData = this.editor.toJSON();
 				delete oSchemeData.nodes[nId];
 				this.refresh(oSchemeData);
+				this.$emit('deletenodeevent', {id: nId});
 			},
 			/**
 			 * @description Ищет данные блока и отправляет их посреднику,
@@ -139,6 +164,15 @@
 						},
 						'Редактировать'() {
 							that.emitEditBlockEvent(node.id);
+						},
+						'Delete': false,
+						'Clone': false,
+					};
+				}
+				if (node.name === 'TimerComponent') {
+					return {
+						'Удалить'() {
+							that.removeBlockById(node.id);
 						},
 						'Delete': false,
 						'Clone': false,
@@ -199,8 +233,12 @@
 			this.engine = new Rete.Engine('demo@0.1.0');
 
 			let aComponents = [new BotSchemeEditorMessageComponent('MessageComponent', this.botSchemeEditorSocket, this.$t),
-							   new BotSchemeEditorBeginComponent('BeginComponent', this.botSchemeEditorSocket, this.$t) ],
-							   i;
+							   new BotSchemeEditorBeginComponent('BeginComponent', this.botSchemeEditorSocket, this.$t),
+							   new BotSchemeEditorTimerComponent('TimerComponent', this.botSchemeEditorSocket, this.$t),
+							   new BotSchemeEditorConditionComponent('ConditionComponent', this.botSchemeEditorSocket, this.$t),
+							   new BotSchemeEditorActionComponent('ActionComponent', this.botSchemeEditorSocket, this.$t)
+							  ],
+							  i;
 			//TODO forEach
 			for (let i = 0; i < aComponents.length; i++) {
 				this.editor.register(aComponents[i]);
@@ -208,8 +246,9 @@
 			}
 			
 			this.editor.on('process nodecreated noderemoved connectioncreated connectionremoved', async () => {
-			    await this.engine.abort();
-			    await this.engine.process(this.editor.toJSON());
+			    /*await this.engine.abort();
+				await this.engine.process(this.editor.toJSON());*/
+				this.compile();
 			});
 		}
 	}
