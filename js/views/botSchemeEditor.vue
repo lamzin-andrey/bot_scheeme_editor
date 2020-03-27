@@ -18,8 +18,35 @@
 			></bot-scheme-editor-area>
 		</div>
 		<div class="clearfix"></div>
-		<div class="message-text-editor-wrapper" :style="{'display':cssMessageEditorVisible}">
-			<bot-scheme-message-editor ref="messageEditor"  @editorpropertyrevent="onPropertyEditorEvent"></bot-scheme-message-editor>
+		<!-- Редактор блока Message -->
+		<div class="property-editor-wrapper" :style="{'display':cssMessageEditorVisible}">
+			<bot-scheme-message-editor ref="messageEditor"  @editorpropertyevent="onPropertyEditorEvent"></bot-scheme-message-editor>
+		</div>
+		<!-- Редактор блока условий -->
+		<div class="property-editor-wrapper" :style="{'display':cssConditionEditorVisible}">
+			<bot-scheme-compound-object-editor ref="conditionEditor"
+											   @editorpropertyevent="onPropertyEditorEvent"
+											   :editor_title="$t('app.EditConditionDialogTitle')"
+											   :str_value_label="$t('app.ConditionType')"
+											   :default_description="$t('app.ShortCondDesc')"
+											   :append_label="$t('app.AppendCondition')"
+											   :edit_label="$t('app.EditCondition')"
+											   :delete_label="$t('app.DeleteCondition')"
+											   :items_label="$t('app.Conditions')"
+											   ></bot-scheme-compound-object-editor>
+		</div>
+		<!-- Редактор блока действий -->
+		<div class="property-editor-wrapper" :style="{'display':cssActionEditorVisible}">
+			<bot-scheme-compound-object-editor ref="actionEditor"
+											   @editorpropertyevent="onPropertyEditorEvent"
+											   :editor_title="$t('app.EditActionDialogTitle')"
+											   :str_value_label="$t('app.ActionType')"
+											   :default_description="$t('app.ShortActDesc')"
+											   :append_label="$t('app.AppendAction')"
+											   :edit_label="$t('app.EditAction')"
+											   :delete_label="$t('app.DeleteAction')"
+											   :items_label="$t('app.Actions')"
+											   ></bot-scheme-compound-object-editor>
 		</div>
 	</div>
 </template>
@@ -30,7 +57,8 @@
 		components:{
 			'bot-scheme-message-editor': require('./botSchemeEditor/botSchemeMessageEditor.vue').default,
 			'bot-scheme-toolbar': require('./botSchemeEditor/botSchemeToolbar.vue').default,
-			'bot-scheme-editor-area': require('./botSchemeEditor/botSchemeEditorArea.vue').default
+			'bot-scheme-editor-area': require('./botSchemeEditor/botSchemeEditorArea.vue').default,
+			'bot-scheme-compound-object-editor': require('./botSchemeEditor/botSchemeCompoundObjectEditor.vue').default
 		},
 
 		//Аргументы (html атрибуты) извне
@@ -45,6 +73,10 @@
 			isSchemeLoaded: false,
 			/** @property {String} cssMessageEditorVisible отвечает за отображение редактора текста сообщения */
 			cssMessageEditorVisible : 'none',
+			/** @property {String} cssConditionEditorVisible отвечает за отображение редактора блока Условий */
+			cssConditionEditorVisible : 'none',
+			/** @property {String} cssActionEditorVisible отвечает за отображение редактора блока Действий */
+			cssActionEditorVisible : 'none',
 		}; },
 		//
 		methods:{
@@ -162,9 +194,22 @@
 			onAddedNode(event) {
 				this.isCurrentSchemeModify = true;
 				if (event.type == 'MessageComponent') {
+					//this.hideAllEditors();//TODO
 					this.$refs.messageEditor.setBlockId(event.id);
 					this.$refs.messageEditor.setMessageText('');
 					this.cssMessageEditorVisible = 'block';
+				}
+				if (event.type == 'ConditionComponent') {
+					//this.hideAllEditors();//TODO
+					//this.$refs.conditionEditor.setBlockId(event.id);
+					//this.$refs.conditionEditor.setMessageText('');
+					this.cssConditionEditorVisible = 'block';
+				}
+				if (event.type == 'ActionComponent') {
+					//this.hideAllEditors();//TODO
+					//this.$refs.conditionEditor.setBlockId(event.id);
+					//this.$refs.conditionEditor.setMessageText('');
+					this.cssActionEditorVisible = 'block';
 				}
 			},
 			/**
@@ -235,7 +280,7 @@
 	.clearfix {
 		clear:both;
 	}
-	.message-text-editor-wrapper{
+	.property-editor-wrapper{
 		position:absolute;
 		right:0px;
 		top:0px;

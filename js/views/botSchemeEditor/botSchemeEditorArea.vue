@@ -227,17 +227,17 @@
 				nodeItems: node => { 
 					return this.configureContextMenu(node);
 				}
-			});
+			});			
 			
 
 			this.engine = new Rete.Engine('demo@0.1.0');
 
 			let aComponents = [new BotSchemeEditorMessageComponent('MessageComponent', this.botSchemeEditorSocket, this.$t),
-							   new BotSchemeEditorBeginComponent('BeginComponent', this.botSchemeEditorSocket, this.$t),
-							   new BotSchemeEditorTimerComponent('TimerComponent', this.botSchemeEditorSocket, this.$t),
-							   new BotSchemeEditorConditionComponent('ConditionComponent', this.botSchemeEditorSocket, this.$t),
-							   new BotSchemeEditorActionComponent('ActionComponent', this.botSchemeEditorSocket, this.$t)
-							  ],
+								new BotSchemeEditorBeginComponent('BeginComponent', this.botSchemeEditorSocket, this.$t),
+								new BotSchemeEditorTimerComponent('TimerComponent', this.botSchemeEditorSocket, this.$t),
+								new BotSchemeEditorConditionComponent('ConditionComponent', this.botSchemeEditorSocket, this.$t),
+							 	new BotSchemeEditorActionComponent('ActionComponent', this.botSchemeEditorSocket, this.$t)
+							],
 							  i;
 			//TODO forEach
 			for (let i = 0; i < aComponents.length; i++) {

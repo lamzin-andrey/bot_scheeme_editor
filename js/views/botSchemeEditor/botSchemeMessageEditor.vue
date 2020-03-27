@@ -16,7 +16,7 @@
 </template>
 <script>
 	export default {
-		name: 'botSchemeToolbar',
+		name: 'botSchemeMessageEditor',
 
 		//Аргументы (html атрибуты) извне
 		props:{
@@ -24,7 +24,7 @@
 		},
 
 		components:{
-			'bot-scheme-toolbar-button': require('./botSchemeToolbar/botSchemeToolbarButton.vue').default
+			
 		},
 
 		//вызывается раньше чем mounted
@@ -38,7 +38,7 @@
 			 * @description Обработка клика на кнопке "Сохранить"
 			*/
 			onClickSave(event) {
-				this.$emit('editorpropertyrevent', {type:'saveMessage', id: this.editNodeId, message: this.content});
+				this.$emit('editorpropertyevent', {type:'saveMessage', id: this.editNodeId, message: this.content});
 			},
 			/**
 			 * @description Установка id узла редактируемого сообщепния
@@ -69,52 +69,3 @@
 		}
 	}
 </script>
-<style scoped>
-	.bot-scheme-editor-property-editor-block {
-		height: 100vh;
-		width: 320px;
-		background-color: #ece9d8;
-	}
-	.clearfix {
-		clear:both;
-	}
-	.bot-scheme-editor-property-editor-title-wrapper {
-		border: 2px solid rgb(100, 89, 89);
-	}
-	.bot-scheme-editor-property-editor-title {
-		padding:4px 0px 4px 10px;
-		font-weight: bold;
-		color:rgb(100, 89, 89);
-		float:left;
-		font-size: 12px;
-	}
-	.bot-scheme-editor-property-editor-title-close {
-		float:right;
-		border:rgb(100, 89, 89) 1px solid;
-		cursor: pointer;
-		padding: 0 3px;
-		height: 22px;
-	}
-	.bot-scheme-editor-property-editor-title-close:hover {
-		background-color: rgb(180, 179, 173);
-	}
-	.bot-scheme-editor-property-editor-textarea {
-		resize: vertical;
-		width:98%;
-	}
-	.bot-scheme-editor-property-editor-button {
-		border:rgb(100, 89, 89) 2px solid;
-		color: rgb(100, 89, 89);
-		background-color: #ece9d8;
-		cursor:pointer;
-	}
-	.text-right {
-		text-align: right;
-	}
-	.mb-3 {
-		margin-bottom: 1rem;
-	}
-	.mt-3 {
-		margin-top: 1rem;
-	}
-</style>
