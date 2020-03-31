@@ -52,7 +52,8 @@
 			 * @description Добавление блока действия
 			*/
 			addNewActionBlock() {
-				let type = 'ActionComponent', id = this.addBlock(type);
+				let type = 'ActionComponent',
+					id = this.addBlock(type);
 				this.$emit('nodeisaddedevent', {id, type});
 			},
 			/**

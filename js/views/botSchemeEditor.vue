@@ -202,13 +202,21 @@
 				if (event.type == 'ConditionComponent') {
 					this.hideAllEditors();
 					this.$refs.conditionEditor.setBlockId(event.id);
-					//this.$refs.conditionEditor.setMessageText('');
+					this.$refs.conditionEditor.setData({
+						sType: this.$t('app.ByOR'),
+						short_description: this.$t('app.ShortCondDesc'),
+						aItems: []
+					});
 					this.cssConditionEditorVisible = 'block';
 				}
 				if (event.type == 'ActionComponent') {
 					this.hideAllEditors();
 					this.$refs.actionEditor.setBlockId(event.id);
-					//this.$refs.conditionEditor.setMessageText('');
+					this.$refs.actionEditor.setData({
+						sType: this.$t('app.ActionType'),
+						short_description: this.$t('app.ShortActDesc'),
+						aItems: []
+					});
 					this.cssActionEditorVisible = 'block';
 				}
 			},
