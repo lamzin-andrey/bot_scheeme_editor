@@ -44,7 +44,7 @@
 		</div>
 		<hr>
 		<div class="text-right mt-3">
-			<button @click="onClickSave" class="bot-scheme-editor-property-editor-button">{{ $t('app.Save') }}</button>
+			<button @click="onClickSave" class="bot-scheme-editor-property-editor-button">{{ $t('app.SaveData') }}</button>
 			<button @click="$emit('editorpropertyevent', {type:'close'})" class="bot-scheme-editor-property-editor-button">{{ $t('app.Close') }}</button>
 		</div>
 	</div>
@@ -108,7 +108,7 @@
 
 		//вызывается раньше чем mounted
 		data: function(){return {
-			/** @property {String} content текст сообщения, который может быть отредактирован */
+			/** @property {String} content текст одного из списка свойств */
 			content : '',
 
 			/** @property {String} stringValue Строковое значение для редактирования. Например в ConditionControl это Тип условия  */
@@ -140,20 +140,39 @@
 			 * @description Обработка клика на кнопке "Сохранить"
 			*/
 			onClickSave(event) {
-				this.$emit('editorpropertyrevent', {type:'saveMessage', id: this.editNodeId, message: this.content});
+				this.$emit('editorpropertyrevent', {
+					type: 'saveCompound',
+					nId: this.editNodeId, 
+					sTypeLabel: this.stringValue,
+					sDescription: this.userDescription,
+					aItems: this.items
+				});
 			},
 			/**
+			 * TODO при редактировании задаём nextId максимальный id из всех item of items
 			 * @description Обработка клика на кнопке "Сохранить" для текста одного условия или действия
+			 * @param {Event} event {id - идентификатор элемента в списке составных условий}
 			*/
 			onClickSaveItemContent(event) {
+				/** @property {Number} nextId используется для вычисления нового идентификатора свойства составного условия или действия */
+				this.nextId = this.nextId ? this.nextId : 0;
+
 				if (this.nEditItemId == -1) {
-					this.items.push( {id : this.items.length, content: this.content} );
-					this.nEditItemId = this.items.length - 1;
+					this.items.push( {id : this.nextId, content: this.content} );
+					this.nEditItemId = this.nextId;
+					this.nextId++;
 				} else {
 					let oItem = this.$refs['item' + this.nEditItemId][0];
 					if (oItem) {
 						oItem.setContent(this.content);
 					}
+					//установить данные в массиве, который будет сохранён
+					this.items = this.items.map((item, index, arr) => {
+						if (item.id == this.nEditItemId) {
+							item.content = this.content;
+						}
+						return item;
+					});
 				}
 			},
 			/**
@@ -200,7 +219,7 @@
 		},//end methods
 		//вызывается после data, поля из data видны "напрямую" как this.fieldName
 		mounted() {
-
+			this.userDescription = this.default_description;
 		}
 	}
 </script>

@@ -1713,6 +1713,8 @@ var locales = {
       'ByAND': 'If  all true (AND)',
       'ActionType': 'Action type',
       'Action': 'Action',
+      'Actions': 'Actions',
+      'SaveData': 'Save data',
       'AppendAction': 'Append condition',
       'DeleteAction': 'Delete condition',
       'EditAction': 'Edit condition',
@@ -1749,6 +1751,7 @@ var locales = {
       'ActionType': 'Тип действия',
       'Action': 'Действие',
       'Actions': 'Действия',
+      'SaveData': 'Сохранить данные',
       'AppendAction': 'Добавить действие',
       'DeleteAction': 'Удалить действие',
       'EditAction': 'Править действи',
@@ -2253,7 +2256,7 @@ __webpack_require__.r(__webpack_exports__);
   //вызывается раньше чем mounted
   data: function data() {
     return {
-      /** @property {String} content текст сообщения, который может быть отредактирован */
+      /** @property {String} content текст одного из списка свойств */
       content: '',
 
       /** @property {String} stringValue Строковое значение для редактирования. Например в ConditionControl это Тип условия  */
@@ -2288,28 +2291,47 @@ __webpack_require__.r(__webpack_exports__);
     */
     onClickSave: function onClickSave(event) {
       this.$emit('editorpropertyrevent', {
-        type: 'saveMessage',
-        id: this.editNodeId,
-        message: this.content
+        type: 'saveCompound',
+        nId: this.editNodeId,
+        sTypeLabel: this.stringValue,
+        sDescription: this.userDescription,
+        aItems: this.items
       });
     },
 
     /**
+     * TODO при редактировании задаём nextId максимальный id из всех item of items
      * @description Обработка клика на кнопке "Сохранить" для текста одного условия или действия
+     * @param {Event} event {id - идентификатор элемента в списке составных условий}
     */
     onClickSaveItemContent: function onClickSaveItemContent(event) {
+      var _this = this;
+
+      /** @property {Number} nextId используется для вычисления нового идентификатора свойства составного условия или действия */
+      this.nextId = this.nextId ? this.nextId : 0;
+
       if (this.nEditItemId == -1) {
         this.items.push({
-          id: this.items.length,
+          id: this.nextId,
           content: this.content
         });
-        this.nEditItemId = this.items.length - 1;
+        this.nEditItemId = this.nextId;
+        this.nextId++;
       } else {
         var oItem = this.$refs['item' + this.nEditItemId][0];
 
         if (oItem) {
           oItem.setContent(this.content);
-        }
+        } //установить данные в массиве, который будет сохранён
+
+
+        this.items = this.items.map(function (item, index, arr) {
+          if (item.id == _this.nEditItemId) {
+            item.content = _this.content;
+          }
+
+          return item;
+        });
       }
     },
 
@@ -2361,7 +2383,9 @@ __webpack_require__.r(__webpack_exports__);
   },
   //end methods
   //вызывается после data, поля из data видны "напрямую" как this.fieldName
-  mounted: function mounted() {}
+  mounted: function mounted() {
+    this.userDescription = this.default_description;
+  }
 });
 
 /***/ }),
@@ -55586,7 +55610,7 @@ var render = function() {
           staticClass: "bot-scheme-editor-property-editor-button",
           on: { click: _vm.onClickSave }
         },
-        [_vm._v(_vm._s(_vm.$t("app.Save")))]
+        [_vm._v(_vm._s(_vm.$t("app.SaveData")))]
       ),
       _vm._v(" "),
       _c(
