@@ -4,7 +4,7 @@
 			<div class="bot-scheme-editor-property-editor-title">
 				{{ editor_title }}
 			</div>
-			<div @click="$emit('editorpropertyrevent', {type:'close'})" class="bot-scheme-editor-property-editor-title-close">&times;</div>
+			<div @click="$emit('editorpropertyevent', {type:'close'})" class="bot-scheme-editor-property-editor-title-close">&times;</div>
 			<div class="clearfix"></div>
 		</div>
 
@@ -21,12 +21,17 @@
 										 :append_label="append_label"
 										 :edit_label="edit_label"
 										 :delete_label="delete_label"
+										 :initial_content="item.content"
+										 :ref="`item${item.id}`"
+										 :id="item.id"
+										 @edititemofcompoundobject="onClickEditItem"
+										 @deleteitemofcompoundobject="onClickDeleteItem"
 										 ></bot-scheme-compound-editor-list-item>
 		</div>
 		<hr>
 			<div>
 				<label class="bot-scheme-editor-property-add-item-label">{{ append_label }}</label>
-				<bot-scheme-compound-editor-list-item-button :title="append_label" icon_image="/images/bot-scheme-toolbar/add32.png"></bot-scheme-compound-editor-list-item-button>
+				<bot-scheme-compound-editor-list-item-button @click="onClickAddItemButton" :title="append_label" icon_image="/images/bot-scheme-toolbar/add32.png"></bot-scheme-compound-editor-list-item-button>
 				<div class="clearfix"></div>
 			</div>
 		<hr>
@@ -40,7 +45,7 @@
 		<hr>
 		<div class="text-right mt-3">
 			<button @click="onClickSave" class="bot-scheme-editor-property-editor-button">{{ $t('app.Save') }}</button>
-			<button @click="$emit('editorpropertyrevent', {type:'close'})" class="bot-scheme-editor-property-editor-button">{{ $t('app.Close') }}</button>
+			<button @click="$emit('editorpropertyevent', {type:'close'})" class="bot-scheme-editor-property-editor-button">{{ $t('app.Close') }}</button>
 		</div>
 	</div>
 </template>
@@ -113,13 +118,24 @@
 			userDescription : '',
 
 			/** @property {String} items массив свойств  */
-			items: [{id: 1}, {id: 2}, {id: 3} , {id: 4}],
+			items: [],
+
+			/** @property {Number} nEditItemId индекс в массиве items того элемента, который редактируется */
+			nEditItemId : -1,
 
 			/** @property {String} cssContentEditorVisible отвечает за видимость блока сохранения содержимого однго условия */
 			cssContentEditorVisible: 'none'
 		}; },
 		//
-		methods:{
+		methods : {
+			/**
+			 * @description Обработка клика на кнопке "Добавить" - показывается поле ввода списка
+			*/
+			onClickAddItemButton() {
+				this.nEditItemId = -1;
+				this.content = '';
+				this.cssContentEditorVisible = 'block';
+			},
 			/**
 			 * @description Обработка клика на кнопке "Сохранить"
 			*/
@@ -130,11 +146,19 @@
 			 * @description Обработка клика на кнопке "Сохранить" для текста одного условия или действия
 			*/
 			onClickSaveItemContent(event) {
-				//TODO
+				if (this.nEditItemId == -1) {
+					this.items.push( {id : this.items.length, content: this.content} );
+					this.nEditItemId = this.items.length - 1;
+				} else {
+					let oItem = this.$refs['item' + this.nEditItemId][0];
+					if (oItem) {
+						oItem.setContent(this.content);
+					}
+				}
 			},
 			/**
 			 * @description Установка id узла редактируемого сообщепния
-			 * @property {Number} id
+			 * @param {Number} id
 			*/
 			setBlockId(id) {
 				this.editNodeId = id;
@@ -148,12 +172,31 @@
 			},
 			/**
 			 * @description Установить текст сообщения
-			 * @property  {String} text
+			 * @param  {String} text
 			*/
 			setMessageText(text) {
 				this.content = text;
 			},
-			
+			/**
+			 * @description Обработка на клике кнопки Править списка условий или действий 
+			 * @param  {Event} event {id, content}
+			*/
+			onClickEditItem(event) {
+				this.nEditItemId = event.id;
+				this.content = event.content;
+				this.cssContentEditorVisible = 'block';
+			},
+			/**
+			 * @description Обработка на клике кнопки Удалить списка условий или действий 
+			 * @param  {Event} event {id}
+			*/
+			onClickDeleteItem(event) {
+				this.content = '';
+				this.cssContentEditorVisible = 'none';
+				this.items = this.items.filter((item, index, arr) => {
+					return item.id != event.id;
+				});
+			}
 		},//end methods
 		//вызывается после data, поля из data видны "напрямую" как this.fieldName
 		mounted() {

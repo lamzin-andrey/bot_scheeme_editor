@@ -1,8 +1,9 @@
 <template>
 	<div class="bot-scheme-editor-list-block">
-		<bot-scheme-compound-editor-list-item-button :title="delete_label" icon_image="/images/bot-scheme-toolbar/delete32.png"></bot-scheme-compound-editor-list-item-button>
-		<bot-scheme-compound-editor-list-item-button :title="edit_label" icon_image="/images/bot-scheme-toolbar/edit32.png"></bot-scheme-compound-editor-list-item-button>
+		<bot-scheme-compound-editor-list-item-button @click="onClickDeleteItem" :title="delete_label" icon_image="/images/bot-scheme-toolbar/delete32.png"></bot-scheme-compound-editor-list-item-button>
+		<bot-scheme-compound-editor-list-item-button @click="onClickEditItem" :title="edit_label" icon_image="/images/bot-scheme-toolbar/edit32.png"></bot-scheme-compound-editor-list-item-button>
 		{{ content }}
+		<div class="clearfix"></div>
 	</div>
 </template>
 <script>	
@@ -23,6 +24,16 @@
 			delete_label: {
 				type: String,
 				default: 'Delete'
+			},
+			/** @property {String} delete_label Текст по умолчанию */
+			initial_content: {
+				type: String,
+				default: ''
+			},
+			/** @property {Number} delete_label Идентификатор */
+			id: {
+				type: Number,
+				default: -1
 			}
 		},
 
@@ -30,31 +41,48 @@
 			'bot-scheme-compound-editor-list-item-button': require('./botSchemeCompoundEditorListItemButton').default
 		},
 
-
+		computed: {
+			/**
+			 * @description Вывод контента элемента списка
+			 * @return String
+			*/
+			content() {
+				return this.actual_content ? this.actual_content : this.initial_content;
+			}
+		},
 
 		//вызывается раньше чем mounted
 		data: function(){return {
-			/** @property {String} content текст элемента списка */
-			content : ` Товарищи! сложившаяся структура организации в значительной степени обуславливает создание позиций, занимаемых участниками в отношении поставленных задач. Не следует, однако забывать, что укрепление и развитие структуры влечет за собой процесс внедрения и модернизации направлений прогрессивного развития. Равным образом реализация намеченных плановых заданий обеспечивает широкому кругу (специалистов) участие в формировании позиций, занимаемых участниками в отношении поставленных задач.
-
-Значимость этих проблем настолько очевидна, что рамки и место обучения кадров позволяет выполнять важные задания по разработке направлений прогрессивного развития. Значимость этих проблем настолько очевидна, что начало повседневной работы по формированию позиции обеспечивает широкому кругу (специалистов) участие в формировании существенных финансовых и административных условий. Задача организации, в особенности же консультация с широким активом влечет за собой процесс внедрения и модернизации позиций, занимаемых участниками в отношении поставленных задач. Идейные соображения высшего порядка, а также новая модель организационной деятельности в значительной степени обуславливает создание модели развития. Равным образом укрепление и развитие структуры обеспечивает широкому кругу (специалистов) участие в формировании новых предложений. `,
-
-			
+			/** @property {String} content текст элемента списка (после редактирования и он же используется для передачи в Rete.node) */
+			actual_content : ''
 		}; },
+
 		//
 		methods:{
 			/**
-			 * @description Обработка клика на кнопке "Сохранить"
+			 * @description Изменить контент свойства
+			 * @param {String} sContent
 			*/
-			on(event) {
-				
+			setContent(sContent) {
+				this.actual_content = sContent;
 			},
-			
+			/**
+			 * @description
+			*/
+			onClickEditItem() {
+				this.$emit('edititemofcompoundobject', {id: this.id, content: this.actual_content});
+			},
+			/**
+			 * @description
+			*/
+			onClickDeleteItem() {
+				this.$emit('deleteitemofcompoundobject', {id: this.id});
+			}
 			
 		},//end methods
 		//вызывается после data, поля из data видны "напрямую" как this.fieldName
 		mounted() {
-
+			this.actual_content = this.initial_content;
 		}
 	}
 </script>

@@ -2038,25 +2038,35 @@ __webpack_require__.r(__webpack_exports__);
       this.isCurrentSchemeModify = true;
 
       if (event.type == 'MessageComponent') {
-        //this.hideAllEditors();//TODO
+        this.hideAllEditors();
         this.$refs.messageEditor.setBlockId(event.id);
         this.$refs.messageEditor.setMessageText('');
         this.cssMessageEditorVisible = 'block';
       }
 
       if (event.type == 'ConditionComponent') {
-        //this.hideAllEditors();//TODO
-        //this.$refs.conditionEditor.setBlockId(event.id);
-        //this.$refs.conditionEditor.setMessageText('');
+        this.hideAllEditors();
+        this.$refs.conditionEditor.setBlockId(event.id); //this.$refs.conditionEditor.setMessageText('');
+
         this.cssConditionEditorVisible = 'block';
       }
 
       if (event.type == 'ActionComponent') {
-        //this.hideAllEditors();//TODO
-        //this.$refs.conditionEditor.setBlockId(event.id);
-        //this.$refs.conditionEditor.setMessageText('');
+        this.hideAllEditors();
+        this.$refs.actionEditor.setBlockId(event.id); //this.$refs.conditionEditor.setMessageText('');
+
         this.cssActionEditorVisible = 'block';
       }
+    },
+
+    /**
+     * @description Скрыть все редакторы узлов
+     * @param {Object} event {id:Number}
+    */
+    hideAllEditors: function hideAllEditors() {
+      this.cssMessageEditorVisible = 'none';
+      this.cssConditionEditorVisible = 'none';
+      this.cssActionEditorVisible = 'none';
     },
 
     /**
@@ -2074,6 +2084,14 @@ __webpack_require__.r(__webpack_exports__);
     onNodeDeleted: function onNodeDeleted(event) {
       if (this.$refs.messageEditor.getBlockId() == event.id) {
         this.cssMessageEditorVisible = 'none';
+      }
+
+      if (this.$refs.actionEditor.getBlockId() == event.id) {
+        this.cssActionEditorVisible = 'none';
+      }
+
+      if (this.$refs.conditionEditor.getBlockId() == event.id) {
+        this.cssConditionEditorVisible = 'none';
       }
     },
 
@@ -2101,8 +2119,7 @@ __webpack_require__.r(__webpack_exports__);
           break;
 
         case 'close':
-          this.cssMessageEditorVisible = 'none'; //TODO
-
+          this.hideAllEditors();
           break;
       }
     }
@@ -2123,6 +2140,11 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2241,15 +2263,10 @@ __webpack_require__.r(__webpack_exports__);
       userDescription: '',
 
       /** @property {String} items массив свойств  */
-      items: [{
-        id: 1
-      }, {
-        id: 2
-      }, {
-        id: 3
-      }, {
-        id: 4
-      }],
+      items: [],
+
+      /** @property {Number} nEditItemId индекс в массиве items того элемента, который редактируется */
+      nEditItemId: -1,
 
       /** @property {String} cssContentEditorVisible отвечает за видимость блока сохранения содержимого однго условия */
       cssContentEditorVisible: 'none'
@@ -2257,6 +2274,15 @@ __webpack_require__.r(__webpack_exports__);
   },
   //
   methods: {
+    /**
+     * @description Обработка клика на кнопке "Добавить" - показывается поле ввода списка
+    */
+    onClickAddItemButton: function onClickAddItemButton() {
+      this.nEditItemId = -1;
+      this.content = '';
+      this.cssContentEditorVisible = 'block';
+    },
+
     /**
      * @description Обработка клика на кнопке "Сохранить"
     */
@@ -2271,12 +2297,25 @@ __webpack_require__.r(__webpack_exports__);
     /**
      * @description Обработка клика на кнопке "Сохранить" для текста одного условия или действия
     */
-    onClickSaveItemContent: function onClickSaveItemContent(event) {//TODO
+    onClickSaveItemContent: function onClickSaveItemContent(event) {
+      if (this.nEditItemId == -1) {
+        this.items.push({
+          id: this.items.length,
+          content: this.content
+        });
+        this.nEditItemId = this.items.length - 1;
+      } else {
+        var oItem = this.$refs['item' + this.nEditItemId][0];
+
+        if (oItem) {
+          oItem.setContent(this.content);
+        }
+      }
     },
 
     /**
      * @description Установка id узла редактируемого сообщепния
-     * @property {Number} id
+     * @param {Number} id
     */
     setBlockId: function setBlockId(id) {
       this.editNodeId = id;
@@ -2292,10 +2331,32 @@ __webpack_require__.r(__webpack_exports__);
 
     /**
      * @description Установить текст сообщения
-     * @property  {String} text
+     * @param  {String} text
     */
     setMessageText: function setMessageText(text) {
       this.content = text;
+    },
+
+    /**
+     * @description Обработка на клике кнопки Править списка условий или действий 
+     * @param  {Event} event {id, content}
+    */
+    onClickEditItem: function onClickEditItem(event) {
+      this.nEditItemId = event.id;
+      this.content = event.content;
+      this.cssContentEditorVisible = 'block';
+    },
+
+    /**
+     * @description Обработка на клике кнопки Удалить списка условий или действий 
+     * @param  {Event} event {id}
+    */
+    onClickDeleteItem: function onClickDeleteItem(event) {
+      this.content = '';
+      this.cssContentEditorVisible = 'none';
+      this.items = this.items.filter(function (item, index, arr) {
+        return item.id != event.id;
+      });
     }
   },
   //end methods
@@ -2321,6 +2382,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /**
  * Этот комонент может быть сконфигурирован как для редактора блока условий, так и для редактора блока действий
@@ -2339,28 +2401,73 @@ __webpack_require__.r(__webpack_exports__);
     delete_label: {
       type: String,
       "default": 'Delete'
+    },
+
+    /** @property {String} delete_label Текст по умолчанию */
+    initial_content: {
+      type: String,
+      "default": ''
+    },
+
+    /** @property {Number} delete_label Идентификатор */
+    id: {
+      type: Number,
+      "default": -1
     }
   },
   components: {
     'bot-scheme-compound-editor-list-item-button': __webpack_require__(/*! ./botSchemeCompoundEditorListItemButton */ "./js/views/botSchemeEditor/botSchemeCompoundObjectEditor/botSchemeCompoundEditorListItemButton.vue")["default"]
   },
+  computed: {
+    /**
+     * @description Вывод контента элемента списка
+     * @return String
+    */
+    content: function content() {
+      return this.actual_content ? this.actual_content : this.initial_content;
+    }
+  },
   //вызывается раньше чем mounted
   data: function data() {
     return {
-      /** @property {String} content текст элемента списка */
-      content: " \u0422\u043E\u0432\u0430\u0440\u0438\u0449\u0438! \u0441\u043B\u043E\u0436\u0438\u0432\u0448\u0430\u044F\u0441\u044F \u0441\u0442\u0440\u0443\u043A\u0442\u0443\u0440\u0430 \u043E\u0440\u0433\u0430\u043D\u0438\u0437\u0430\u0446\u0438\u0438 \u0432 \u0437\u043D\u0430\u0447\u0438\u0442\u0435\u043B\u044C\u043D\u043E\u0439 \u0441\u0442\u0435\u043F\u0435\u043D\u0438 \u043E\u0431\u0443\u0441\u043B\u0430\u0432\u043B\u0438\u0432\u0430\u0435\u0442 \u0441\u043E\u0437\u0434\u0430\u043D\u0438\u0435 \u043F\u043E\u0437\u0438\u0446\u0438\u0439, \u0437\u0430\u043D\u0438\u043C\u0430\u0435\u043C\u044B\u0445 \u0443\u0447\u0430\u0441\u0442\u043D\u0438\u043A\u0430\u043C\u0438 \u0432 \u043E\u0442\u043D\u043E\u0448\u0435\u043D\u0438\u0438 \u043F\u043E\u0441\u0442\u0430\u0432\u043B\u0435\u043D\u043D\u044B\u0445 \u0437\u0430\u0434\u0430\u0447. \u041D\u0435 \u0441\u043B\u0435\u0434\u0443\u0435\u0442, \u043E\u0434\u043D\u0430\u043A\u043E \u0437\u0430\u0431\u044B\u0432\u0430\u0442\u044C, \u0447\u0442\u043E \u0443\u043A\u0440\u0435\u043F\u043B\u0435\u043D\u0438\u0435 \u0438 \u0440\u0430\u0437\u0432\u0438\u0442\u0438\u0435 \u0441\u0442\u0440\u0443\u043A\u0442\u0443\u0440\u044B \u0432\u043B\u0435\u0447\u0435\u0442 \u0437\u0430 \u0441\u043E\u0431\u043E\u0439 \u043F\u0440\u043E\u0446\u0435\u0441\u0441 \u0432\u043D\u0435\u0434\u0440\u0435\u043D\u0438\u044F \u0438 \u043C\u043E\u0434\u0435\u0440\u043D\u0438\u0437\u0430\u0446\u0438\u0438 \u043D\u0430\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0439 \u043F\u0440\u043E\u0433\u0440\u0435\u0441\u0441\u0438\u0432\u043D\u043E\u0433\u043E \u0440\u0430\u0437\u0432\u0438\u0442\u0438\u044F. \u0420\u0430\u0432\u043D\u044B\u043C \u043E\u0431\u0440\u0430\u0437\u043E\u043C \u0440\u0435\u0430\u043B\u0438\u0437\u0430\u0446\u0438\u044F \u043D\u0430\u043C\u0435\u0447\u0435\u043D\u043D\u044B\u0445 \u043F\u043B\u0430\u043D\u043E\u0432\u044B\u0445 \u0437\u0430\u0434\u0430\u043D\u0438\u0439 \u043E\u0431\u0435\u0441\u043F\u0435\u0447\u0438\u0432\u0430\u0435\u0442 \u0448\u0438\u0440\u043E\u043A\u043E\u043C\u0443 \u043A\u0440\u0443\u0433\u0443 (\u0441\u043F\u0435\u0446\u0438\u0430\u043B\u0438\u0441\u0442\u043E\u0432) \u0443\u0447\u0430\u0441\u0442\u0438\u0435 \u0432 \u0444\u043E\u0440\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0438 \u043F\u043E\u0437\u0438\u0446\u0438\u0439, \u0437\u0430\u043D\u0438\u043C\u0430\u0435\u043C\u044B\u0445 \u0443\u0447\u0430\u0441\u0442\u043D\u0438\u043A\u0430\u043C\u0438 \u0432 \u043E\u0442\u043D\u043E\u0448\u0435\u043D\u0438\u0438 \u043F\u043E\u0441\u0442\u0430\u0432\u043B\u0435\u043D\u043D\u044B\u0445 \u0437\u0430\u0434\u0430\u0447.\n\n\u0417\u043D\u0430\u0447\u0438\u043C\u043E\u0441\u0442\u044C \u044D\u0442\u0438\u0445 \u043F\u0440\u043E\u0431\u043B\u0435\u043C \u043D\u0430\u0441\u0442\u043E\u043B\u044C\u043A\u043E \u043E\u0447\u0435\u0432\u0438\u0434\u043D\u0430, \u0447\u0442\u043E \u0440\u0430\u043C\u043A\u0438 \u0438 \u043C\u0435\u0441\u0442\u043E \u043E\u0431\u0443\u0447\u0435\u043D\u0438\u044F \u043A\u0430\u0434\u0440\u043E\u0432 \u043F\u043E\u0437\u0432\u043E\u043B\u044F\u0435\u0442 \u0432\u044B\u043F\u043E\u043B\u043D\u044F\u0442\u044C \u0432\u0430\u0436\u043D\u044B\u0435 \u0437\u0430\u0434\u0430\u043D\u0438\u044F \u043F\u043E \u0440\u0430\u0437\u0440\u0430\u0431\u043E\u0442\u043A\u0435 \u043D\u0430\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0439 \u043F\u0440\u043E\u0433\u0440\u0435\u0441\u0441\u0438\u0432\u043D\u043E\u0433\u043E \u0440\u0430\u0437\u0432\u0438\u0442\u0438\u044F. \u0417\u043D\u0430\u0447\u0438\u043C\u043E\u0441\u0442\u044C \u044D\u0442\u0438\u0445 \u043F\u0440\u043E\u0431\u043B\u0435\u043C \u043D\u0430\u0441\u0442\u043E\u043B\u044C\u043A\u043E \u043E\u0447\u0435\u0432\u0438\u0434\u043D\u0430, \u0447\u0442\u043E \u043D\u0430\u0447\u0430\u043B\u043E \u043F\u043E\u0432\u0441\u0435\u0434\u043D\u0435\u0432\u043D\u043E\u0439 \u0440\u0430\u0431\u043E\u0442\u044B \u043F\u043E \u0444\u043E\u0440\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u044E \u043F\u043E\u0437\u0438\u0446\u0438\u0438 \u043E\u0431\u0435\u0441\u043F\u0435\u0447\u0438\u0432\u0430\u0435\u0442 \u0448\u0438\u0440\u043E\u043A\u043E\u043C\u0443 \u043A\u0440\u0443\u0433\u0443 (\u0441\u043F\u0435\u0446\u0438\u0430\u043B\u0438\u0441\u0442\u043E\u0432) \u0443\u0447\u0430\u0441\u0442\u0438\u0435 \u0432 \u0444\u043E\u0440\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0438 \u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0435\u043D\u043D\u044B\u0445 \u0444\u0438\u043D\u0430\u043D\u0441\u043E\u0432\u044B\u0445 \u0438 \u0430\u0434\u043C\u0438\u043D\u0438\u0441\u0442\u0440\u0430\u0442\u0438\u0432\u043D\u044B\u0445 \u0443\u0441\u043B\u043E\u0432\u0438\u0439. \u0417\u0430\u0434\u0430\u0447\u0430 \u043E\u0440\u0433\u0430\u043D\u0438\u0437\u0430\u0446\u0438\u0438, \u0432 \u043E\u0441\u043E\u0431\u0435\u043D\u043D\u043E\u0441\u0442\u0438 \u0436\u0435 \u043A\u043E\u043D\u0441\u0443\u043B\u044C\u0442\u0430\u0446\u0438\u044F \u0441 \u0448\u0438\u0440\u043E\u043A\u0438\u043C \u0430\u043A\u0442\u0438\u0432\u043E\u043C \u0432\u043B\u0435\u0447\u0435\u0442 \u0437\u0430 \u0441\u043E\u0431\u043E\u0439 \u043F\u0440\u043E\u0446\u0435\u0441\u0441 \u0432\u043D\u0435\u0434\u0440\u0435\u043D\u0438\u044F \u0438 \u043C\u043E\u0434\u0435\u0440\u043D\u0438\u0437\u0430\u0446\u0438\u0438 \u043F\u043E\u0437\u0438\u0446\u0438\u0439, \u0437\u0430\u043D\u0438\u043C\u0430\u0435\u043C\u044B\u0445 \u0443\u0447\u0430\u0441\u0442\u043D\u0438\u043A\u0430\u043C\u0438 \u0432 \u043E\u0442\u043D\u043E\u0448\u0435\u043D\u0438\u0438 \u043F\u043E\u0441\u0442\u0430\u0432\u043B\u0435\u043D\u043D\u044B\u0445 \u0437\u0430\u0434\u0430\u0447. \u0418\u0434\u0435\u0439\u043D\u044B\u0435 \u0441\u043E\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u0438\u044F \u0432\u044B\u0441\u0448\u0435\u0433\u043E \u043F\u043E\u0440\u044F\u0434\u043A\u0430, \u0430 \u0442\u0430\u043A\u0436\u0435 \u043D\u043E\u0432\u0430\u044F \u043C\u043E\u0434\u0435\u043B\u044C \u043E\u0440\u0433\u0430\u043D\u0438\u0437\u0430\u0446\u0438\u043E\u043D\u043D\u043E\u0439 \u0434\u0435\u044F\u0442\u0435\u043B\u044C\u043D\u043E\u0441\u0442\u0438 \u0432 \u0437\u043D\u0430\u0447\u0438\u0442\u0435\u043B\u044C\u043D\u043E\u0439 \u0441\u0442\u0435\u043F\u0435\u043D\u0438 \u043E\u0431\u0443\u0441\u043B\u0430\u0432\u043B\u0438\u0432\u0430\u0435\u0442 \u0441\u043E\u0437\u0434\u0430\u043D\u0438\u0435 \u043C\u043E\u0434\u0435\u043B\u0438 \u0440\u0430\u0437\u0432\u0438\u0442\u0438\u044F. \u0420\u0430\u0432\u043D\u044B\u043C \u043E\u0431\u0440\u0430\u0437\u043E\u043C \u0443\u043A\u0440\u0435\u043F\u043B\u0435\u043D\u0438\u0435 \u0438 \u0440\u0430\u0437\u0432\u0438\u0442\u0438\u0435 \u0441\u0442\u0440\u0443\u043A\u0442\u0443\u0440\u044B \u043E\u0431\u0435\u0441\u043F\u0435\u0447\u0438\u0432\u0430\u0435\u0442 \u0448\u0438\u0440\u043E\u043A\u043E\u043C\u0443 \u043A\u0440\u0443\u0433\u0443 (\u0441\u043F\u0435\u0446\u0438\u0430\u043B\u0438\u0441\u0442\u043E\u0432) \u0443\u0447\u0430\u0441\u0442\u0438\u0435 \u0432 \u0444\u043E\u0440\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0438 \u043D\u043E\u0432\u044B\u0445 \u043F\u0440\u0435\u0434\u043B\u043E\u0436\u0435\u043D\u0438\u0439. "
+      /** @property {String} content текст элемента списка (после редактирования и он же используется для передачи в Rete.node) */
+      actual_content: ''
     };
   },
   //
   methods: {
     /**
-     * @description Обработка клика на кнопке "Сохранить"
+     * @description Изменить контент свойства
+     * @param {String} sContent
     */
-    on: function on(event) {}
+    setContent: function setContent(sContent) {
+      this.actual_content = sContent;
+    },
+
+    /**
+     * @description
+    */
+    onClickEditItem: function onClickEditItem() {
+      this.$emit('edititemofcompoundobject', {
+        id: this.id,
+        content: this.actual_content
+      });
+    },
+
+    /**
+     * @description
+    */
+    onClickDeleteItem: function onClickDeleteItem() {
+      this.$emit('deleteitemofcompoundobject', {
+        id: this.id
+      });
+    }
   },
   //end methods
   //вызывается после data, поля из data видны "напрямую" как this.fieldName
-  mounted: function mounted() {}
+  mounted: function mounted() {
+    this.actual_content = this.initial_content;
+  }
 });
 
 /***/ }),
@@ -55322,7 +55429,7 @@ var render = function() {
             staticClass: "bot-scheme-editor-property-editor-title-close",
             on: {
               click: function($event) {
-                return _vm.$emit("editorpropertyrevent", { type: "close" })
+                return _vm.$emit("editorpropertyevent", { type: "close" })
               }
             }
           },
@@ -55391,10 +55498,18 @@ var render = function() {
       _vm._l(_vm.items, function(item) {
         return _c("bot-scheme-compound-editor-list-item", {
           key: item.id,
+          ref: "item" + item.id,
+          refInFor: true,
           attrs: {
             append_label: _vm.append_label,
             edit_label: _vm.edit_label,
-            delete_label: _vm.delete_label
+            delete_label: _vm.delete_label,
+            initial_content: item.content,
+            id: item.id
+          },
+          on: {
+            edititemofcompoundobject: _vm.onClickEditItem,
+            deleteitemofcompoundobject: _vm.onClickDeleteItem
           }
         })
       }),
@@ -55416,7 +55531,8 @@ var render = function() {
           attrs: {
             title: _vm.append_label,
             icon_image: "/images/bot-scheme-toolbar/add32.png"
-          }
+          },
+          on: { click: _vm.onClickAddItemButton }
         }),
         _vm._v(" "),
         _c("div", { staticClass: "clearfix" })
@@ -55479,7 +55595,7 @@ var render = function() {
           staticClass: "bot-scheme-editor-property-editor-button",
           on: {
             click: function($event) {
-              return _vm.$emit("editorpropertyrevent", { type: "close" })
+              return _vm.$emit("editorpropertyevent", { type: "close" })
             }
           }
         },
@@ -55518,16 +55634,19 @@ var render = function() {
         attrs: {
           title: _vm.delete_label,
           icon_image: "/images/bot-scheme-toolbar/delete32.png"
-        }
+        },
+        on: { click: _vm.onClickDeleteItem }
       }),
       _vm._v(" "),
       _c("bot-scheme-compound-editor-list-item-button", {
         attrs: {
           title: _vm.edit_label,
           icon_image: "/images/bot-scheme-toolbar/edit32.png"
-        }
+        },
+        on: { click: _vm.onClickEditItem }
       }),
-      _vm._v("\n\t" + _vm._s(_vm.content) + "\n")
+      _vm._v("\n\t" + _vm._s(_vm.content) + "\n\t"),
+      _c("div", { staticClass: "clearfix" })
     ],
     1
   )

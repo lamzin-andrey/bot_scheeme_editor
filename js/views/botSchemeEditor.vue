@@ -194,23 +194,32 @@
 			onAddedNode(event) {
 				this.isCurrentSchemeModify = true;
 				if (event.type == 'MessageComponent') {
-					//this.hideAllEditors();//TODO
+					this.hideAllEditors();
 					this.$refs.messageEditor.setBlockId(event.id);
 					this.$refs.messageEditor.setMessageText('');
 					this.cssMessageEditorVisible = 'block';
 				}
 				if (event.type == 'ConditionComponent') {
-					//this.hideAllEditors();//TODO
-					//this.$refs.conditionEditor.setBlockId(event.id);
+					this.hideAllEditors();
+					this.$refs.conditionEditor.setBlockId(event.id);
 					//this.$refs.conditionEditor.setMessageText('');
 					this.cssConditionEditorVisible = 'block';
 				}
 				if (event.type == 'ActionComponent') {
-					//this.hideAllEditors();//TODO
-					//this.$refs.conditionEditor.setBlockId(event.id);
+					this.hideAllEditors();
+					this.$refs.actionEditor.setBlockId(event.id);
 					//this.$refs.conditionEditor.setMessageText('');
 					this.cssActionEditorVisible = 'block';
 				}
+			},
+			/**
+			 * @description Скрыть все редакторы узлов
+			 * @param {Object} event {id:Number}
+			*/
+			hideAllEditors(){
+				this.cssMessageEditorVisible = 'none';
+				this.cssConditionEditorVisible = 'none';
+				this.cssActionEditorVisible = 'none';
 			},
 			/**
 			 * @description Событие, когда на схеме не найден узел с тем или иным идентификатором
@@ -226,6 +235,12 @@
 			onNodeDeleted(event) {
 				if (this.$refs.messageEditor.getBlockId() == event.id) {
 					this.cssMessageEditorVisible = 'none';
+				}
+				if (this.$refs.actionEditor.getBlockId() == event.id) {
+					this.cssActionEditorVisible = 'none';
+				}
+				if (this.$refs.conditionEditor.getBlockId() == event.id) {
+					this.cssConditionEditorVisible = 'none';
 				}
 			},
 			/**
@@ -250,7 +265,7 @@
 						this.$refs.editorArea.updateBlockMessageText(event.id, event.message);
 						break;
 					case 'close':
-						this.cssMessageEditorVisible = 'none';//TODO
+						this.hideAllEditors();
 						break;
 				}
 			}
