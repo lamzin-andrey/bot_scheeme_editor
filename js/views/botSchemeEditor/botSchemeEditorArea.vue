@@ -152,6 +152,26 @@
 				}
 			},
 			/**
+			 * @description Сохранить данные составного объекта (Условия или Действия)  на схеме
+			 * @property {Number} nId
+			 * @property {String} sTypeLabel для Действий - тип действия, для Условий - тип условия
+			 * @property {String} sDescription краткое описание, какое это действие или условие
+			 * @property {Array} of {id, content} aItems массив поддействий или подусловий из которых состоит Действие или Условие
+			*/
+			updateBlockCompoundData(nId, sTypeLabel, sDescription, aItems) {
+				let oSchemeData = this.editor.toJSON();
+				if (oSchemeData.nodes[nId]) {
+					console.log( oSchemeData.nodes[nId].name );
+					oSchemeData.nodes[nId].data.aItems = aItems;
+					oSchemeData.nodes[nId].data.short_description = sDescription;
+					oSchemeData.nodes[nId].data.sType = sTypeLabel;
+					this.refresh(oSchemeData);
+				} else {
+					this.$emit('nodenotfoundevent', {msg: 'Unable find node with id ' + nId, noSavedData: {nId, sTypeLabel, sDescription, aItems}});
+				}
+			},
+
+			/**
 			 * @description Конфигурация контекстного меню компонентов
 			 * Это функция, которая вызывается в объекте конфигурации ContextMenuPlugin 
 			 * для поля nodeItems

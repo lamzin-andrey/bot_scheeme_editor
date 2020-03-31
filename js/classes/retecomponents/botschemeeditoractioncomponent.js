@@ -13,7 +13,7 @@ class BotSchemeEditorActionComponent extends BotSchemeEditorCompoundComponent{
         super(sComponentId, oSocket, translator);
         //Установить метку, условие это или действие
         this.sLabelOfType = translator('app.Action');
-        this.sTypeInfo = translator('app.actionType');
+        this.sTypeInfo = translator('app.ActionType');
         this.sDefaultDescriptionText = translator('app.ShortActDesc');
 	}
     /**

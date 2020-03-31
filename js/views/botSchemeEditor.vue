@@ -264,6 +264,9 @@
 					case 'saveMessage':
 						this.$refs.editorArea.updateBlockMessageText(event.id, event.message);
 						break;
+					case 'saveCompoundObject':
+						this.$refs.editorArea.updateBlockCompoundData(event.nId, event.sTypeLabel, event.sDescription, event.aItems);
+						break;
 					case 'close':
 						this.hideAllEditors();
 						break;

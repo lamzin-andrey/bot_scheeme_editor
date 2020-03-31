@@ -47,8 +47,8 @@ class BotSchemeEditorCompoundComponent extends Rete.Component{
             outputNo = new Rete.Output('no', this.$t('app.No'), this.socket, false),
             outputParralels = new Rete.Output('parallelExecuting', this.$t('app.parallelExecuting'), this.socket, false),
 			input = new Rete.Input('input', this.$t('app.Enter'), this.socket, true),
-			ctrl = new BotSchemeEditorCompoundControl(this.editor, node.data.interval,
-														 this.$t, this.sLabelOfType, this.sTypeInfo);
+			ctrl = new BotSchemeEditorCompoundControl(this.editor, this.$t,
+														this.sLabelOfType, this.sTypeInfo);
 			ctrl.setDefaultDescription(this.sDefaultDescriptionText);
 		
 		node.addControl(ctrl);

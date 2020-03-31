@@ -96,8 +96,13 @@
 		},
 
 		computed: {
-			description() {
-				return this.userDescription ? this.userDescription : this.default_description;
+			description :  {
+				get() {
+					return this.userDescription ? this.userDescription : this.default_description;
+				},
+				set(s) {
+					this.userDescription = s;
+				}
 			}
 		},
 
@@ -140,8 +145,8 @@
 			 * @description Обработка клика на кнопке "Сохранить"
 			*/
 			onClickSave(event) {
-				this.$emit('editorpropertyrevent', {
-					type: 'saveCompound',
+				this.$emit('editorpropertyevent', {
+					type: 'saveCompoundObject',
 					nId: this.editNodeId, 
 					sTypeLabel: this.stringValue,
 					sDescription: this.userDescription,
