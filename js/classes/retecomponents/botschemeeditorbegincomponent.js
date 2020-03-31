@@ -28,5 +28,19 @@ class BotSchemeEditorBeginComponent extends Rete.Component{
 		//outputs['begin'] = node.data.num;
 		return {key: outputs};
 	}
+	/**
+	 * @description Конфигурация контекстного меню компонента.
+	 * @see Документацию по конфигурации ContextMenuPlugin (rete-context-menu-plugin  version ^0.5.2), поле nodeItems
+	 * Проверка на равенство node.name имени компонента производится в botSchemeEditorArea.configureContextMenu
+	 * @param {Object} applicationContext Должен обеспечивать методы removeBlockById и emitEditBlockEvent
+	 * @param {Rete.node} node Узел (блок) схемы
+	*/
+	contextMenu(applicationContext, node) {
+		return {
+			//"Глушим" стандартные пункты контекстного меню, потому что они не нужны
+			'Delete': false,
+			'Clone': false,
+		};
+	}
 }
 export default BotSchemeEditorBeginComponent;

@@ -4,13 +4,13 @@
 			<div class="bot-scheme-editor-property-editor-title">
 				{{ $t('app.EditMessageText') }}
 			</div>
-			<div @click="$emit('editorpropertyrevent', {type:'close'})" class="bot-scheme-editor-property-editor-title-close">&times;</div>
+			<div @click="$emit('editorpropertyevent', {type:'close'})" class="bot-scheme-editor-property-editor-title-close">&times;</div>
 			<div class="clearfix"></div>
 		</div>
 		<textarea v-model="content" class="bot-scheme-editor-property-editor-textarea" rows="15"></textarea>
 		<div class="text-right mt-3">
 			<button @click="onClickSave" class="bot-scheme-editor-property-editor-button">{{ $t('app.Save') }}</button>
-			<button @click="$emit('editorpropertyrevent', {type:'close'})" class="bot-scheme-editor-property-editor-button">{{ $t('app.Close') }}</button>
+			<button @click="$emit('editorpropertyevent', {type:'close'})" class="bot-scheme-editor-property-editor-button">{{ $t('app.Close') }}</button>
 		</div>
 	</div>
 </template>

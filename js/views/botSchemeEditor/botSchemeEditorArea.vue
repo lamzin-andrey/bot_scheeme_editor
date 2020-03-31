@@ -152,41 +152,21 @@
 				}
 			},
 			/**
-			 * @description Это функция, которая вызывается в объекте конфигурации ContextMenuPlugin 
-			 * для nodeItems
+			 * @description Конфигурация контекстного меню компонентов
+			 * Это функция, которая вызывается в объекте конфигурации ContextMenuPlugin 
+			 * для поля nodeItems
+			 * 
+			 * Конфигурацию контекстного меню для новых компонентов надо в методе 
+			 *  contextMenu() классов этих компонентов
 			*/
 			configureContextMenu(node) {
-				let that = this;
-				if (node.name === 'MessageComponent') {
-					return {
-						'Удалить'() {
-							that.removeBlockById(node.id);
-						},
-						'Редактировать'() {
-							that.emitEditBlockEvent(node.id);
-						},
-						'Delete': false,
-						'Clone': false,
-					};
+				let i;
+				for (i = 0; i < this.aComponents.length; i++) {
+					if (node.name == this.aComponents[i].name) {
+						return this.aComponents[i].contextMenu(this, node);
+					}
 				}
-				if (node.name === 'TimerComponent') {
-					return {
-						'Удалить'() {
-							that.removeBlockById(node.id);
-						},
-						'Delete': false,
-						'Clone': false,
-					};
-				}
-				if (node.name === 'BeginComponent') {
-					return {
-						'Delete': false,
-						'Clone': false,
-					};
-				}
-				return { 
-					'Click me'(){ console.log('Works for node!') }
-				}
+				return {};
 			},
 			/**
 			 * 
@@ -232,13 +212,14 @@
 
 			this.engine = new Rete.Engine('demo@0.1.0');
 
-			let aComponents = [new BotSchemeEditorMessageComponent('MessageComponent', this.botSchemeEditorSocket, this.$t),
+			/** @property {Array} aComponents  массив экземпляров объектов компонентов, наследников Rete.Component */
+			let aComponents = this.aComponents = [new BotSchemeEditorMessageComponent('MessageComponent', this.botSchemeEditorSocket, this.$t),
 								new BotSchemeEditorBeginComponent('BeginComponent', this.botSchemeEditorSocket, this.$t),
 								new BotSchemeEditorTimerComponent('TimerComponent', this.botSchemeEditorSocket, this.$t),
 								new BotSchemeEditorConditionComponent('ConditionComponent', this.botSchemeEditorSocket, this.$t),
 							 	new BotSchemeEditorActionComponent('ActionComponent', this.botSchemeEditorSocket, this.$t)
 							],
-							  i;
+							i;
 			//TODO forEach
 			for (let i = 0; i < aComponents.length; i++) {
 				this.editor.register(aComponents[i]);
