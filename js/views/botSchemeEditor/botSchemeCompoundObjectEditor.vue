@@ -195,11 +195,26 @@
 				return this.editNodeId;
 			},
 			/**
-			 * @description Установить текст сообщения
-			 * @param  {String} text
+			 * @description Установить данные блока для редактирования
+			 * @param  {Object} nodeData
 			*/
-			setMessageText(text) {
-				this.content = text;
+			setData(nodeData) {
+				this.stringValue = nodeData.sType;
+				this.userDescription = nodeData.short_description;
+				this.items = [];
+				Vue.nextTick(() => {
+					this.items = nodeData.aItems ? nodeData.aItems : [];
+				});
+				this.nEditItemId = -1;
+				this.content = '';
+				this.cssContentEditorVisible = 'none';
+				//getMaxId
+				this.nextId = this.items.reduce((prevResult, currentItem) => {
+					if (currentItem.id > prevResult) {
+						return currentItem.id;
+					}
+				}, -1);
+				this.nextId++;
 			},
 			/**
 			 * @description Обработка на клике кнопки Править списка условий или действий 

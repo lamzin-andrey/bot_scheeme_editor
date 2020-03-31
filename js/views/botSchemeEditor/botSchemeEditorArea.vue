@@ -1,5 +1,5 @@
 <template>
-	<div id="wrongway"></div>
+	<div id="rete"></div>
 </template>
 <script>
 	
@@ -161,7 +161,6 @@
 			updateBlockCompoundData(nId, sTypeLabel, sDescription, aItems) {
 				let oSchemeData = this.editor.toJSON();
 				if (oSchemeData.nodes[nId]) {
-					console.log( oSchemeData.nodes[nId].name );
 					oSchemeData.nodes[nId].data.aItems = aItems;
 					oSchemeData.nodes[nId].data.short_description = sDescription;
 					oSchemeData.nodes[nId].data.sType = sTypeLabel;
@@ -202,8 +201,7 @@
 			/** @property botSchemeEditorSocket - Объект для коммуникации между узлами */
 			this.botSchemeEditorSocket = new Rete.Socket('Number value');
 
-			this.container = document.querySelector('#wrongway');
-			console.log(this.container);
+			this.container = document.querySelector('#rete');
 			this.editor = new Rete.NodeEditor('demo@0.1.0', this.container);
 
 			this.editor.use(AlightRenderPlugin);
@@ -240,15 +238,11 @@
 							 	new BotSchemeEditorActionComponent('ActionComponent', this.botSchemeEditorSocket, this.$t)
 							],
 							i;
-			//TODO forEach
-			for (let i = 0; i < aComponents.length; i++) {
-				this.editor.register(aComponents[i]);
-				this.engine.register(aComponents[i]);
-			}
+			aComponents.forEach((item, i, arr) => {
+				this.editor.register(item);
+			});
 			
 			this.editor.on('process nodecreated noderemoved connectioncreated connectionremoved', async () => {
-			    /*await this.engine.abort();
-				await this.engine.process(this.editor.toJSON());*/
 				this.compile();
 			});
 		}

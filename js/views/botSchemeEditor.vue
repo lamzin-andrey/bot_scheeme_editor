@@ -248,11 +248,19 @@
 			 * @param {Object} event {id:Number, nodeType:String, nodeData: Object}
 			*/
 			onStartEditNodeContent(event) {
+				console.log(event);
 				switch (event.nodeType) {
 					case 'MessageComponent':
 						this.$refs.messageEditor.setBlockId(event.id);
 						this.$refs.messageEditor.setMessageText(event.nodeData.msg);
+						this.hideAllEditors();
 						this.cssMessageEditorVisible = 'block';
+						break;
+					case 'ConditionComponent':
+						this._loadDataToCompoundEditor(this.$refs.conditionEditor, 'cssConditionEditorVisible', event.id, event.nodeData);
+						break;
+					case 'ActionComponent':
+						this._loadDataToCompoundEditor(this.$refs.actionEditor, 'cssActionEditorVisible', event.id, event.nodeData);
 						break;
 				}
 			},
@@ -271,6 +279,19 @@
 						this.hideAllEditors();
 						break;
 				}
+			},
+			/**
+			 * @description Загрузить данные в редактор Условия или Действия
+			 * @param {botSchemeCompoundObjectEditor} compoundObjectEditor
+			 * @param {String} sCssFieldName
+			 * @param {Number} nId
+			 * @param {Object} oNodeData
+			*/
+			_loadDataToCompoundEditor(compoundObjectEditor, sCssFieldName, nId, oNodeData) {
+				compoundObjectEditor.setBlockId(nId);
+				compoundObjectEditor.setData(oNodeData);
+				this.hideAllEditors();
+				this[sCssFieldName] = 'block';
 			}
 		},//end methods
 		//вызывается после data, поля из data видны "напрямую" как this.fieldName
