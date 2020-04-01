@@ -85,9 +85,25 @@
 			*/
 			refresh(oSchemeData) {
 				oSchemeData = oSchemeData ? oSchemeData : this.editor.toJSON();
-				this.editor.fromJSON(oSchemeData).then(() => {
+				this.editor.fromJSON(oSchemeData).then((arg) => {
 					this.editor.view.resize();
 					this.compile();
+
+					//Вместо этого должно было быть onFailSetJSONtoEditor()  в catch, но rete не совершенен
+					let newData = this.editor.toJSON(), nLength = 0, i;
+					if (newData.nodes) {
+						for (i in newData.nodes) {
+							nLength++;
+							break;
+						}
+					}
+					if (!newData.nodes || !nLength) {
+						this.onFailSetJSONtoEditor();
+					}
+				})
+				.catch(() => {
+					//Хотелось бы, но ему хоть composer.json от Symfony подсовывай - всё равно then(true) вызывается
+					//this.onFailSetJSONtoEditor();
 				});
 			},
 			/**
@@ -216,20 +232,30 @@
 						this.blockCounter++;
 					}
 					oSchemeData.nodes = {...oImportData.nodes};
+					/** @property {Boolean} isProcessingJSONFromFile принимает true когда в editor пытаемся установить данные из файла */
+					this.isProcessingJSONFromFile = true;
 					this.refresh(oSchemeData);
 					return true;
 				} catch (e) {
-					//TODO emit fail event
-					alert('If some happens...');
+					;//TODO onfailparsejson invalid json
 				}
 				return false;
 				
+			},
+			/**
+			 * @description Сбой установки JSON формата в редактор
+			*/
+			onFailSetJSONtoEditor(){
+				if ( this.isProcessingJSONFromFile) {
+					this.isProcessingJSONFromFile = false;
+					this.$emit('onfailparsejson', {fromFile: true, forRete: true}); //TODO invalid JSON for rete
+				}
 			}
 		},//end methods
 		//вызывается после data, поля из data видны "напрямую" как this.fieldName
 		mounted() {
 			/** @property botSchemeEditorSocket - Объект для коммуникации между узлами */
-			this.botSchemeEditorSocket = new Rete.Socket('Number value');
+			this.botSchemeEditorSocket = new Rete.Socket('Number value');//TODO зачем тут Number value ?
 
 			this.container = document.querySelector('#rete');
 			this.editor = new Rete.NodeEditor('demo@0.1.0', this.container);
@@ -277,4 +303,4 @@
 			});
 		}
 	}
-</script>
+</script>onfailparsejson
