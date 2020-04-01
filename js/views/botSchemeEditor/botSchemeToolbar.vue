@@ -29,6 +29,12 @@
 			@touchstart="onTouchStartAddActionBlock"
 			:title="$t('app.addActionBlockHint')"
 			icon_image="/images/bot-scheme-toolbar/act32.png"></bot-scheme-toolbar-button>
+
+		<bot-scheme-toolbar-button 
+			@click="onClickExportToJSON"
+			@touchstart="onTouchStartExportToJSON"
+			:title="$t('app.exportJSONHint')"
+			icon_image="/images/bot-scheme-toolbar/export32.png"></bot-scheme-toolbar-button>
 			
 	</div>
 </template>
@@ -51,6 +57,22 @@
 		}; },
 		//
 		methods:{
+			/**
+			 * @description Обработка события touchstart для планшетных устройств
+			*/
+			onTouchStartExportToJSON(event) {
+				//Чтобы не вызвался ещё и onclick
+				event.preventDefault();
+				event.stopImmediatelePropaganation();
+				this._emitToolbarEvent('exportToJSONButtonClicked');
+			},
+			/**
+			 * @description Обработка события click для desktop устройств
+			*/
+			onClickExportToJSON(event) {
+				event.preventDefault();
+				this._emitToolbarEvent('exportToJSONButtonClicked');
+			},
 			/**
 			 * @description Обработка события touchstart для планшетных устройств
 			*/

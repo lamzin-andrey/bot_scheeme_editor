@@ -104,7 +104,21 @@
 					case 'addActionBlockButtonClicked':
 						this.onClickAddActionButton();
 						break;
+					
+					case 'exportToJSONButtonClicked':
+						this.onClickExportToJSONButton();
+						break;
 				}
+			},
+			/**
+			 * @description Обработка кликов на кнопке Экспорт в JSON
+			*/
+			onClickExportToJSONButton(){
+				if (!this.isSchemeLoaded) {
+					this.alert(this.$t('app.needCreateScheme'));
+					return;
+				}
+				alert('Start JSON Export');
 			},
 			/**
 			 * @description Обработка кликов на кнопке Добавить действие
