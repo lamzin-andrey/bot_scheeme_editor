@@ -123,10 +123,10 @@
 				let fr = new FileReader(), success;
 				//TODO normalize JSON
 				fr.onloadend = (result) => {
-					if (this.confirmSaveCurrentScheme()) {
-						;
-					}
+					//Сохранили текущую схему.
+					this.confirmSaveCurrentScheme();
 
+					//Установили данные из файла
 					success = this.$refs.editorArea.setJSON(fr.result);
 					if (success) {
 						this.hideAllEditors();
@@ -331,12 +331,11 @@
 			},
 			/**
 			 * @description Задаёт вопрос о необходимости сохранить данные текущей схемы
-			 * @return Boolean true если пользователь выбрал сохранение текущиъ данных
+			 * @return Boolean true если пользователь выбрал сохранение текущих данных
 			*/
 			confirmSaveCurrentScheme() {
 				if (this.isCurrentSchemeModify) {
 					if (this.confirm(this.$t('app.currentSchemeIsChangedWantSaveCurrentScheme'))) {
-						/** @property {Boolean} needCreateNewScheme принимает true когда необходимо создать новую схему после сохранения текущей */
 						this.onClickExportToJSONButton();
 						return true;
 					}
