@@ -5,6 +5,13 @@
 			@touchstart="onTouchStartNewScheme"
 			:title="$t('app.newSchemeCreate')"
 			icon_image="/images/bot-scheme-toolbar/new32.png"></bot-scheme-toolbar-button>
+		
+		<bot-scheme-toolbar-file-input-button
+			@select="onSelectFileForImportFromJSON"
+			:title="$t('app.importJSONHint')"
+			accept=".jss"
+			id="import"
+			icon_image="/images/bot-scheme-toolbar/import32.png"></bot-scheme-toolbar-file-input-button>
 
 		<bot-scheme-toolbar-button 
 			@click="onClickAddMessageBlock"
@@ -35,6 +42,7 @@
 			@touchstart="onTouchStartExportToJSON"
 			:title="$t('app.exportJSONHint')"
 			icon_image="/images/bot-scheme-toolbar/export32.png"></bot-scheme-toolbar-button>
+		
 			
 	</div>
 </template>
@@ -48,7 +56,8 @@
 		},
 
 		components:{
-			'bot-scheme-toolbar-button': require('./botSchemeToolbar/botSchemeToolbarButton.vue').default
+			'bot-scheme-toolbar-button': require('./botSchemeToolbar/botSchemeToolbarButton.vue').default,
+			'bot-scheme-toolbar-file-input-button': require('./botSchemeToolbar/botSchemeToolbarFileInputButton.vue').default
 		},
 
 		//вызывается раньше чем mounted
@@ -57,6 +66,13 @@
 		}; },
 		//
 		methods:{
+			/**
+			 * @description Обработка события выбора файла
+			*/
+			onSelectFileForImportFromJSON(event) {
+				event.preventDefault();
+				this._emitToolbarEvent('importFromJSONButtonSelected', event.target.files[0]);
+			},
 			/**
 			 * @description Обработка события touchstart для планшетных устройств
 			*/
@@ -156,9 +172,14 @@
 			/**
 			 * @description Оповещает систему о том, какая кнопка на тулбаре была нажата
 			 * @param {String} eventName
+			 * @param {File} file = null
 			*/
-			_emitToolbarEvent(eventName) {
-				this.$emit('toolbarevent', {name: eventName});
+			_emitToolbarEvent(eventName, file = null) {
+				if (!file) {
+					this.$emit('toolbarevent', {name: eventName});
+				} else {
+					this.$emit('toolbarevent', {name: eventName, file: file});
+				}
 			}
 		},//end methods
 		//вызывается после data, поля из data видны "напрямую" как this.fieldName

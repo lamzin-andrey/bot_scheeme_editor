@@ -51,6 +51,8 @@
 	</div>
 </template>
 <script>
+	window.FileSaver = require('file-saver');
+
 	export default {
 		name: 'botSchemeEditor',
 		
@@ -108,7 +110,31 @@
 					case 'exportToJSONButtonClicked':
 						this.onClickExportToJSONButton();
 						break;
+					
+					case 'importFromJSONButtonSelected':
+						this.onClickImportFromJSONButton(event.file);
+						break;
 				}
+			},
+			/**
+			 * @param {File} file
+			*/
+			onClickImportFromJSONButton(file){
+				let fr = new FileReader(), success;
+				//TODO normalize JSON
+				fr.onloadend = (result) => {
+					if (this.confirmSaveCurrentScheme()) {
+						;
+					}
+
+					success = this.$refs.editorArea.setJSON(fr.result);
+					if (success) {
+						this.hideAllEditors();
+						this.isSchemeLoaded = true;	
+						this.isCurrentSchemeModify = true;
+					}
+				};
+				fr.readAsText(file);
 			},
 			/**
 			 * @description Обработка кликов на кнопке Экспорт в JSON
@@ -118,7 +144,9 @@
 					this.alert(this.$t('app.needCreateScheme'));
 					return;
 				}
-				alert('Start JSON Export');
+				//TODO normalize JSON
+				let blob = new Blob([this.$refs.editorArea.getJSON()], {type: "text/plain;charset=utf-8"});
+				FileSaver.saveAs(blob, "scheme.jss");
 			},
 			/**
 			 * @description Обработка кликов на кнопке Добавить действие
@@ -160,24 +188,10 @@
 			 * @description Обработка кликов на кнопке Создать новую схему
 			*/
 			onClickNewSchemeButton(){
-				if (this.isCurrentSchemeModify) {
-					if (this.confirm(this.$t('app.currentSchemeIsChangedWantSaveCurrentScheme'))) {
-						/** @property {Boolean} needCreateNewScheme принимает true когда необходимо создать новую схему после сохранения текущей */
-						this.needCreateNewScheme = true;
-						this.showExportSchemeDialog();
-
-						return;
-					}
+				if (this.confirmSaveCurrentScheme()) {
+					return;
 				}
 				this.loadNewScheme();
-			},
-			/**
-			 * @description Показывает диалог экспорта схемы в json
-			*/
-			showExportSchemeDialog() {
-				//TODO
-				this.alert(`Вы должны были увидеть интерфейс для экспорта в JSON или даже должна была
-				начаться загрузка JSON файла, но это пока не готово.`);
 			},
 			/**
 			 * @description Загружает в редактор шаблон новой схемы по умолчанию (на данный момент это схема с одним блоком "Начало")
@@ -314,6 +328,20 @@
 				compoundObjectEditor.setData(oNodeData);
 				this.hideAllEditors();
 				this[sCssFieldName] = 'block';
+			},
+			/**
+			 * @description Задаёт вопрос о необходимости сохранить данные текущей схемы
+			 * @return Boolean true если пользователь выбрал сохранение текущиъ данных
+			*/
+			confirmSaveCurrentScheme() {
+				if (this.isCurrentSchemeModify) {
+					if (this.confirm(this.$t('app.currentSchemeIsChangedWantSaveCurrentScheme'))) {
+						/** @property {Boolean} needCreateNewScheme принимает true когда необходимо создать новую схему после сохранения текущей */
+						this.onClickExportToJSONButton();
+						return true;
+					}
+				}
+				return false;
 			}
 		},//end methods
 		//вызывается после data, поля из data видны "напрямую" как this.fieldName

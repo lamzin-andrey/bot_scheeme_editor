@@ -189,13 +189,42 @@
 				return {};
 			},
 			/**
-			 * 
+			 * Обновить данные в движке схем
 			*/
 			async compile() {
 			    await this.engine.abort();
 			    await this.engine.process(this.editor.toJSON());
+			},
+			/**
+			 * @description Получить данные в JSON формате
+			 * @return String
+			*/
+			getJSON() {
+				return JSON.stringify(this.editor.toJSON());
+			},
+			/**
+			 * @description Установить данные схемы в rete
+			 * @param {String} sJSON  данные в формате rete
+			 * @return Boolean
+			*/
+			setJSON(sJSON) {
+				let oSchemeData = this.editor.toJSON(), i, oImportData;
+				try {
+					oImportData = JSON.parse(sJSON);
+					this.blockCounter = 0;
+					for (i in oImportData.nodes) {
+						this.blockCounter++;
+					}
+					oSchemeData.nodes = {...oImportData.nodes};
+					this.refresh(oSchemeData);
+					return true;
+				} catch (e) {
+					//TODO emit fail event
+					alert('If some happens...');
+				}
+				return false;
+				
 			}
-			
 		},//end methods
 		//вызывается после data, поля из data видны "напрямую" как this.fieldName
 		mounted() {
