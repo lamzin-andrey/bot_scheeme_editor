@@ -246,14 +246,14 @@
 			onFailSetJSONtoEditor(){
 				if ( this.isProcessingJSONFromFile) {
 					this.isProcessingJSONFromFile = false;
-					this.$emit('onfailparsejson', {fromFile: true, forRete: true}); //TODO invalid JSON for rete
+					this.$emit('onfailparsejson', {fromFile: true, forRete: true});
 				}
 			}
 		},//end methods
 		//вызывается после data, поля из data видны "напрямую" как this.fieldName
 		mounted() {
 			/** @property botSchemeEditorSocket - Объект для коммуникации между узлами */
-			this.botSchemeEditorSocket = new Rete.Socket('Number value');//TODO зачем тут Number value ?
+			this.botSchemeEditorSocket = new Rete.Socket('');
 
 			this.container = document.querySelector('#rete');
 			this.editor = new Rete.NodeEditor('demo@0.1.0', this.container);
@@ -263,14 +263,14 @@
 			//this.editor.use(VueRenderPlugin);
 			
 			this.editor.use(ContextMenuPlugin, {
-				searchBar: false, // true by default
+				searchBar: false, // true by default (в контекстном меню редактора (не компонентов) появляется поле поиска)
 				searchKeep: title => true, // leave item when searching, optional. For example, title => ['Refresh'].includes(title)
 				delay: 100,
 				allocate(component) {
 					//return ['Submenu'];
 				},
 				rename(component) {
-					return component.name;
+					//return component.name;
 				},
 				items: {
 					//'Click me'(){ console.log('Works!') }
@@ -301,4 +301,4 @@
 			});
 		}
 	}
-</script>onfailparsejson
+</script>

@@ -61,7 +61,6 @@ class BotSchemeEditorCompoundComponent extends Rete.Component{
 	 * @description вызывается всякий раз при перерисовке узла
 	*/
 	worker(node, inputs, outputs) {
-		outputs['num'] = node.data.num;
 		return {key: outputs};
 	}
 	/**

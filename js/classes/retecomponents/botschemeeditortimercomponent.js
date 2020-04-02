@@ -31,7 +31,6 @@ class BotSchemeEditorTimerComponent extends Rete.Component{
 	 * @description вызывается всякий раз при перерисовке узла
 	*/
 	worker(node, inputs, outputs) {
-		//outputs['message'] = node.data.num;
 		return {key: outputs};
 	}
 	/**
