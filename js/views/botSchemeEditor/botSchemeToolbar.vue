@@ -79,7 +79,7 @@
 			onTouchStartExportToJSON(event) {
 				//Чтобы не вызвался ещё и onclick
 				event.preventDefault();
-				event.stopImmediatelePropaganation();
+				event.stopImmediatePropagation();
 				this._emitToolbarEvent('exportToJSONButtonClicked');
 			},
 			/**
@@ -95,7 +95,7 @@
 			onTouchStartAddActionBlock(event) {
 				//Чтобы не вызвался ещё и onclick
 				event.preventDefault();
-				event.stopImmediatelePropaganation();
+				event.stopImmediatePropagation();
 				this._emitToolbarEvent('addActionBlockButtonClicked');
 			},
 			/**
@@ -111,7 +111,7 @@
 			onTouchStartAddConditionBlock(event) {
 				//Чтобы не вызвался ещё и onclick
 				event.preventDefault();
-				event.stopImmediatelePropaganation();
+				event.stopImmediatePropagation();
 				this._emitToolbarEvent('addConditionBlockButtonClicked');
 			},
 			/**
@@ -127,7 +127,7 @@
 			onTouchStartAddTimerBlock(event) {
 				//Чтобы не вызвался ещё и onclick
 				event.preventDefault();
-				event.stopImmediatelePropaganation();
+				event.stopImmediatePropagation();
 				this._emitToolbarEvent('addTimerBlockButtonClicked');
 			},
 			/**
@@ -143,7 +143,7 @@
 			onTouchStartAddMessageBlock(event) {
 				//Чтобы не вызвался ещё и onclick
 				event.preventDefault();
-				event.stopImmediatelePropaganation();
+				event.stopImmediatePropagation();
 				this._emitToolbarEvent('addMessageBlockButtonClicked');
 			},
 			/**
@@ -159,7 +159,7 @@
 			onTouchStartNewScheme(event) {
 				//Чтобы не вызвался ещё и onclick
 				event.preventDefault();
-				event.stopImmediatelePropaganation();
+				event.stopImmediatePropagation();
 				this._emitToolbarEvent('newSchemeButtonClicked');
 			},
 			/**

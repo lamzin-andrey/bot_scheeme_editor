@@ -5,7 +5,7 @@
  (В дальнейшем - редактора свойств компонентов и т. п.)
 -->
 <template>
-	<div>
+	<div class="d-flex-test">
 		<div class="toolbar-wrapper">
 			<bot-scheme-toolbar @toolbarevent="onToolbarEvent"></bot-scheme-toolbar>
 		</div>
@@ -19,7 +19,7 @@
 				@positionchanged="onPositionChanged"
 			></bot-scheme-editor-area>
 		</div>
-		<div class="clearfix"></div>
+		<!--div class="clearfix"></div-->
 		<!-- Редактор блока Message -->
 		<div class="property-editor-wrapper" :style="{'display':cssMessageEditorVisible}">
 			<bot-scheme-message-editor ref="messageEditor"  @editorpropertyevent="onPropertyEditorEvent"></bot-scheme-message-editor>
@@ -370,10 +370,15 @@
 	}
 </script>
 <style scoped>
+	.d-flex-test {
+		display:flex;
+		align-items:stretch;
+		flex-direction: row;
+	}
 	.toolbar-wrapper {
 		border: solid 1px #ece9d8;
 		border-right-color: #3E97C4;
-		float: left;
+		/*float: left;*/
 		min-width: 63px;
 		width: 64px;
 		height: 99.5vh;
@@ -382,7 +387,7 @@
 	}
 	.editorarea-wrapper {
 		/*border: solid 1px #AAFF00;*/
-		float:left;
+		/*float:left;*/
 		width: calc(100% - 70px);
 		height: 99.5vh;
 	}
