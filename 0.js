@@ -363,18 +363,6 @@ var BotSchemeEditorCompoundComponent = /*#__PURE__*/function (_Rete$Component) {
     _this.sComponentId = sComponentId;
     _this.socket = oSocket;
     _this.$t = translator;
-    /* Возможно, что-то подобное понадобится
-    this.task = {
-    	outputs: {act: 'option', key: 'output'},
-    	init(task){
-    	 	eventHandlers.remove();
-    		eventHandlers.add('keydown', function (e) {
-    			task.run(e.keyCode);
-    			task.reset();
-    		});
-    	}
-    }*/
-
     return _this;
   }
   /**
@@ -392,7 +380,7 @@ var BotSchemeEditorCompoundComponent = /*#__PURE__*/function (_Rete$Component) {
           outputNo = new rete__WEBPACK_IMPORTED_MODULE_0__["default"].Output('no', this.$t('app.No'), this.socket, false),
           outputParralels = new rete__WEBPACK_IMPORTED_MODULE_0__["default"].Output('parallelExecuting', this.$t('app.parallelExecuting'), this.socket, false),
           input = new rete__WEBPACK_IMPORTED_MODULE_0__["default"].Input('input', this.$t('app.Enter'), this.socket, true),
-          ctrl = new _retecontrols_botschemeeditorcompoundcontrol__WEBPACK_IMPORTED_MODULE_1__["default"](this.editor, this.$t, this.sLabelOfType, this.sTypeInfo);
+          ctrl = new _retecontrols_botschemeeditorcompoundcontrol__WEBPACK_IMPORTED_MODULE_1__["default"](this.editor, this.$t, this.sLabelOfType, this.sTypeInfo, node);
       ctrl.setDefaultDescription(this.sDefaultDescriptionText);
       node.addControl(ctrl);
       node.addOutput(outputYes);
@@ -765,8 +753,9 @@ var BotSchemeEditorCompoundControl = /*#__PURE__*/function (_Rete$Control) {
    * @param {VueI18n} $t
    * @param {String} sLabel метка "Условие" или "Действие"
    * @param {String} sType тип, например "OR" или "AND" для условий. Будет отображаться на блоке схемы
-   */
-  function BotSchemeEditorCompoundControl(emitter, $t, sLabel, sType) {
+   * @param {Rete.node} oReteNode ссылка на связанный узел
+  */
+  function BotSchemeEditorCompoundControl(emitter, $t, sLabel, sType, oReteNode) {
     var _this;
 
     _classCallCheck(this, BotSchemeEditorCompoundControl);
@@ -775,6 +764,7 @@ var BotSchemeEditorCompoundControl = /*#__PURE__*/function (_Rete$Control) {
     _this.emitter = emitter;
     _this.template = "<div>{{ sLabel }}</div>\n                        <div><input @input=\"change($event)\" class=\"conditionName\" type=\"text\" :value=\"value\"></div>\n                        <div>{{ sType }}</div>";
     _this.$t = $t;
+    _this.oReteNode = oReteNode;
     _this.scope = {
       /** @property {String} value пользователь сможет вводить краткое описание условия для наглядности  */
       value: '',
@@ -794,15 +784,23 @@ var BotSchemeEditorCompoundControl = /*#__PURE__*/function (_Rete$Control) {
     key: "change",
     value: function change(e) {
       this.scope.value = e.target.value;
-      this.update();
+      this.update('onchange');
     }
+    /**
+     * @param {String} type = '' Может содержать onchange
+    */
+
   }, {
     key: "update",
     value: function update() {
+      var type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
       //putData Устанавливает в данных узла редактора node.data.short_description
-      this.putData('short_description', this.scope.value); //this.putData('sType', this.scope.sType);
-
-      this.emitter.trigger('process');
+      this.putData('short_description', this.scope.value);
+      var eventType = type ? type : 'process';
+      this.emitter.trigger('process', {
+        eventType: eventType,
+        node: this.oReteNode
+      });
 
       this._alight.scan();
     }
@@ -1890,6 +1888,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 window.FileSaver = __webpack_require__(/*! file-saver */ "./node_modules/file-saver/dist/FileSaver.min.js");
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'botSchemeEditor',
@@ -2248,6 +2247,20 @@ window.FileSaver = __webpack_require__(/*! file-saver */ "./node_modules/file-sa
       }
 
       return false;
+    },
+
+    /**
+     * @description Обработка редактирования краткого описания в блоке (для связи с редактором свойств)
+     * @param {Object} event {nodeId, nodeData, nodeType}
+    */
+    onLiveEditNodeContent: function onLiveEditNodeContent(event) {
+      if (event.nodeId == this.$refs.actionEditor.getBlockId()) {
+        this.$refs.actionEditor.setUserDescription(event.nodeData.short_description);
+      }
+
+      if (event.nodeId == this.$refs.conditionEditor.getBlockId()) {
+        this.$refs.conditionEditor.setUserDescription(event.nodeData.short_description);
+      }
     }
   },
   //end methods
@@ -2502,6 +2515,14 @@ __webpack_require__.r(__webpack_exports__);
         }
       }, -1);
       this.nextId++;
+    },
+
+    /**
+     * @description Установка краткого описания (используется при редактировани его непосредственно в блоке)
+     * @param {String} s
+    */
+    setUserDescription: function setUserDescription(s) {
+      this.userDescription = s;
     },
 
     /**
@@ -3103,20 +3124,36 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     aComponents.forEach(function (item, i, arr) {
       _this3.editor.register(item);
     });
-    this.editor.on('process nodecreated noderemoved connectioncreated connectionremoved', /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              _this3.compile();
+    this.editor.on('process nodecreated noderemoved connectioncreated connectionremoved', /*#__PURE__*/function () {
+      var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(event) {
+        var eventData;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _this3.compile();
 
-            case 1:
-            case "end":
-              return _context2.stop();
+                if (event.eventType == 'onchange') {
+                  eventData = {};
+                  eventData.nodeType = event.node.name;
+                  eventData.nodeData = event.node.data;
+                  eventData.nodeId = event.node.id;
+
+                  _this3.$emit('compounddesscriptionliveedit', eventData);
+                }
+
+              case 2:
+              case "end":
+                return _context2.stop();
+            }
           }
-        }
-      }, _callee2);
-    })));
+        }, _callee2);
+      }));
+
+      return function (_x) {
+        return _ref.apply(this, arguments);
+      };
+    }());
   }
 });
 
@@ -55777,6 +55814,7 @@ var render = function() {
             nodeisaddedevent: _vm.onAddedNode,
             nodenotfoundevent: _vm.onNodeNotFound,
             editnodeevent: _vm.onStartEditNodeContent,
+            compounddesscriptionliveedit: _vm.onLiveEditNodeContent,
             deletenodeevent: _vm.onNodeDeleted
           }
         })

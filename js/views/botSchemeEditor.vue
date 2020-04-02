@@ -14,6 +14,7 @@
 				@nodeisaddedevent="onAddedNode"
 				@nodenotfoundevent="onNodeNotFound"
 				@editnodeevent="onStartEditNodeContent"
+				@compounddesscriptionliveedit="onLiveEditNodeContent"
 				@deletenodeevent="onNodeDeleted"
 			></bot-scheme-editor-area>
 		</div>
@@ -343,6 +344,18 @@
 					}
 				}
 				return false;
+			},
+			/**
+			 * @description Обработка редактирования краткого описания в блоке (для связи с редактором свойств)
+			 * @param {Object} event {nodeId, nodeData, nodeType}
+			*/
+			onLiveEditNodeContent(event) {
+				if (event.nodeId == this.$refs.actionEditor.getBlockId()) {
+					this.$refs.actionEditor.setUserDescription(event.nodeData.short_description);
+				}
+				if (event.nodeId == this.$refs.conditionEditor.getBlockId()) {
+					this.$refs.conditionEditor.setUserDescription(event.nodeData.short_description);
+				}
 			}
 		},//end methods
 		//вызывается после data, поля из data видны "напрямую" как this.fieldName

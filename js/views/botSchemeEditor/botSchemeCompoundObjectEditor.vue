@@ -217,6 +217,13 @@
 				this.nextId++;
 			},
 			/**
+			 * @description Установка краткого описания (используется при редактировани его непосредственно в блоке)
+			 * @param {String} s
+			*/
+			setUserDescription(s) {
+				this.userDescription = s;
+			},
+			/**
 			 * @description Обработка на клике кнопки Править списка условий или действий 
 			 * @param  {Event} event {id, content}
 			*/

@@ -8,14 +8,16 @@ class BotSchemeEditorCompoundControl extends Rete.Control {
      * @param {VueI18n} $t
      * @param {String} sLabel метка "Условие" или "Действие"
      * @param {String} sType тип, например "OR" или "AND" для условий. Будет отображаться на блоке схемы
-     */
-    constructor(emitter, $t, sLabel, sType) {
+     * @param {Rete.node} oReteNode ссылка на связанный узел
+    */
+    constructor(emitter, $t, sLabel, sType, oReteNode) {
         super('BotSchemeEditorCompoundControl');
         this.emitter = emitter;
         this.template = `<div>{{ sLabel }}</div>
                         <div><input @input="change($event)" class="conditionName" type="text" :value="value"></div>
                         <div>{{ sType }}</div>`;
         this.$t = $t;
+        this.oReteNode = oReteNode;
         this.scope = {
             /** @property {String} value пользователь сможет вводить краткое описание условия для наглядности  */
             value: '',
@@ -30,14 +32,17 @@ class BotSchemeEditorCompoundControl extends Rete.Control {
 
     change(e) {
         this.scope.value = e.target.value;
-        this.update();
+        this.update('onchange');
     }
 
-    update() {
+    /**
+     * @param {String} type = '' Может содержать onchange
+    */
+    update(type = '') {
         //putData Устанавливает в данных узла редактора node.data.short_description
         this.putData('short_description', this.scope.value);
-        //this.putData('sType', this.scope.sType);
-        this.emitter.trigger('process');
+        let eventType = type ? type : 'process';
+        this.emitter.trigger('process', {eventType: eventType, node: this.oReteNode});
         this._alight.scan();
     }
     /**

@@ -314,8 +314,15 @@
 				this.editor.register(item);
 			});
 			
-			this.editor.on('process nodecreated noderemoved connectioncreated connectionremoved', async () => {
+			this.editor.on('process nodecreated noderemoved connectioncreated connectionremoved', async (event) => {
 				this.compile();
+				if (event.eventType == 'onchange') {
+					let eventData = {};
+					eventData.nodeType = event.node.name;
+					eventData.nodeData = event.node.data;
+					eventData.nodeId   = event.node.id;
+					this.$emit('compounddesscriptionliveedit', eventData);
+				}
 			});
 		}
 	}

@@ -22,19 +22,6 @@ class BotSchemeEditorCompoundComponent extends Rete.Component{
 		this.sComponentId = sComponentId;
 		this.socket = oSocket;
 		this.$t = translator;
-		
-
-		/* Возможно, что-то подобное понадобится
-		this.task = {
-			outputs: {act: 'option', key: 'output'},
-			init(task){
-			 	eventHandlers.remove();
-				eventHandlers.add('keydown', function (e) {
-					task.run(e.keyCode);
-					task.reset();
-				});
-			}
-		}*/
 	}
 	/**
 	 * @description Вызывается при создании узла (При вызове editor.fromJSON)
@@ -48,7 +35,7 @@ class BotSchemeEditorCompoundComponent extends Rete.Component{
             outputParralels = new Rete.Output('parallelExecuting', this.$t('app.parallelExecuting'), this.socket, false),
 			input = new Rete.Input('input', this.$t('app.Enter'), this.socket, true),
 			ctrl = new BotSchemeEditorCompoundControl(this.editor, this.$t,
-														this.sLabelOfType, this.sTypeInfo);
+														this.sLabelOfType, this.sTypeInfo, node);
 			ctrl.setDefaultDescription(this.sDefaultDescriptionText);
 		
 		node.addControl(ctrl);
