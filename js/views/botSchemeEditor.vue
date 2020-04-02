@@ -122,7 +122,7 @@
 			*/
 			onClickImportFromJSONButton(file){
 				let fr = new FileReader(), success;
-				//TODO normalize JSON
+				//здесь normalize JSON если понадобится, мне rete формат кажется вполне логичным
 				fr.onloadend = (result) => {
 					//Сохранили текущую схему.
 					this.confirmSaveCurrentScheme();
@@ -153,7 +153,7 @@
 					this.alert(this.$t('app.needCreateScheme'));
 					return;
 				}
-				//TODO normalize JSON
+				//здесь normalize JSON если понадобится, мне rete формат кажется вполне логичным
 				let blob = new Blob([this.$refs.editorArea.getJSON()], {type: "text/plain;charset=utf-8"});
 				FileSaver.saveAs(blob, "scheme.jss");
 			},

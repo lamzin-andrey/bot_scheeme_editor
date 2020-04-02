@@ -57,20 +57,6 @@ class BotSchemeEditorCompoundComponent extends Rete.Component{
 		node.addOutput(outputParralels);
 		node.addInput(input);
     }
-    /**
-	 * @description Добавляет элемент  в список действий или условий
-	 * @param {String} sItemLabel - отображаемая на блоке метка действия или условия
-	*/
-    addItemInList(sItemLabel) {
-        //TODO or override in child
-    }
-    /**
-	 * @description Указывает узлу тип (например, установить значение переменной или считать по всем условиями или по любому из условия)
-	 * @param {String} sItemLabel - отображаемая на блоке метка действия или условия
-	*/
-    setType(sType) {
-        //TODO or override in child
-    }
 	/**
 	 * @description вызывается всякий раз при перерисовке узла
 	*/

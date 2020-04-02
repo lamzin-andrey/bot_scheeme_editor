@@ -224,10 +224,10 @@
 			 * @return Boolean
 			*/
 			setJSON(sJSON) {
+				this.clear();
 				let oSchemeData = this.editor.toJSON(), i, oImportData;
 				try {
 					oImportData = JSON.parse(sJSON);
-					this.blockCounter = 0;
 					for (i in oImportData.nodes) {
 						this.blockCounter++;
 					}
@@ -237,10 +237,8 @@
 					this.refresh(oSchemeData);
 					return true;
 				} catch (e) {
-					;//TODO onfailparsejson invalid json
 				}
 				return false;
-				
 			},
 			/**
 			 * @description Сбой установки JSON формата в редактор
