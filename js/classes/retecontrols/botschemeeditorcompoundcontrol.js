@@ -26,6 +26,8 @@ class BotSchemeEditorCompoundControl extends Rete.Control {
             sType: sType,
             /** @property {String} sLabel метка "Условие" или "Действие" */
             sLabel: sLabel,
+            /** @property {Array} of {id: Number, content:String} aItems список "подусловий" или "поддействий"  */
+            aItems: [],
             change: this.change.bind(this)
         };
     }
@@ -41,6 +43,8 @@ class BotSchemeEditorCompoundControl extends Rete.Control {
     update(type = '') {
         //putData Устанавливает в данных узла редактора node.data.short_description
         this.putData('short_description', this.scope.value);
+        this.putData('sType', this.scope.sType);
+        this.putData('aItems', this.scope.aItems);
         let eventType = type ? type : 'process';
         this.emitter.trigger('process', {eventType: eventType, node: this.oReteNode});
         this._alight.scan();
@@ -55,8 +59,9 @@ class BotSchemeEditorCompoundControl extends Rete.Control {
 
     mounted() {
         this.scope.value = this.getData('short_description') || this.defaultDescription;
-        //TODO вот это совсем не очевидно было (сохранение из редактора)! Надо что-то придумать кк минимум написать в документации
+        //TODO вот это совсем не очевидно было (сохранение из редактора)! Надо что-то придумать как минимум написать в документации
         this.scope.sType = this.getData('sType') || this.scope.sType;
+        this.scope.aItems = this.getData('aItems') || this.scope.aItems;
         this.update();
     }
 

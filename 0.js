@@ -775,6 +775,9 @@ var BotSchemeEditorCompoundControl = /*#__PURE__*/function (_Rete$Control) {
 
       /** @property {String} sLabel метка "Условие" или "Действие" */
       sLabel: sLabel,
+
+      /** @property {Array} of {id: Number, content:String} aItems список "подусловий" или "поддействий"  */
+      aItems: [],
       change: _this.change.bind(_assertThisInitialized(_this))
     };
     return _this;
@@ -796,6 +799,8 @@ var BotSchemeEditorCompoundControl = /*#__PURE__*/function (_Rete$Control) {
       var type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
       //putData Устанавливает в данных узла редактора node.data.short_description
       this.putData('short_description', this.scope.value);
+      this.putData('sType', this.scope.sType);
+      this.putData('aItems', this.scope.aItems);
       var eventType = type ? type : 'process';
       this.emitter.trigger('process', {
         eventType: eventType,
@@ -817,9 +822,10 @@ var BotSchemeEditorCompoundControl = /*#__PURE__*/function (_Rete$Control) {
   }, {
     key: "mounted",
     value: function mounted() {
-      this.scope.value = this.getData('short_description') || this.defaultDescription; //TODO вот это совсем не очевидно было (сохранение из редактора)! Надо что-то придумать кк минимум написать в документации
+      this.scope.value = this.getData('short_description') || this.defaultDescription; //TODO вот это совсем не очевидно было (сохранение из редактора)! Надо что-то придумать как минимум написать в документации
 
       this.scope.sType = this.getData('sType') || this.scope.sType;
+      this.scope.aItems = this.getData('aItems') || this.scope.aItems;
       this.update();
     }
   }, {
@@ -2439,7 +2445,6 @@ __webpack_require__.r(__webpack_exports__);
     },
 
     /**
-     * TODO при редактировании задаём nextId максимальный id из всех item of items
      * @description Обработка клика на кнопке "Сохранить" для текста одного условия или действия
      * @param {Event} event {id - идентификатор элемента в списке составных условий}
     */
