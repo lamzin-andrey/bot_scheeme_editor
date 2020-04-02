@@ -1890,7 +1890,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 window.FileSaver = __webpack_require__(/*! file-saver */ "./node_modules/file-saver/dist/FileSaver.min.js");
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'botSchemeEditor',
@@ -1985,13 +1984,6 @@ window.FileSaver = __webpack_require__(/*! file-saver */ "./node_modules/file-sa
       };
 
       fr.readAsText(file);
-    },
-
-    /**
-     * @description Обработка варианта, когда в выбюранном файле JSON, но он не для rete 
-    */
-    onFailParseJSON: function onFailParseJSON(event) {
-      this.alert(this.$t('app.IncorrectJSONFormat'));
     },
 
     /**
@@ -2827,25 +2819,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.editor.fromJSON(oSchemeData).then(function (arg) {
         _this.editor.view.resize();
 
-        _this.compile(); //Вместо этого должно было быть onFailSetJSONtoEditor()  в catch, но rete не совершенен
-
-
-        var newData = _this.editor.toJSON(),
-            nLength = 0,
-            i;
-
-        if (newData.nodes) {
-          for (i in newData.nodes) {
-            nLength++;
-            break;
-          }
-        }
-
-        if (!newData.nodes || !nLength) {
-          _this.onFailSetJSONtoEditor();
-        }
-      })["catch"](function () {//Хотелось бы, но ему хоть composer.json от Symfony подсовывай - всё равно then(true) вызывается
-        //this.onFailSetJSONtoEditor();
+        _this.compile();
       });
     },
 
@@ -3025,6 +2999,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       try {
         oImportData = JSON.parse(sJSON);
 
+        if (!this.validateReteJSONFormat(oImportData)) {
+          return false;
+        }
+
         for (i in oImportData.nodes) {
           this.blockCounter++;
         }
@@ -3041,16 +3019,50 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     },
 
     /**
-     * @description Сбой установки JSON формата в редактор
+     * 
     */
-    onFailSetJSONtoEditor: function onFailSetJSONtoEditor() {
-      if (this.isProcessingJSONFromFile) {
-        this.isProcessingJSONFromFile = false;
-        this.$emit('onfailparsejson', {
-          fromFile: true,
-          forRete: true
-        });
+    validateReteJSONFormat: function validateReteJSONFormat(newData) {
+      var nLength = 0,
+          i,
+          idFieldExists = false,
+          nodesFieldExists = false,
+          isCorrectReteJSON = false;
+
+      if (newData.nodes) {
+        for (i in newData.nodes) {
+          nLength++;
+          break;
+        }
+      } //Для корректной схемы refresh вызывается и в тот момент, когда nodes пусты, в этом случае проверяем на соответствие пустой схеме
+
+
+      if (!nLength) {
+        console.log('Nodes length = 0 (' + nLength + ') is incorrect rete format 105');
+
+        for (i in newData) {
+          if (!idFieldExists) {
+            idFieldExists = i == 'id';
+          }
+
+          if (!nodesFieldExists) {
+            nodesFieldExists = i == 'nodes';
+          }
+
+          nLength++;
+        }
+
+        if (nLength == 2 && idFieldExists && nodesFieldExists) {
+          console.log('Nodes length = ' + nLength + ' is correct rete format 112');
+          isCorrectReteJSON = true;
+        } else {
+          console.log('Nodes length = 0 (' + nLength + ') is incorrect rete format 105', 'idFieldExists', idFieldExists, 'nodesFieldExists', nodesFieldExists);
+        }
+      } else {
+        console.log('Nodes length = ' + nLength + ' is correct rete format 114');
+        isCorrectReteJSON = true;
       }
+
+      return isCorrectReteJSON;
     }
   },
   //end methods
@@ -55765,8 +55777,7 @@ var render = function() {
             nodeisaddedevent: _vm.onAddedNode,
             nodenotfoundevent: _vm.onNodeNotFound,
             editnodeevent: _vm.onStartEditNodeContent,
-            deletenodeevent: _vm.onNodeDeleted,
-            onfailparsejson: _vm.onFailParseJSON
+            deletenodeevent: _vm.onNodeDeleted
           }
         })
       ],

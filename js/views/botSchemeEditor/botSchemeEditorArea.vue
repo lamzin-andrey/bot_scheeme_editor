@@ -88,22 +88,6 @@
 				this.editor.fromJSON(oSchemeData).then((arg) => {
 					this.editor.view.resize();
 					this.compile();
-
-					//Вместо этого должно было быть onFailSetJSONtoEditor()  в catch, но rete не совершенен
-					let newData = this.editor.toJSON(), nLength = 0, i;
-					if (newData.nodes) {
-						for (i in newData.nodes) {
-							nLength++;
-							break;
-						}
-					}
-					if (!newData.nodes || !nLength) {
-						this.onFailSetJSONtoEditor();
-					}
-				})
-				.catch(() => {
-					//Хотелось бы, но ему хоть composer.json от Symfony подсовывай - всё равно then(true) вызывается
-					//this.onFailSetJSONtoEditor();
 				});
 			},
 			/**
@@ -228,6 +212,10 @@
 				let oSchemeData = this.editor.toJSON(), i, oImportData;
 				try {
 					oImportData = JSON.parse(sJSON);
+					if (!this.validateReteJSONFormat(oImportData)) {
+						return false;
+					}
+
 					for (i in oImportData.nodes) {
 						this.blockCounter++;
 					}
@@ -241,13 +229,43 @@
 				return false;
 			},
 			/**
-			 * @description Сбой установки JSON формата в редактор
+			 * 
 			*/
-			onFailSetJSONtoEditor(){
-				if ( this.isProcessingJSONFromFile) {
-					this.isProcessingJSONFromFile = false;
-					this.$emit('onfailparsejson', {fromFile: true, forRete: true});
+			validateReteJSONFormat(newData) {
+				let nLength = 0, i,
+					idFieldExists = false,
+					nodesFieldExists = false,
+					isCorrectReteJSON = false;
+				if (newData.nodes) {
+					for (i in newData.nodes) {
+						nLength++;
+						break;
+					}
 				}
+				//Для корректной схемы refresh вызывается и в тот момент, когда nodes пусты, в этом случае проверяем на соответствие пустой схеме
+				if (!nLength) {
+					console.log('Nodes length = 0 (' + nLength + ') is incorrect rete format 105');
+					for (i in newData) {
+						if (!idFieldExists) {
+							idFieldExists = (i == 'id');
+						}
+						if (!nodesFieldExists) {
+							nodesFieldExists = (i == 'nodes');
+						}
+						nLength++;
+					}
+					if (nLength == 2 && idFieldExists && nodesFieldExists) {
+						console.log('Nodes length = ' + nLength + ' is correct rete format 112');
+						isCorrectReteJSON = true;
+					} else {
+						console.log('Nodes length = 0 (' + nLength + ') is incorrect rete format 105', 'idFieldExists', idFieldExists, 'nodesFieldExists', nodesFieldExists);
+					}
+				} else {
+					console.log('Nodes length = ' + nLength + ' is correct rete format 114');
+					isCorrectReteJSON = true;
+				}
+
+				return isCorrectReteJSON;
 			}
 		},//end methods
 		//вызывается после data, поля из data видны "напрямую" как this.fieldName

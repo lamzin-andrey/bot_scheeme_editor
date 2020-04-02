@@ -15,7 +15,6 @@
 				@nodenotfoundevent="onNodeNotFound"
 				@editnodeevent="onStartEditNodeContent"
 				@deletenodeevent="onNodeDeleted"
-				@onfailparsejson="onFailParseJSON"
 			></bot-scheme-editor-area>
 		</div>
 		<div class="clearfix"></div>
@@ -138,12 +137,6 @@
 					}
 				};
 				fr.readAsText(file);
-			},
-			/**
-			 * @description Обработка варианта, когда в выбюранном файле JSON, но он не для rete 
-			*/
-			onFailParseJSON(event) {
-				this.alert(this.$t('app.IncorrectJSONFormat'));
 			},
 			/**
 			 * @description Обработка кликов на кнопке Экспорт в JSON
