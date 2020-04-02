@@ -2179,8 +2179,6 @@ window.FileSaver = __webpack_require__(/*! file-saver */ "./node_modules/file-sa
      * @param {Object} event {id:Number, nodeType:String, nodeData: Object}
     */
     onStartEditNodeContent: function onStartEditNodeContent(event) {
-      console.log(event);
-
       switch (event.nodeType) {
         case 'MessageComponent':
           this.$refs.messageEditor.setBlockId(event.id);
@@ -2503,18 +2501,18 @@ __webpack_require__.r(__webpack_exports__);
       this.userDescription = nodeData.short_description;
       this.items = [];
       Vue.nextTick(function () {
-        _this2.items = nodeData.aItems ? nodeData.aItems : [];
+        _this2.items = nodeData.aItems ? nodeData.aItems : []; //getMaxId
+
+        _this2.nextId = _this2.items.reduce(function (prevResult, currentItem) {
+          if (currentItem.id > prevResult) {
+            return currentItem.id;
+          }
+        }, -1);
+        _this2.nextId++;
       });
       this.nEditItemId = -1;
       this.content = '';
-      this.cssContentEditorVisible = 'none'; //getMaxId
-
-      this.nextId = this.items.reduce(function (prevResult, currentItem) {
-        if (currentItem.id > prevResult) {
-          return currentItem.id;
-        }
-      }, -1);
-      this.nextId++;
+      this.cssContentEditorVisible = 'none';
     },
 
     /**

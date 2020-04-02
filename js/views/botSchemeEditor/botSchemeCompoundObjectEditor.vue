@@ -204,17 +204,17 @@
 				this.items = [];
 				Vue.nextTick(() => {
 					this.items = nodeData.aItems ? nodeData.aItems : [];
+					//getMaxId
+					this.nextId = this.items.reduce((prevResult, currentItem) => {
+						if (currentItem.id > prevResult) {
+							return currentItem.id;
+						}
+					}, -1);
+					this.nextId++;
 				});
 				this.nEditItemId = -1;
 				this.content = '';
 				this.cssContentEditorVisible = 'none';
-				//getMaxId
-				this.nextId = this.items.reduce((prevResult, currentItem) => {
-					if (currentItem.id > prevResult) {
-						return currentItem.id;
-					}
-				}, -1);
-				this.nextId++;
 			},
 			/**
 			 * @description Установка краткого описания (используется при редактировани его непосредственно в блоке)

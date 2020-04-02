@@ -287,7 +287,6 @@
 			 * @param {Object} event {id:Number, nodeType:String, nodeData: Object}
 			*/
 			onStartEditNodeContent(event) {
-				console.log(event);
 				switch (event.nodeType) {
 					case 'MessageComponent':
 						this.$refs.messageEditor.setBlockId(event.id);
