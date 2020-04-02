@@ -1895,6 +1895,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 window.FileSaver = __webpack_require__(/*! file-saver */ "./node_modules/file-saver/dist/FileSaver.min.js");
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'botSchemeEditor',
@@ -1982,7 +1983,7 @@ window.FileSaver = __webpack_require__(/*! file-saver */ "./node_modules/file-sa
           _this.hideAllEditors();
 
           _this.isSchemeLoaded = true;
-          _this.isCurrentSchemeModify = true;
+          _this.isCurrentSchemeModify = false;
         } else {
           _this.alert(_this.$t('app.IncorrectJSONFormat'));
         }
@@ -2265,6 +2266,13 @@ window.FileSaver = __webpack_require__(/*! file-saver */ "./node_modules/file-sa
       if (event.nodeId == this.$refs.conditionEditor.getBlockId()) {
         this.$refs.conditionEditor.setUserDescription(event.nodeData.short_description);
       }
+    },
+
+    /**
+     * Событие изменения позиции блока, позиции схемы
+    */
+    onPositionChanged: function onPositionChanged() {
+      this.isCurrentSchemeModify = true;
     }
   },
   //end methods
@@ -3061,8 +3069,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
       if (!nLength) {
-        console.log('Nodes length = 0 (' + nLength + ') is incorrect rete format 105');
-
         for (i in newData) {
           if (!idFieldExists) {
             idFieldExists = i == 'id';
@@ -3076,13 +3082,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }
 
         if (nLength == 2 && idFieldExists && nodesFieldExists) {
-          console.log('Nodes length = ' + nLength + ' is correct rete format 112');
           isCorrectReteJSON = true;
-        } else {
-          console.log('Nodes length = 0 (' + nLength + ') is incorrect rete format 105', 'idFieldExists', idFieldExists, 'nodesFieldExists', nodesFieldExists);
         }
       } else {
-        console.log('Nodes length = ' + nLength + ' is correct rete format 114');
         isCorrectReteJSON = true;
       }
 
@@ -3155,6 +3157,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
       return function (_x) {
         return _ref.apply(this, arguments);
+      };
+    }());
+    this.editor.on('nodetranslated translated', /*#__PURE__*/function () {
+      var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(event) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _this3.$emit('positionchanged');
+
+              case 1:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
+      }));
+
+      return function (_x2) {
+        return _ref2.apply(this, arguments);
       };
     }());
   }
@@ -55818,7 +55840,8 @@ var render = function() {
             nodenotfoundevent: _vm.onNodeNotFound,
             editnodeevent: _vm.onStartEditNodeContent,
             compounddesscriptionliveedit: _vm.onLiveEditNodeContent,
-            deletenodeevent: _vm.onNodeDeleted
+            deletenodeevent: _vm.onNodeDeleted,
+            positionchanged: _vm.onPositionChanged
           }
         })
       ],

@@ -16,6 +16,7 @@
 				@editnodeevent="onStartEditNodeContent"
 				@compounddesscriptionliveedit="onLiveEditNodeContent"
 				@deletenodeevent="onNodeDeleted"
+				@positionchanged="onPositionChanged"
 			></bot-scheme-editor-area>
 		</div>
 		<div class="clearfix"></div>
@@ -131,8 +132,8 @@
 					success = this.$refs.editorArea.setJSON(fr.result);
 					if (success) {
 						this.hideAllEditors();
-						this.isSchemeLoaded = true;	
-						this.isCurrentSchemeModify = true;
+						this.isSchemeLoaded = true;
+						this.isCurrentSchemeModify = false;
 					} else {
 						this.alert(this.$t('app.IncorrectJSONFormat'));
 					}
@@ -355,6 +356,12 @@
 				if (event.nodeId == this.$refs.conditionEditor.getBlockId()) {
 					this.$refs.conditionEditor.setUserDescription(event.nodeData.short_description);
 				}
+			},
+			/**
+			 * Событие изменения позиции блока, позиции схемы
+			*/
+			onPositionChanged(){
+				this.isCurrentSchemeModify = true;
 			}
 		},//end methods
 		//вызывается после data, поля из data видны "напрямую" как this.fieldName
