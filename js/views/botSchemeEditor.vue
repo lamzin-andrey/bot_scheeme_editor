@@ -5,9 +5,9 @@
  (В дальнейшем - редактора свойств компонентов и т. п.)
 -->
 <template>
-	<div class="d-flex-test">
-		<div class="toolbar-wrapper">&nbsp;</div>
-		<div class="toolbar-wrapper toolbar-fixed">
+	<div class="d-flex">
+		<div class="toolbar-wrapper">&nbsp;</div><!-- Чтобы схема не залезала под тулбар -->
+		<div class="toolbar-wrapper toolbar-fixed"><!-- Собственно, тулбар -->
 			<bot-scheme-toolbar @toolbarevent="onToolbarEvent"></bot-scheme-toolbar>
 		</div>
 		<div class="editorarea-wrapper">
@@ -20,7 +20,6 @@
 				@positionchanged="onPositionChanged"
 			></bot-scheme-editor-area>
 		</div>
-		<!--div class="clearfix"></div-->
 		<!-- Редактор блока Message -->
 		<div class="property-editor-wrapper" :style="{'display':cssMessageEditorVisible}">
 			<bot-scheme-message-editor ref="messageEditor"  @editorpropertyevent="onPropertyEditorEvent"></bot-scheme-message-editor>
@@ -370,40 +369,3 @@
 		}
 	}
 </script>
-<style scoped>
-	.d-flex-test {
-		display:flex;
-		align-items:stretch;
-		flex-direction: row;
-	}
-	.toolbar-wrapper {
-		border: solid 1px #ece9d8;
-		border-right-color: #3E97C4;
-		/*float: left;*/
-		min-width: 63px;
-		width: 64px;
-		min-height: 99.5vh;
-		background-color: #ece9d8;
-		text-align: center;
-	}
-	.toolbar-fixed {
-		position:fixed;
-		z-index:2;
-	}
-	.editorarea-wrapper {
-		/*border: solid 1px #AAFF00;*/
-		/*float:left;*/
-		width: calc(100% - 70px);
-		min-height: 99.5vh;
-	}
-	.clearfix {
-		clear:both;
-	}
-	.property-editor-wrapper{
-		position:absolute;
-		right:0px;
-		top:0px;
-		z-index:1;
-		min-height: 99.5vh;
-	}
-</style>
