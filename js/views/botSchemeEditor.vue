@@ -6,7 +6,8 @@
 -->
 <template>
 	<div class="d-flex-test">
-		<div class="toolbar-wrapper">
+		<div class="toolbar-wrapper">&nbsp;</div>
+		<div class="toolbar-wrapper toolbar-fixed">
 			<bot-scheme-toolbar @toolbarevent="onToolbarEvent"></bot-scheme-toolbar>
 		</div>
 		<div class="editorarea-wrapper">
@@ -381,15 +382,19 @@
 		/*float: left;*/
 		min-width: 63px;
 		width: 64px;
-		height: 99.5vh;
+		min-height: 99.5vh;
 		background-color: #ece9d8;
 		text-align: center;
+	}
+	.toolbar-fixed {
+		position:fixed;
+		z-index:2;
 	}
 	.editorarea-wrapper {
 		/*border: solid 1px #AAFF00;*/
 		/*float:left;*/
 		width: calc(100% - 70px);
-		height: 99.5vh;
+		min-height: 99.5vh;
 	}
 	.clearfix {
 		clear:both;
@@ -399,5 +404,6 @@
 		right:0px;
 		top:0px;
 		z-index:1;
+		min-height: 99.5vh;
 	}
 </style>
