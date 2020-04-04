@@ -7,11 +7,12 @@ class BotSchemeEditorTimerControl extends Rete.Control {
      * @param {Rete.Editor} emitter 
      * @param {Number} interval 
      * @param {VueI18n} $t 
+     * @param {String} sImageCatalog путь к папке с изображениями
      */
-    constructor(emitter, interval, $t) {
+    constructor(emitter, interval, $t, sImageCatalog) {
         super('BotSchemeEditorTimerControl');
         this.emitter = emitter;
-        this.template = `<img class="timer-icon" src="/images/bot-scheme-toolbar/clock32.png">
+        this.template = `<img class="timer-icon" src="${sImageCatalog}/clock32.png">
         <input @input="change($event)" type="number" :value="value"> ${$t('app.sec')}`;
         this.scope = {
             value: 0,

@@ -6,12 +6,14 @@ class BotSchemeEditorTimerComponent extends Rete.Component{
 	 * @param {String} sComponentId string id компонента. На схеме могут быть один или несколько блоков такого "класса"
 	 * @param {Rete.Socket} oSocket Сокет для соединения компонентов
 	 * @param {VueI18n} translator 
+	 * @param {String} sImageCatalog путь к папке с изображениями
 	*/
-	constructor(sComponentId, oSocket, translator) {
+	constructor(sComponentId, oSocket, translator, sImageCatalog) {
 		super(sComponentId);
 		this.sComponentId = sComponentId;
 		this.socket = oSocket;
 		this.$t = translator;
+		this.sImageCatalog = sImageCatalog;
 	}
 	/**
 	 * @description вызывается при создании узла (При вызове editor.fromJSON)
@@ -22,7 +24,7 @@ class BotSchemeEditorTimerComponent extends Rete.Component{
 	builder(node) {
 		let outputTimer = new Rete.Output('timerOutput', 'Timer', this.socket, false),
 			input = new Rete.Input('messageIn', this.$t('app.Enter'), this.socket, true),
-			ctrl = new BotSchemeEditorTimerControl(this.editor, node.data.interval, this.$t);
+			ctrl = new BotSchemeEditorTimerControl(this.editor, node.data.interval, this.$t, this.sImageCatalog);
 		node.addOutput(outputTimer);
 		node.addInput(input);
 		node.addControl(ctrl);

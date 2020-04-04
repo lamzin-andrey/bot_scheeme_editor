@@ -1,6 +1,6 @@
 <template>
 	<div class="list-item-button" @click="$emit('click', $event)"  @touchstart="$emit('touchstart', $event)">
-		<img class="list-item-button-icon" :src="icon_image" >
+		<img class="list-item-button-icon" :src="calc_icon_image" >
 	</div>
 </template>
 <script>
@@ -14,6 +14,26 @@
 				default: '/images/bot-scheme-toolbar/add32.png'
 			},
 		},
+
+		//
+		computed: {
+			/**
+			 * Добавляет префикс Vue.prototype.$imageCatalog к тем путям файлов изображений,
+			 * которые переданы без него в начале.
+			*/
+			calc_icon_image() {
+				let catalog = this.$imageCatalog;
+				let path = this.icon_image;
+				if (!catalog) {
+					return path;
+				}
+				if (path.indexOf(catalog) == 0) {
+					return path;
+				}
+				return catalog + '/' + path;
+			}
+		},
+
 		//вызывается раньше чем mounted
 		data: function(){return {
 			

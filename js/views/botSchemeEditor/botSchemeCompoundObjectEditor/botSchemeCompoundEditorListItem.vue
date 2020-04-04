@@ -1,7 +1,7 @@
 <template>
 	<div class="bot-scheme-editor-list-block">
-		<bot-scheme-compound-editor-list-item-button @click="onClickDeleteItem" :title="delete_label" icon_image="/images/bot-scheme-toolbar/delete32.png"></bot-scheme-compound-editor-list-item-button>
-		<bot-scheme-compound-editor-list-item-button @click="onClickEditItem" :title="edit_label" icon_image="/images/bot-scheme-toolbar/edit32.png"></bot-scheme-compound-editor-list-item-button>
+		<bot-scheme-compound-editor-list-item-button @click="onClickDeleteItem" :title="delete_label" icon_image="delete32.png"></bot-scheme-compound-editor-list-item-button>
+		<bot-scheme-compound-editor-list-item-button @click="onClickEditItem" :title="edit_label" icon_image="edit32.png"></bot-scheme-compound-editor-list-item-button>
 		{{ content }}
 		<div class="clearfix"></div>
 	</div>

@@ -2,7 +2,7 @@
 	<div>
 		<label :for="id">
 			<div class="bot-scheme-toolbar-button">
-				<img :src="icon_image" class="bot-scheme-toolbar-button-icon">
+				<img :src="calc_icon_image" class="bot-scheme-toolbar-button-icon">
 			</div>
 		</label>
 		<input @change="$emit('select', $event)" type="file" :name="id" :id="id" :accept="accept" style="display:none">
@@ -26,6 +26,26 @@
 				type:String
 			},
 		},
+
+		//
+		computed: {
+			/**
+			 * Добавляет префикс Vue.prototype.$imageCatalog к тем путям файлов изображений,
+			 * которые переданы без него в начале.
+			*/
+			calc_icon_image() {
+				let catalog = this.$imageCatalog;
+				let path = this.icon_image;
+				if (!catalog) {
+					return path;
+				}
+				if (path.indexOf(catalog) == 0) {
+					return path;
+				}
+				return catalog + '/' + path;
+			}
+		},
+
 		//вызывается раньше чем mounted
 		data: function(){return {
 			

@@ -31,7 +31,7 @@
 		<hr>
 			<div>
 				<label class="bot-scheme-editor-property-add-item-label">{{ append_label }}</label>
-				<bot-scheme-compound-editor-list-item-button @click="onClickAddItemButton" :title="append_label" icon_image="/images/bot-scheme-toolbar/add32.png"></bot-scheme-compound-editor-list-item-button>
+				<bot-scheme-compound-editor-list-item-button @click="onClickAddItemButton" :title="append_label" icon_image="add32.png"></bot-scheme-compound-editor-list-item-button>
 				<div class="clearfix"></div>
 			</div>
 		<hr>

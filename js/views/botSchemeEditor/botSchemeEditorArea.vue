@@ -297,10 +297,11 @@
 
 			this.engine = new Rete.Engine('demo@0.1.0');
 
+
 			/** @property {Array} aComponents  массив экземпляров объектов компонентов, наследников Rete.Component */
 			let aComponents = this.aComponents = [new BotSchemeEditorMessageComponent('MessageComponent', this.botSchemeEditorSocket, this.$t),
 								new BotSchemeEditorBeginComponent('BeginComponent', this.botSchemeEditorSocket, this.$t),
-								new BotSchemeEditorTimerComponent('TimerComponent', this.botSchemeEditorSocket, this.$t),
+								new BotSchemeEditorTimerComponent('TimerComponent', this.botSchemeEditorSocket, this.$t, this.$imageCatalog),
 								new BotSchemeEditorConditionComponent('ConditionComponent', this.botSchemeEditorSocket, this.$t),
 							 	new BotSchemeEditorActionComponent('ActionComponent', this.botSchemeEditorSocket, this.$t)
 							],

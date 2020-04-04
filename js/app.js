@@ -1,6 +1,10 @@
 window.jQuery = window.$ = window.jquery = require('jquery');
 window.Vue = require('vue');
 
+//Каталог с изображениями, которые использует приложение
+
+Vue.prototype.$imageCatalog = '/portfolio/web-razrabotka/bot_scheme_editor/images/bot-scheme-toolbar';
+
 Vue.component('bot-scheme-editor', require('./views/botSchemeEditor.vue').default);
 
 

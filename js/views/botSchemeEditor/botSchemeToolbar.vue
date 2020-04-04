@@ -4,44 +4,44 @@
 			@click="onClickNewScheme"
 			@touchstart="onTouchStartNewScheme"
 			:title="$t('app.newSchemeCreate')"
-			icon_image="/images/bot-scheme-toolbar/new32.png"></bot-scheme-toolbar-button>
+			icon_image="new32.png"></bot-scheme-toolbar-button>
 		
 		<bot-scheme-toolbar-file-input-button
 			@select="onSelectFileForImportFromJSON"
 			:title="$t('app.importJSONHint')"
 			accept=".jss"
 			id="import"
-			icon_image="/images/bot-scheme-toolbar/import32.png"></bot-scheme-toolbar-file-input-button>
+			icon_image="import32.png"></bot-scheme-toolbar-file-input-button>
 
 		<bot-scheme-toolbar-button 
 			@click="onClickAddMessageBlock"
 			@touchstart="onTouchStartAddMessageBlock"
 			:title="$t('app.addMessageBlockHint')"
-			icon_image="/images/bot-scheme-toolbar/addMessage32.png"></bot-scheme-toolbar-button>
+			icon_image="addMessage32.png"></bot-scheme-toolbar-button>
 
 		<bot-scheme-toolbar-button 
 			@click="onClickAddTimerBlock"
 			@touchstart="onTouchStartAddTimerBlock"
 			:title="$t('app.addTimerBlockHint')"
-			icon_image="/images/bot-scheme-toolbar/clock32.png"></bot-scheme-toolbar-button>
+			icon_image="clock32.png"></bot-scheme-toolbar-button>
 
 		<bot-scheme-toolbar-button 
 			@click="onClickAddConditionBlock"
 			@touchstart="onTouchStartAddConditionBlock"
 			:title="$t('app.addConditionBlockHint')"
-			icon_image="/images/bot-scheme-toolbar/if32.png"></bot-scheme-toolbar-button>
+			icon_image="if32.png"></bot-scheme-toolbar-button>
 
 		<bot-scheme-toolbar-button 
 			@click="onClickAddActionBlock"
 			@touchstart="onTouchStartAddActionBlock"
 			:title="$t('app.addActionBlockHint')"
-			icon_image="/images/bot-scheme-toolbar/act32.png"></bot-scheme-toolbar-button>
+			icon_image="act32.png"></bot-scheme-toolbar-button>
 
 		<bot-scheme-toolbar-button 
 			@click="onClickExportToJSON"
 			@touchstart="onTouchStartExportToJSON"
 			:title="$t('app.exportJSONHint')"
-			icon_image="/images/bot-scheme-toolbar/export32.png"></bot-scheme-toolbar-button>
+			icon_image="export32.png"></bot-scheme-toolbar-button>
 		
 			
 	</div>
