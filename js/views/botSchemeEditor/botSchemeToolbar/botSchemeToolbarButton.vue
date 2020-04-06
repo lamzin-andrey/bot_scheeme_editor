@@ -22,8 +22,7 @@
 			 * которые переданы без него в начале.
 			*/
 			calc_icon_image() {
-				let catalog = this.$imageCatalog;
-				console.log('catalog', catalog);
+				let catalog = this.$config.imageCatalog;
 				let path = this.icon_image;
 				if (!catalog) {
 					return path;
