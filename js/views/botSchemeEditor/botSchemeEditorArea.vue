@@ -308,6 +308,7 @@
 							i;
 			aComponents.forEach((item, i, arr) => {
 				this.editor.register(item);
+				this.engine.register(item);
 			});
 			
 			this.editor.on('process nodecreated noderemoved connectioncreated connectionremoved', async (event) => {
