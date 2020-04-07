@@ -19,7 +19,7 @@ export default {
 		/** @property {String} sLabel метка "Условие" или "Действие" */
 		'sLabel',
 		/** @property {String} sLabel тип для наглядности, например тип для условий, по всем или по одному  */
-		'sType',
+		//'sType', Закомментировано, чтобы не возникала ошибка "Используйте вместо этого вычисляемое свойство"
 		/** @property {Rete.Node} oReteNode ссылка на связанный узел */
 		'oReteNode',
 		/** @property {Function} putData метод записи, через него осуществляется связь с данными наследника Rete.Control */
