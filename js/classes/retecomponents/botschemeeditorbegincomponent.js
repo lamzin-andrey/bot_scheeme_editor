@@ -1,5 +1,6 @@
 import Rete from "rete";
-class BotSchemeEditorBeginComponent extends Rete.Component{
+import AlightRenderPlugin from 'rete-alight-render-plugin';
+class BotSchemeEditorBeginComponent extends Rete.Component {
 	/**
 	 * @param {String} sComponentId string id компонента. На схеме могут быть один или несколько блоков такого "класса"
 	 * @param {Rete.Socket} oSocket Сокет для соединения компонентов
@@ -10,6 +11,8 @@ class BotSchemeEditorBeginComponent extends Rete.Component{
 		this.sComponentId = sComponentId;
 		this.socket = oSocket;
 		this.$t = translator;
+
+		
 	}
 	/**
 	 * @description вызывается при создании узла (При вызове editor.fromJSON)

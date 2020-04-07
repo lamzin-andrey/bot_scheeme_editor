@@ -7,8 +7,8 @@
 	import Rete from "rete";
 	import ConnectionPlugin from 'rete-connection-plugin';
 	import ContextMenuPlugin from 'rete-context-menu-plugin';
-	import AlightRenderPlugin from 'rete-alight-render-plugin';
-	//import VueRenderPlugin from 'rete-vue-render-plugin';
+	//import AlightRenderPlugin from 'rete-alight-render-plugin';
+	import VueRenderPlugin from 'rete-vue-render-plugin';
 	// /Rete
 	import BotSchemeEditorMessageComponent from '../../classes/retecomponents/botschemeeditormessagecomponent';
 	import BotSchemeEditorBeginComponent from '../../classes/retecomponents/botschemeeditorbegincomponent';
@@ -271,9 +271,9 @@
 			this.container = document.querySelector('#rete');
 			this.editor = new Rete.NodeEditor('demo@0.1.0', this.container);
 
-			this.editor.use(AlightRenderPlugin);
+			//this.editor.use(AlightRenderPlugin);
+			this.editor.use(VueRenderPlugin);
 			this.editor.use(ConnectionPlugin);
-			//this.editor.use(VueRenderPlugin);
 			
 			this.editor.use(ContextMenuPlugin, {
 				searchBar: false, // true by default (в контекстном меню редактора (не компонентов) появляется поле поиска)

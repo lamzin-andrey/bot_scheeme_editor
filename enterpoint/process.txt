@@ -17,6 +17,11 @@ https://www.npmjs.com/package/rete-context-menu-plugin
 
 Разобраться, как переставить коннекторы у rete компонента, возможно сделать это более удобным.
 
+Отказываюсь от alight render plugin потому что  https://rete.readthedocs.io/en/latest/Plugins/#alight-render-deprecated
+
+
+
+
 Постараться более автоматизировать связывание ontoolbarevent, хотя там и так 5 - 10 минут на добавление кнопки
  и создание её пустого обработчика в редакторе.
 

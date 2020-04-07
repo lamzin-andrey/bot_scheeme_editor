@@ -1,30 +1,17 @@
 import Rete from 'rete';
 
+import VueMessageReteControlView from '../../views/botSchemeEditor/botSchemeReteControlsViews/vueMessageReteControlsView.vue';
+
 class BotSchemeEditorMessageControl extends Rete.Control {
 
     constructor(emitter, msg) {
         super('BotSchemeEditorMessageControl');
-        this.emitter = emitter;
-        this.template = '<div class="bot-scheme-editor-msg-view">{{ msg }}</div>';
-        this.scope = {
-            msg: msg
-        };
-    }
-
-    update() {
-        //putData Устанавливает в данных узла редактора node.data.msg
-        this.putData('msg', this.scope.value);
-        this.emitter.trigger('process');
-        this._alight.scan();
-    }
-
-    mounted() {
-        this.scope.value = this.getData('msg') || '';
-        this.update();
+        this.props = {emitter, msg};
+        this.component = VueMessageReteControlView;
     }
 
     setValue(val) {
-        this.scope.value = val;
+        this.value = val;
         this.update();
     }
 }

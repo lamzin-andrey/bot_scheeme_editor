@@ -1,4 +1,5 @@
 import Rete from 'rete';
+import VueCompoundReteControlView from '../../views/botSchemeEditor/botSchemeReteControlsViews/vueCompoundReteControlsView.vue';
 
 class BotSchemeEditorCompoundControl extends Rete.Control {
 
@@ -11,63 +12,27 @@ class BotSchemeEditorCompoundControl extends Rete.Control {
      * @param {Rete.node} oReteNode ссылка на связанный узел
     */
     constructor(emitter, $t, sLabel, sType, oReteNode) {
-        super('BotSchemeEditorCompoundControl');
-        this.emitter = emitter;
-        this.template = `<div>{{ sLabel }}</div>
-                        <div><input @input="change($event)" class="conditionName" type="text" :value="value"></div>
-                        <div>{{ sType }}</div>`;
-        this.$t = $t;
-        this.oReteNode = oReteNode;
-        this.scope = {
-            /** @property {String} value пользователь сможет вводить краткое описание условия для наглядности  */
-            value: '',
-            short_description : '',
-            /** @property {String} sType тип для наглядности, например тип для условий, по всем или по одному  */
-            sType: sType,
-            /** @property {String} sLabel метка "Условие" или "Действие" */
-            sLabel: sLabel,
-            /** @property {Array} of {id: Number, content:String} aItems список "подусловий" или "поддействий"  */
-            aItems: [],
-            change: this.change.bind(this)
-        };
+		super('BotSchemeEditorCompoundControl');
+		
+		this.component = VueCompoundReteControlView;
+		this.props = {emitter, $t, sLabel, sType, oReteNode, defaultDescription: ''};
     }
 
-    change(e) {
-        this.scope.value = e.target.value;
-        this.update('onchange');
-    }
-
-    /**
-     * @param {String} type = '' Может содержать onchange
-    */
-    update(type = '') {
-        //putData Устанавливает в данных узла редактора node.data.short_description
-        this.putData('short_description', this.scope.value);
-        this.putData('sType', this.scope.sType);
-        this.putData('aItems', this.scope.aItems);
-        let eventType = type ? type : 'process';
-        this.emitter.trigger('process', {eventType: eventType, node: this.oReteNode});
-        this._alight.scan();
-    }
-    /**
-     * @description Установить текст в контроле краткого описания по умолчанию
-     * @param {String} s 
-     */
-    setDefaultDescription(s) {
-        this.defaultDescription = s;
-    }
-
-    mounted() {
-        this.scope.value = this.getData('short_description') || this.defaultDescription;
-        //TODO вот это совсем не очевидно было (сохранение из редактора)! Надо что-то придумать как минимум написать в документации
-        this.scope.sType = this.getData('sType') || this.scope.sType;
-        this.scope.aItems = this.getData('aItems') || this.scope.aItems;
-        this.update();
-    }
+	/**
+	 * @description Установить текст в контроле краткого описания по умолчанию
+	 * @param {String} s 
+	*/
+	setDefaultNodeDescription(s) {
+		this.props.defaultDescription = s;
+	}
 
     setValue(val) {
-        this.scope.value = val;
-        this.update();
+		this.vueContext.value = val; //это из примера (https://codepen.io/Ni55aN/pen/EGZOdK), не уверен, что это работает.
+		//Пример установки из примера this.editor.nodes.find(n => n.id == node.id).controls.get('preview').setValue(sum);		
+		
+		//если остро понадобится,
+		//this.props.value = val; - можно как-то так... Правда здесь и сейчас это работать не будет, потому что сейчас value должно быть в data... (судя по примеру)
     }
 }
+
 export default BotSchemeEditorCompoundControl;

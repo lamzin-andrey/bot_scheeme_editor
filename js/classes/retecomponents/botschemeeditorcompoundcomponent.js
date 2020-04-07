@@ -36,7 +36,8 @@ class BotSchemeEditorCompoundComponent extends Rete.Component{
 			input = new Rete.Input('input', this.$t('app.Enter'), this.socket, true),
 			ctrl = new BotSchemeEditorCompoundControl(this.editor, this.$t,
 														this.sLabelOfType, this.sTypeInfo, node);
-			ctrl.setDefaultDescription(this.sDefaultDescriptionText);
+			console.log('BotSchemeEditorCompoundComponent::builder: bef call setDefaultNodeDescription');
+			ctrl.setDefaultNodeDescription(this.sDefaultDescriptionText);
 		
 		node.addControl(ctrl);
 		node.addOutput(outputYes);
