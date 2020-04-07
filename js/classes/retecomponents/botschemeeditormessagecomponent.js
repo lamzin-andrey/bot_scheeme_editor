@@ -1,6 +1,7 @@
 import Rete from 'rete';
 import BotSchemeEditorMessageControl from '../retecontrols/botschemeeditormessagecontrol';
-import VueRenderPlugin from 'rete-vue-render-plugin';
+
+import ReteConnectionVerticalView from '../../views/botSchemeEditor/botSchemeCustomNodes/reteConnectionVerticalView.vue';
 
 class BotSchemeEditorMessageComponent extends Rete.Component{
 	/**
@@ -14,31 +15,7 @@ class BotSchemeEditorMessageComponent extends Rete.Component{
 		this.socket = oSocket;
 		this.$t = translator;
 
-		let CustomNode = {
-			template:
-				`<div class="node" :class="[selected(), node.name] | kebab">
-				<!--- hide title <div class="title">{{node.name}}</div> -->
-				<!-- Outputs-->
-				<div class="output " v-for="output in outputs()" :key="output.key">
-				  <div class="output-title">{{output.name}}</div>
-				  <Socket v-socket:output="output" type="output" :socket="output.socket"></Socket>
-				</div>
-				<!-- Controls-->
-				<div class="control" v-for="control in controls()" v-control="control"></div>
-				<!-- Inputs-->
-				<div class="input" v-for="input in inputs()" :key="input.key">
-				  <Socket v-socket:input="input" type="input" :socket="input.socket"></Socket>
-				  <div class="input-title" v-show="!input.showControl()">{{input.name}}</div>
-				  <div class="input-control" v-show="input.showControl()" v-control="input.control"></div>
-				</div>
-			  </div>`,
-			mixins: [VueRenderPlugin.mixin],
-			components: {
-				Socket: VueRenderPlugin.Socket
-			}
-		};
-
-		//this.data.component = CustomNode;
+		//this.data.component = ReteConnectionVerticalView;
 	}
 	/**
 	 * @description вызывается при создании узла (При вызове editor.fromJSON)
@@ -51,8 +28,10 @@ class BotSchemeEditorMessageComponent extends Rete.Component{
 			outputParallelExecuting = new Rete.Output('parallelExecuting', this.$t('app.parallelExecuting'), this.socket, false),
 			input = new Rete.Input('messageIn', this.$t('app.Enter'), this.socket, true),
 			ctrl = new BotSchemeEditorMessageControl(this.editor, node.data.msg);
+
 		node.addOutput(outputMessageAnswer);
 		node.addOutput(outputParallelExecuting);
+		
 		node.addInput(input);
 		node.addControl(ctrl);
 	}

@@ -17,7 +17,7 @@ https://www.npmjs.com/package/rete-context-menu-plugin
 
 Разобраться, как переставить коннекторы у rete компонента, возможно сделать это более удобным.
 
-Отказываюсь от alight render plugin потому что  https://rete.readthedocs.io/en/latest/Plugins/#alight-render-deprecated
+Ругается теперь на sType (почему только на него) при добавлении объектов;
 
 
 

@@ -1,5 +1,5 @@
 import Rete from "rete";
-import AlightRenderPlugin from 'rete-alight-render-plugin';
+
 class BotSchemeEditorBeginComponent extends Rete.Component {
 	/**
 	 * @param {String} sComponentId string id компонента. На схеме могут быть один или несколько блоков такого "класса"
