@@ -218,10 +218,14 @@
 					if (!this.validateReteJSONFormat(oImportData)) {
 						return false;
 					}
-
+					//getMaxId
 					for (i in oImportData.nodes) {
-						this.blockCounter++;
+						if (this.blockCounter < i) {
+							this.blockCounter = i;
+						}
 					}
+					this.blockCounter++;
+
 					oSchemeData.nodes = {...oImportData.nodes};
 					/** @property {Boolean} isProcessingJSONFromFile принимает true когда в editor пытаемся установить данные из файла */
 					this.isProcessingJSONFromFile = true;
