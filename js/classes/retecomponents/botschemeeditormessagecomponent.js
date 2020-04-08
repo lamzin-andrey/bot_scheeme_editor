@@ -15,7 +15,7 @@ class BotSchemeEditorMessageComponent extends Rete.Component{
 		this.socket = oSocket;
 		this.$t = translator;
 
-		//this.data.component = ReteConnectionVerticalView;
+		this.data.component = ReteConnectionVerticalView;
 	}
 	/**
 	 * @description вызывается при создании узла (При вызове editor.fromJSON)

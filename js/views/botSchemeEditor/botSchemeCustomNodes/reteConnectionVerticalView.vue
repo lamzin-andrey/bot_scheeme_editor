@@ -77,34 +77,17 @@ export default {
 		font-style: italic;
 	}
 
-	.verticalSocketsContainerTop .socket-block {
+	/*.verticalSocketsContainerTop .socket-block {
 		display:block;
 	}
 
 	.verticalSocketsContainerBottom div.input {
-		/*position:relative;*/
+		position:relative;
 	}
 
 	.verticalSocketsContainerBottom .socket-block {
-		/*position: absolute;
-		top:24px;*/
-	}
-
-	/*.verticalSocketsContainerBottom .socket.input::after {
-		cursor: pointer;
-		border: 1px solid white;
-		border-radius: 12px;
-		width: 24px;
-		height: 24px;
-		margin: 16px 6px 6px 0px;
-		display: block;
-		vertical-align: middle;
-		background: #96b38a;
-		z-index: 2;
-		box-sizing: border-box;
-		content: '';
-	}
-	.verticalSocketsContainerBottom .socket.input::after ::hover {
-		border-width: 4px;
+		position: absolute;
+		top:24px;
 	}*/
+
 </style>
