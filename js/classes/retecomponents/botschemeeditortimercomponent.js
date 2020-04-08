@@ -1,7 +1,8 @@
 import Rete from 'rete';
+import BotSchemeEditorBaseComponent from './botschemeeditorbasecomponent';
 import BotSchemeEditorTimerControl from '../retecontrols/botschemeeditortimercontrol';
 
-class BotSchemeEditorTimerComponent extends Rete.Component{
+class BotSchemeEditorTimerComponent extends BotSchemeEditorBaseComponent {
 	/**
 	 * @param {String} sComponentId string id компонента. На схеме могут быть один или несколько блоков такого "класса"
 	 * @param {Rete.Socket} oSocket Сокет для соединения компонентов
@@ -9,10 +10,7 @@ class BotSchemeEditorTimerComponent extends Rete.Component{
 	 * @param {String} sImageCatalog путь к папке с изображениями
 	*/
 	constructor(sComponentId, oSocket, translator, sImageCatalog) {
-		super(sComponentId);
-		this.sComponentId = sComponentId;
-		this.socket = oSocket;
-		this.$t = translator;
+		super(sComponentId, oSocket, translator, BotSchemeEditorBaseComponent.SOCKET_POSITION_V_T2B);
 		this.sImageCatalog = sImageCatalog;
 	}
 	/**
@@ -28,12 +26,6 @@ class BotSchemeEditorTimerComponent extends Rete.Component{
 		node.addOutput(outputTimer);
 		node.addInput(input);
 		node.addControl(ctrl);
-	}
-	/**
-	 * @description вызывается всякий раз при перерисовке узла
-	*/
-	worker(node, inputs, outputs) {
-		return {key: outputs};
 	}
 	/**
 	 * @description Конфигурация контекстного меню компонента.

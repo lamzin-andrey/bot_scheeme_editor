@@ -1,21 +1,15 @@
 import Rete from 'rete';
+import BotSchemeEditorBaseComponent from './botschemeeditorbasecomponent';
 import BotSchemeEditorMessageControl from '../retecontrols/botschemeeditormessagecontrol';
 
-import ReteConnectionVerticalView from '../../views/botSchemeEditor/botSchemeCustomNodes/reteConnectionVerticalView.vue';
-
-class BotSchemeEditorMessageComponent extends Rete.Component{
+class BotSchemeEditorMessageComponent extends BotSchemeEditorBaseComponent {
 	/**
 	 * @param {String} sComponentId string id компонента. На схеме могут быть один или несколько блоков такого "класса"
 	 * @param {Rete.Socket} oSocket Сокет для соединения компонентов
 	 * @param {VueI18n} translator 
 	*/
 	constructor(sComponentId, oSocket, translator) {
-		super(sComponentId);
-		this.sComponentId = sComponentId;
-		this.socket = oSocket;
-		this.$t = translator;
-
-		this.data.component = ReteConnectionVerticalView;
+		super(sComponentId, oSocket, translator);
 	}
 	/**
 	 * @description вызывается при создании узла (При вызове editor.fromJSON)
@@ -31,36 +25,9 @@ class BotSchemeEditorMessageComponent extends Rete.Component{
 
 		node.addOutput(outputMessageAnswer);
 		node.addOutput(outputParallelExecuting);
-		
 		node.addInput(input);
+
 		node.addControl(ctrl);
-	}
-	/**
-	 * @description вызывается всякий раз при перерисовке узла
-	*/
-	worker(node, inputs, outputs) {
-		return {key: outputs};
-	}
-	/**
-	 * @description Конфигурация контекстного меню компонента.
-	 * @see Документацию по конфигурации ContextMenuPlugin (rete-context-menu-plugin  version ^0.5.2), поле nodeItems
-	 * Проверка на равенство node.name имени компонента производится в botSchemeEditorArea.configureContextMenu
-	 * @param {Object} applicationContext Должен обеспечивать методы removeBlockById и emitEditBlockEvent
-	 * @param {Rete.node} node Узел (блок) схемы
-	*/
-	contextMenu(applicationContext, node) {
-		return {
-			'Удалить'() {
-				applicationContext.removeBlockById(node.id);
-			},
-			'Редактировать'() {
-				applicationContext.emitEditBlockEvent(node.id);
-			},
-			//"Глушим" стандартный пункт контекстного меню, чтобы была возможность его локализовать
-			'Delete': false,
-			//"Глушим" стандартный пункт контекстного меню, потому что он не нужен
-			'Clone': false,
-		};
 	}
 }
 export default BotSchemeEditorMessageComponent;

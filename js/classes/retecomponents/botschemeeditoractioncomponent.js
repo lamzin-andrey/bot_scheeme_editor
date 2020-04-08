@@ -3,11 +3,11 @@ import BotSchemeEditorCompoundComponent from "./botschemeeditorcompoundcomponent
 /**
  * @class BotSchemeEditorActionComponent базовый для компонентов условий и действий
 */
-class BotSchemeEditorActionComponent extends BotSchemeEditorCompoundComponent{
+class BotSchemeEditorActionComponent extends BotSchemeEditorCompoundComponent {
 	/**
 	 * @param {String} sComponentId string id компонента. На схеме могут быть один или несколько блоков такого "класса"
 	 * @param {Rete.Socket} oSocket Сокет для соединения компонентов
-	 * @param {VueI18n} translator 
+	 * @param {Function} VueI18n translator 
 	*/
 	constructor(sComponentId, oSocket, translator) {
         super(sComponentId, oSocket, translator);

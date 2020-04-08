@@ -2,7 +2,7 @@
 	<div>
 		<div>{{ sLabel }}</div>
 			<div><input @input="change($event)" class="conditionName" type="text" :value="value"></div>
-		<div>{{ sType }}</div>
+		<div>{{ sTypeC }}</div>
 	</div>
 </template>
 <script>
@@ -18,8 +18,8 @@ export default {
 		'$t',
 		/** @property {String} sLabel метка "Условие" или "Действие" */
 		'sLabel',
-		/** @property {String} sLabel тип для наглядности, например тип для условий, по всем или по одному  */
-		//'sType', Закомментировано, чтобы не возникала ошибка "Используйте вместо этого вычисляемое свойство"
+		/** @property {String} sType тип для наглядности, например тип для условий, по всем или по одному  */
+		'sType', //Возникает ошибка "Используйте вместо этого вычисляемое свойство", пришлось мудрить с computed
 		/** @property {Rete.Node} oReteNode ссылка на связанный узел */
 		'oReteNode',
 		/** @property {Function} putData метод записи, через него осуществляется связь с данными наследника Rete.Control */
@@ -34,8 +34,21 @@ export default {
 		return {
 			//Это по примеру https://codepen.io/lamzin-andrey/pen/poJMZag но по моему, это не работает
 			value: '',
+			sTypePrivate : ''
 		}
 	},
+
+	computed: {
+		sTypeC: {
+			get() {
+				return this.sTypePrivate || this.sType;
+			},
+			set(s) {
+				this.sTypePrivate = s;
+			}
+		}
+	},
+	
 
 	methods: {
 		/**
@@ -47,7 +60,7 @@ export default {
 
 			//putData Устанавливает в данных узла редактора node.data.short_description
 			this.putData('short_description', this.value);
-			this.putData('sType', this.sType);
+			this.putData('sType', this.sTypePrivate);
 			this.putData('aItems', this.aItems);
 			let eventType = type ? type : 'process';
 			this.emitter.trigger('process', {eventType: eventType, node: this.oReteNode});	
@@ -65,7 +78,7 @@ export default {
 	mounted() {
 		this.value = this.getData('short_description') || this.defaultDescription;
 		//TODO вот это совсем не очевидно было (сохранение из редактора)! Надо что-то придумать как минимум написать в документации
-		this.sType = this.getData('sType') || this.sType;
+		this.sTypePrivate = this.getData('sType') || this.sTypePrivate || this.sType;
 		this.aItems = this.getData('aItems') || this.aItems;
 		this.update();
 	}

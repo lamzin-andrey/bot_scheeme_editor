@@ -1,27 +1,26 @@
 import Rete from "rete";
+import BotSchemeEditorBaseComponent from './botschemeeditorbasecomponent';
 import BotSchemeEditorCompoundControl from "../retecontrols/botschemeeditorcompoundcontrol";
 
 /**
  * @class BotSchemeEditorCompoundComponent базовый для компонентов условий и действий
 */
-class BotSchemeEditorCompoundComponent extends Rete.Component{
+class BotSchemeEditorCompoundComponent extends BotSchemeEditorBaseComponent {
 	/**
 	 * @param {String} sComponentId string id компонента. На схеме могут быть один или несколько блоков такого "класса"
 	 * @param {Rete.Socket} oSocket Сокет для соединения компонентов
-	 * @param {VueI18n} translator
+	 * @param {Function} VueI18n translator
+	 * @param {String} socketPosition = BotSchemeEditorBaseComponent.SOCKET_POSITION_H_L2R можно изменять позицию коннекторов (см. константы BotSchemeEditorBaseComponent.SOCKET_POSITION_* )
 	*/
-	constructor(sComponentId, oSocket, translator) {
-		super(sComponentId);
+	constructor(sComponentId, oSocket, translator, socketPosition = BotSchemeEditorBaseComponent.SOCKET_POSITION_H_L2R) {
+		super(sComponentId, oSocket, translator, socketPosition);
+		
 		/** @property {String} sLabelOfType Текст "Условие" или "Действие", определяется в Child */
 		this.sLabelOfType = '';
 		/** @property {String} sTypeInfo например текст "По всем" или "Достаточно одного", определяется в Child */
 		this.sTypeInfo = '';
 		/** @property {String} sDefaultDescriptionText например текст "Краткое описание условия" или "Краткое описание действия", определяется в Child */
 		this.sDefaultDescriptionText = '';
-
-		this.sComponentId = sComponentId;
-		this.socket = oSocket;
-		this.$t = translator;
 	}
 	/**
 	 * @description Вызывается при создании узла (При вызове editor.fromJSON)
@@ -45,32 +44,5 @@ class BotSchemeEditorCompoundComponent extends Rete.Component{
 		node.addOutput(outputParralels);
 		node.addInput(input);
     }
-	/**
-	 * @description вызывается всякий раз при перерисовке узла
-	*/
-	worker(node, inputs, outputs) {
-		return {key: outputs};
-	}
-	/**
-	 * @description Конфигурация контекстного меню компонента.
-	 * @see Документацию по конфигурации ContextMenuPlugin (rete-context-menu-plugin  version ^0.5.2), поле nodeItems
-	 * Проверка на равенство node.name имени компонента производится в botSchemeEditorArea.configureContextMenu
-	 * @param {Object} applicationContext Должен обеспечивать методы removeBlockById и emitEditBlockEvent
-	 * @param {Rete.node} node Узел (блок) схемы
-	*/
-	contextMenu(applicationContext, node) {
-		return {
-			'Удалить'() {
-				applicationContext.removeBlockById(node.id);
-			},
-			'Редактировать'() {
-				applicationContext.emitEditBlockEvent(node.id);
-			},
-			//"Глушим" стандартный пункт контекстного меню, чтобы была возможность его локализовать
-			'Delete': false,
-			//"Глушим" стандартный пункт контекстного меню, потому что он не нужен
-			'Clone': false,
-		};
-	}
 }
 export default BotSchemeEditorCompoundComponent;
