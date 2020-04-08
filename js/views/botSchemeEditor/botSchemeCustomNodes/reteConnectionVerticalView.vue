@@ -50,12 +50,12 @@ export default {
 	.verticalSocketsContainer div.output,  .verticalSocketsContainer div.input {
 		float: left;
 		margin-right: 0px;
-		margin-bottom: 0px;
 		margin-left: 2px;
 	}
 
 	.verticalSocketsContainerTop div.output {
 		margin-top: -6px;
+		margin-bottom: 5px;
 	}
 
 	.clearfix {
@@ -75,19 +75,45 @@ export default {
 		vertical-align: middle;
 		font-weight: bold;
 		font-style: italic;
+		margin-left: 4px;
 	}
 
-	/*.verticalSocketsContainerTop .socket-block {
+	.verticalSocketsContainerTop .socket-block {
+		display:block;
+	}
+
+	.verticalSocketsContainerTop .socket-block {
 		display:block;
 	}
 
 	.verticalSocketsContainerBottom div.input {
-		position:relative;
+		margin-top: 17px;
+	}
+	.verticalSocketsContainerBottom .socket-block {
+		margin-top: -12px;
 	}
 
-	.verticalSocketsContainerBottom .socket-block {
-		position: absolute;
-		top:24px;
-	}*/
+	.verticalSocketsContainerBottom {
+		max-height: 54px;
+	}
+
+	
+
+	.node {
+		background: rgba(110, 136, 255, 0.8);
+		border: 2px solid #4e58bf;
+		border-radius: 10px;
+		cursor: pointer;
+		min-width: 180px;
+		height: auto;
+		padding-bottom: 6px;
+		box-sizing: content-box;
+		position: relative;
+		user-select: none;
+	}
+
+	.node .control {
+	    padding: 6px 18px;
+	}
 
 </style>
