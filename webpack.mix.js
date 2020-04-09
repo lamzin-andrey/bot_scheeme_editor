@@ -10,6 +10,13 @@ let mix = require('laravel-mix');
  | file for the application as well as bundling up all the JS files.
  |
  */
-//TrollKiller
+//Bot Scheme Editor
 mix.js('js/app.js', '0.js');
+
+mix.styles([
+			'./css/component_theme.css',
+			'./css/layout.css',
+			'./css/property_editor.css',
+			'./css/utils.css'
+		], './css/app.css');
 
