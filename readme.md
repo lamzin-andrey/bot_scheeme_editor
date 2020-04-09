@@ -3,9 +3,11 @@
 
 ## Что это
 
-Bot Circuit Designer
+Bot CircuitЦветовая схема и всё, что можно изменить с помощью css Designer
 
 ### Кастомизация внешнего вида блоков схемы
+
+#### Цветовая схема и всё, что можно изменить с помощью css
 
 Можно изменять цвета блоков, скрывать отображение заголовка блока, текстов рядом с коннекторами.
 
@@ -14,7 +16,7 @@ Bot Circuit Designer
 Пример файла, кастомизирующего блок "Сообщение":
 
 ```css
-/* Скрыть стандартный заголовок блока и метки рядлом с коннекторами */
+/* Скрыть стандартный заголовок блока и метки рядом с коннекторами */
  .messagecomponent .title, .messagecomponent .input .input-title,  .messagecomponent .output .output-title{
 	display:none!important;
 }
@@ -33,6 +35,64 @@ Bot Circuit Designer
 	border-color: #6277A2!important;
 }
 ```
+
+#### Кастомизация расположения коннекторов на блоке
+
+Все классы, реализующие элементы схемы наследуются от класса `BotSchemeEditorBaseComponent`, который в свою очередь наследуется от класса `Rete.Component`.
+
+Конструктор класса принимает аргументы:
+
+````javascript
+class BotSchemeEditorBaseComponent extends Rete.Component {
+	/**
+	 * @param {String} sComponentId string id компонента. На схеме могут быть один или несколько блоков такого "класса"
+	 * @param {Rete.Socket} oSocket Сокет для соединения компонентов
+	 * @param {Function} VueI18n translator 
+	 * @param {String} socketPosition = BotSchemeEditorBaseComponent.SOCKET_POSITION_H_L2R можно изменять позицию коннекторов (см. константы BotSchemeEditorBaseComponent.SOCKET_POSITION_* )
+	*/
+	constructor(sComponentId, oSocket, translator, socketPosition = BotSchemeEditorBaseComponent.SOCKET_POSITION_H_L2R) {
+		//....
+	}
+	//...
+}
+````
+
+Мы видим, что четвертый аргумент конструктора по умолчанию равен константе
+
+`BotSchemeEditorBaseComponent.SOCKET_POSITION_H_L2R`
+
+Это значение обеспечивает дефолтный вид Rete.Node, когда входяшие коннекторы расположены на левой грани блока,
+а исходящие на правой грани блока.
+
+Это поведение можно изменить, передав в конструктор класса четвертым аргументом одну из констант
+
+`BotSchemeEditorBaseComponent.SOCKET_POSITION_V_T2B`
+
+или
+
+`BotSchemeEditorBaseComponent.SOCKET_POSITION_V_B2T`.
+
+````javascript
+/** @property static SOCKET_POSITION_V_T2B = 'SOCKET_POSITION_V_T2B' Размещает коннекторы на горизонтальной грани блока input сверху, output снизу */
+/** @property static SOCKET_POSITION_V_B2T = 'SOCKET_POSITION_V_B2T' Размещает коннекторы на горизонтальной грани блока input снизу, output сверху */
+````
+
+Также можно изменить это поведение, если экземпляр класса уже создан.
+Для этого существует метод
+
+````javascript
+
+class BotSchemeEditorBaseComponent extends Rete.Component {
+	/**
+	 * @description Устанавливает позицию входных и выходных коннекторов (сторону блока, на которой они находятся)
+	 * @param {String} socketPosition одна из констант BotSchemeEditorBaseComponent.SOCKET_POSITION_*
+	 */
+	setSocketsPosition(socketPosition) {
+		//...
+	}
+	//...
+}
+````
 
 ### Настройка контекстного меню компонентов
 
@@ -95,6 +155,8 @@ Bot Circuit Designer
 
 ### Customization of the appearance of circuit blocks
 
+#### Color scheme and everything that can be changed using css
+
 You can change the colors of the blocks, hide the display of the block title, texts next to the connectors.
 
 To do this, the theme.css file is connected to the page.
@@ -122,6 +184,64 @@ An example of a file customizing the Message block:
 	border-color: #6277A2!important;
 }
 ```
+
+#### Customize connettors position on sides of block
+
+All classes implementing items of circuit extends class `BotSchemeEditorBaseComponent` (and `BotSchemeEditorBaseComponent` extends `Rete.Component` class).
+
+Constructor `BotSchemeEditorBaseComponent` get arguments:
+
+````javascript
+class BotSchemeEditorBaseComponent extends Rete.Component {
+	/**
+	 * @param {String} sComponentId string id of component. The circuit can containts one or more blocks of the "class"
+	 * @param {Rete.Socket} oSocket Socket for nodes connection
+	 * @param {Function} VueI18n translator 
+	 * @param {String} socketPosition = BotSchemeEditorBaseComponent.SOCKET_POSITION_H_L2R allows change connectors position (see constants BotSchemeEditorBaseComponent.SOCKET_POSITION_* )
+	*/
+	constructor(sComponentId, oSocket, translator, socketPosition = BotSchemeEditorBaseComponent.SOCKET_POSITION_H_L2R) {
+		//....
+	}
+	//...
+}
+````
+
+We see, that fourth argument of constructor by default equal a constant
+
+`BotSchemeEditorBaseComponent.SOCKET_POSITION_H_L2R`
+
+This value provides Rete.Node view , when inputs connectors located on left side of the block,
+and output connectors located on the right side of the block.
+
+This behavior can be changed, passing in class constructor fourth argument one from, constants
+
+`BotSchemeEditorBaseComponent.SOCKET_POSITION_V_T2B`
+
+or
+
+`BotSchemeEditorBaseComponent.SOCKET_POSITION_V_B2T`.
+
+````javascript
+/** @property static SOCKET_POSITION_V_T2B = 'SOCKET_POSITION_V_T2B' Located connectors on horizontal sides of the block. Input on top side, output on bottom side. */
+/** @property static SOCKET_POSITION_V_B2T = 'SOCKET_POSITION_V_B2T' Located connectors on horizontal sides of the block. Input on bottom side, output on top side. */
+````
+
+Also we can change view, if object of class already created.
+Для этого существует метод
+
+````javascript
+
+class BotSchemeEditorBaseComponent extends Rete.Component {
+	/**
+	 * @description Set connectors positions (sides of block, where is connectors)
+	 * @param {String} socketPosition one from constants BotSchemeEditorBaseComponent.SOCKET_POSITION_*
+	 */
+	setSocketsPosition(socketPosition) {
+		//...
+	}
+	//...
+}
+````
 
 
 ### Setting the context menu of components
