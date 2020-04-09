@@ -1,9 +1,34 @@
-
 # Ru
 
 ## Что это
 
 Bot CircuitЦветовая схема и всё, что можно изменить с помощью css Designer
+
+### Установка
+
+1 Клонируйте приложение из репозитория github
+ `git clone https://github.com/lamzin-andrey/bot_scheeme_editor.git`
+
+2 Переименуйте js/app.example.css в js/app.js и измените в секции конфигурации необходимые вам параметры
+
+3 Редактируйте css файлы, чтобы задать необходимые вам стили для отображаемых блоков
+
+4 При необходимости конфигурируйте пути к каталогу с изображениями, которые использует редактор схем. Для этого переименуйте app.example.js в app.js, измените путь к каталогу с изображениями в секции конфигурации
+и пересобирите проект
+
+5 Кастомизируйте расположение коннекторов на сторонах блоков.
+
+### Сборка
+
+При сборке использовался npm версии 5.6.0, версия nodejs v8.10.0.
+
+Откройте терминал или командную строку в каталоге с package.json и выполните
+
+`npm install`
+
+`npm run prod`
+
+
 
 ### Кастомизация внешнего вида блоков схемы
 
@@ -179,7 +204,26 @@ contextMenu(applicationContext, node) {
 лучше вынести в новые методы `botSchemeEditorArea`, так как компонент ничего не должен знать ни о редакторе rete, в котором он отображается, ни о внешних редакторах своих свойств, 
 ни о чём-либо другом, что может понадобиться.
 
+### Настройка каталога с изображениями
 
+Для настройки путей к папке, в которой лежат изображения переименуйте файл 
+
+`app.example.js`
+
+в 
+
+`app.js`
+
+и измените переменную 
+
+````javascript
+//Конфигурация каталога с изображениями, которые использует приложение
+Vue.prototype.$config = {};
+Vue.prototype.$config.imageCatalog = './images/bot-scheme-toolbar';
+````
+например, на моём сервере она равна
+
+`/portfolio/web-razrabotka/bot_scheme_editor/images/bot-scheme-toolbar`
 
 
 
@@ -188,6 +232,30 @@ contextMenu(applicationContext, node) {
 ## About
 
 Bot Circuit Designer
+
+### Installation
+
+1 Clone from github
+ `git clone https://github.com/lamzin-andrey/bot_scheeme_editor.git`
+
+2 Rename js/app.example.css to js/app.js and change in cinfiguration section neeldy parameters
+
+3 Rename css files and change colours for blocks of circuit and hide excess parts of block (for example, I hide section with title)/
+
+4 If necessary, configure the directory paths with the images that the schematic editor uses. To do this, rename app.example.js to app.js, change the path to the directory with images in the configuration section and rebuild the project
+
+5 Customize the location of the connectors on the sides of the blocks.
+
+### Build
+
+The build used npm version 5.6.0, version nodejs v8.10.0.
+
+Open a terminal or command line in the directory with package.json and execute
+
+`npm install`
+
+`npm run prod`
+
 
 ### Customization of the appearance of circuit blocks
 
@@ -285,7 +353,7 @@ and output connectors located on the right side of the block.
 
 This behavior can be changed, passing in class constructor fourth argument one from, constants
 
-`BotSchemeEditorBaseComponent.SOCKET_POSITION_V_T2B`
+`BotSchemeEditorBaseComponent.SOCKET_POSITION_V_T2B`js/app.example.js
 
 or
 

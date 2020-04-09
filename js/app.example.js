@@ -7,7 +7,7 @@ Vue.component('bot-scheme-editor', require('./views/botSchemeEditor.vue').defaul
 
 //Конфигурация каталога с изображениями, которые использует приложение
 Vue.prototype.$config = {};
-Vue.prototype.$config.imageCatalog = '/portfolio/web-razrabotka/bot_scheme_editor/images/bot-scheme-toolbar';
+Vue.prototype.$config.imageCatalog = './images/bot-scheme-toolbar';
 
 //Конфигурация расположения коннекторов на блоках различного типа
 //см. константы в определении класса BotSchemeEditorBaseComponent
