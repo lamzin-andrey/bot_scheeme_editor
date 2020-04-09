@@ -426,3 +426,24 @@ If necessary, to perform some other actions using the new context menu items,
 you should modify the object returned by contextMenu, and the logic of their implementation
 it’s better to bring `botSchemeEditorArea` to the new methods, since the component should not know anything about the rete editor in which it is displayed, or about external editors of its properties,
 about anything else that you might need.
+
+### Image Directory Setup
+
+Rename the file to configure the paths to the folder in which the images are located
+
+`app.example.js`
+
+to
+
+`app.js`
+
+and change variable
+
+````javascript
+//Configuration path with images for this application
+Vue.prototype.$config = {};
+Vue.prototype.$config.imageCatalog = './images/bot-scheme-toolbar';
+````
+for example, on my server it equal
+
+`/portfolio/web-razrabotka/bot_scheme_editor/images/bot-scheme-toolbar`
