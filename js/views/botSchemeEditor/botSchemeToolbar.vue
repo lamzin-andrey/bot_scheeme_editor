@@ -71,7 +71,7 @@
 			*/
 			onSelectFileForImportFromJSON(event) {
 				event.preventDefault();
-				this._emitToolbarEvent('importFromJSONButtonSelected', event.target.files[0]);
+				this._emitToolbarEvent('onClickImportFromJSONButton', event.target.files[0]);
 			},
 			/**
 			 * @description Обработка события touchstart для планшетных устройств
@@ -80,14 +80,14 @@
 				//Чтобы не вызвался ещё и onclick
 				event.preventDefault();
 				event.stopImmediatePropagation();
-				this._emitToolbarEvent('exportToJSONButtonClicked');
+				this._emitToolbarEvent('onClickExportToJSONButton');
 			},
 			/**
 			 * @description Обработка события click для desktop устройств
 			*/
 			onClickExportToJSON(event) {
 				event.preventDefault();
-				this._emitToolbarEvent('exportToJSONButtonClicked');
+				this._emitToolbarEvent('onClickExportToJSONButton');
 			},
 			/**
 			 * @description Обработка события touchstart для планшетных устройств
@@ -96,14 +96,14 @@
 				//Чтобы не вызвался ещё и onclick
 				event.preventDefault();
 				event.stopImmediatePropagation();
-				this._emitToolbarEvent('addActionBlockButtonClicked');
+				this._emitToolbarEvent('onClickAddActionButton');
 			},
 			/**
 			 * @description Обработка события click для desktop устройств
 			*/
 			onClickAddActionBlock(event) {
 				event.preventDefault();
-				this._emitToolbarEvent('addActionBlockButtonClicked');
+				this._emitToolbarEvent('onClickAddActionButton');
 			},
 			/**
 			 * @description Обработка события touchstart для планшетных устройств
@@ -112,14 +112,14 @@
 				//Чтобы не вызвался ещё и onclick
 				event.preventDefault();
 				event.stopImmediatePropagation();
-				this._emitToolbarEvent('addConditionBlockButtonClicked');
+				this._emitToolbarEvent('onClickAddConditionButton');
 			},
 			/**
 			 * @description Обработка события click для desktop устройств
 			*/
 			onClickAddConditionBlock(event) {
 				event.preventDefault();
-				this._emitToolbarEvent('addConditionBlockButtonClicked');
+				this._emitToolbarEvent('onClickAddConditionButton');
 			},
 			/**
 			 * @description Обработка события touchstart для планшетных устройств
@@ -128,14 +128,14 @@
 				//Чтобы не вызвался ещё и onclick
 				event.preventDefault();
 				event.stopImmediatePropagation();
-				this._emitToolbarEvent('addTimerBlockButtonClicked');
+				this._emitToolbarEvent('onClickAddTimerButton');
 			},
 			/**
 			 * @description Обработка события click для desktop устройств
 			*/
 			onClickAddTimerBlock(event) {
 				event.preventDefault();
-				this._emitToolbarEvent('addTimerBlockButtonClicked');
+				this._emitToolbarEvent('onClickAddTimerButton');
 			},
 			/**
 			 * @description Обработка события touchstart для планшетных устройств
@@ -144,14 +144,14 @@
 				//Чтобы не вызвался ещё и onclick
 				event.preventDefault();
 				event.stopImmediatePropagation();
-				this._emitToolbarEvent('addMessageBlockButtonClicked');
+				this._emitToolbarEvent('onClickAddMessageButton');
 			},
 			/**
 			 * @description Обработка события click для desktop устройств
 			*/
 			onClickAddMessageBlock(event) {
 				event.preventDefault();
-				this._emitToolbarEvent('addMessageBlockButtonClicked');
+				this._emitToolbarEvent('onClickAddMessageButton');
 			},
 			/**
 			 * @description Обработка события touchstart для планшетных устройств
@@ -160,14 +160,14 @@
 				//Чтобы не вызвался ещё и onclick
 				event.preventDefault();
 				event.stopImmediatePropagation();
-				this._emitToolbarEvent('newSchemeButtonClicked');
+				this._emitToolbarEvent('onClickNewSchemeButton');
 			},
 			/**
 			 * @description Обработка события click для desktop устройств
 			*/
 			onClickNewScheme(event) {
 				event.preventDefault();
-				this._emitToolbarEvent('newSchemeButtonClicked');
+				this._emitToolbarEvent('onClickNewSchemeButton');
 			},
 			/**
 			 * @description Оповещает систему о том, какая кнопка на тулбаре была нажата
@@ -176,9 +176,9 @@
 			*/
 			_emitToolbarEvent(eventName, file = null) {
 				if (!file) {
-					this.$emit('toolbarevent', {name: eventName});
+					this.$emit('toolbarevent', {methodName: eventName});
 				} else {
-					this.$emit('toolbarevent', {name: eventName, file: file});
+					this.$emit('toolbarevent', {methodName: eventName, file: file});
 				}
 			}
 		},//end methods

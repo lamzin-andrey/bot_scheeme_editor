@@ -88,34 +88,16 @@
 			 * @description Обработка кликов кнопок на тулбаре
 			*/
 			onToolbarEvent(event) {
-				switch (event.name) {
-					case 'newSchemeButtonClicked':
-						this.onClickNewSchemeButton();
-						break;
-
-					case 'addMessageBlockButtonClicked':
-						this.onClickAddMessageButton();
-						break;
-
-					case 'addTimerBlockButtonClicked':
-						this.onClickAddTimerButton();
-						break;
-
-					case 'addConditionBlockButtonClicked':
-						this.onClickAddConditionButton();
-						break;
-
-					case 'addActionBlockButtonClicked':
-						this.onClickAddActionButton();
-						break;
-					
-					case 'exportToJSONButtonClicked':
-						this.onClickExportToJSONButton();
-						break;
-					
-					case 'importFromJSONButtonSelected':
-						this.onClickImportFromJSONButton(event.file);
-						break;
+				if (this[event.methodName] instanceof Function) {
+					this[event.methodName](event.file);
+				} else {
+					/*
+					switch (event.name) {
+						case 'newSchemeButtonClicked':
+							this.onClickNewSchemeButton();
+							break;
+					}
+					*/
 				}
 			},
 			/**
