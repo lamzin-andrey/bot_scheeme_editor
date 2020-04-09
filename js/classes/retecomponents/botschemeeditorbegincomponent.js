@@ -1,18 +1,16 @@
 import Rete from "rete";
+import BotSchemeEditorBaseComponent from './botschemeeditorbasecomponent';
 
-class BotSchemeEditorBeginComponent extends Rete.Component {
+class BotSchemeEditorBeginComponent extends BotSchemeEditorBaseComponent {
 	/**
 	 * @param {String} sComponentId string id компонента. На схеме могут быть один или несколько блоков такого "класса"
 	 * @param {Rete.Socket} oSocket Сокет для соединения компонентов
-	 * @param {VueI18n} translator 
+	 * @param {Function} VueI18n translator 
+	 * @param {Object} config Конфигурация, см. app.example.js
 	*/
-	constructor(sComponentId, oSocket, translator) {
-		super(sComponentId);
-		this.sComponentId = sComponentId;
-		this.socket = oSocket;
-		this.$t = translator;
-
-		
+	constructor(sComponentId, oSocket, translator, config) {
+		super(sComponentId, oSocket, translator);
+		this.setSocketsPosition( this.getSocketPositionFromConfig(config) );
 	}
 	/**
 	 * @description вызывается при создании узла (При вызове editor.fromJSON)

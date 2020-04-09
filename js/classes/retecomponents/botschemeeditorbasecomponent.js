@@ -93,6 +93,17 @@ class BotSchemeEditorBaseComponent extends Rete.Component {
 			'Clone': false,
 		};
 	}
+	/**
+	 * @description Пытается найти в конфигурации данные о позиции коннекоторов на блоке
+	 * @param {Object} config Конфигурация, может содержать полезные данные
+	 * @return String
+	*/
+	getSocketPositionFromConfig(config) {
+		if (config && config.connectorsLocation && config.connectorsLocation[this.sComponentId]) {
+			return config.connectorsLocation[this.sComponentId];
+		}
+		return config.connectorsLocation[this.sComponentId];
+	}
 }
 BotSchemeEditorBaseComponent.SOCKET_POSITION_V_T2B = 'SOCKET_POSITION_V_T2B';
 BotSchemeEditorBaseComponent.SOCKET_POSITION_V_B2T = 'SOCKET_POSITION_V_B2T';

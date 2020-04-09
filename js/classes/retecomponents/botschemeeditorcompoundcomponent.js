@@ -42,6 +42,6 @@ class BotSchemeEditorCompoundComponent extends BotSchemeEditorBaseComponent {
 		node.addOutput(outputNo);
 		node.addOutput(outputParralels);
 		node.addInput(input);
-    }
+	}
 }
 export default BotSchemeEditorCompoundComponent;

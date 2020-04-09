@@ -6,12 +6,14 @@ class BotSchemeEditorTimerComponent extends BotSchemeEditorBaseComponent {
 	/**
 	 * @param {String} sComponentId string id компонента. На схеме могут быть один или несколько блоков такого "класса"
 	 * @param {Rete.Socket} oSocket Сокет для соединения компонентов
-	 * @param {VueI18n} translator 
-	 * @param {String} sImageCatalog путь к папке с изображениями
+	 * @param {Function} translator VueI18n 
+	 * @param {Object} config Конфигурация, см. app.example.js
 	*/
-	constructor(sComponentId, oSocket, translator, sImageCatalog) {
-		super(sComponentId, oSocket, translator, BotSchemeEditorBaseComponent.SOCKET_POSITION_V_T2B);
-		this.sImageCatalog = sImageCatalog;
+	constructor(sComponentId, oSocket, translator, config) {
+		super(sComponentId, oSocket, translator);
+		this.setSocketsPosition( this.getSocketPositionFromConfig(config) );
+		/** @property {String} sImageCatalog путь к папке с изображениями */
+		this.sImageCatalog = config.imageCatalog;
 	}
 	/**
 	 * @description вызывается при создании узла (При вызове editor.fromJSON)

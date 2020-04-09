@@ -38,6 +38,42 @@ Bot CircuitЦветовая схема и всё, что можно измени
 
 #### Кастомизация расположения коннекторов на блоке
 
+Приложение можно сконфигурировать так, чтобы конекторы располагались на горизонтальных гранях блоков.
+
+Для этого надо изменить конфигурацию в app.js:
+
+````javascript
+//Конфигурация расположения коннекторов на блоках различного типа
+//см. константы в определении класса BotSchemeEditorBaseComponent
+//import BotSchemeEditorBaseComponent from './classes/retecomponents/botschemeeditorbasecomponent';
+//Тут хотелось красиво, но к сожалению невозможно импортировать BotSchemeEditorBaseComponent 
+//Пришлось обойтись строками
+Vue.prototype.$config.connectorsLocation = {
+	//Блок "Начало"
+	//BeginComponent: BotSchemeEditorBaseComponent.SOCKET_POSITION_H_L2R,
+	BeginComponent: 'SOCKET_POSITION_H_L2R',
+
+	//Блок "Сообщение"
+	MessageComponent: 'SOCKET_POSITION_H_L2R',
+
+	//Блок "Таймер"
+	TimerComponent: 'SOCKET_POSITION_V_T2B',
+
+	//Блок "Условие"
+	ConditionComponent: 'SOCKET_POSITION_H_L2R',
+
+	//Блок "Действие"
+	ActionComponent: 'SOCKET_POSITION_H_L2R'
+};
+
+// /Конфигурация
+````
+
+Константы, задающие стороны, на которых расположенны коннекторы можно найти в определени класса `BotSchemeEditorBaseComponent`; Их значения равны их именам.
+
+
+##### О реализации
+
 Все классы, реализующие элементы схемы наследуются от класса `BotSchemeEditorBaseComponent`, который в свою очередь наследуется от класса `Rete.Component`.
 
 Конструктор класса принимает аргументы:
@@ -185,7 +221,41 @@ An example of a file customizing the Message block:
 }
 ```
 
-#### Customize connettors position on sides of block
+#### Custom connectors position on sides of block
+
+The application can be configured so that the connectors are located on the horizontal faces of the blocks.
+
+Change your app.js:
+
+````javascript
+//Configuration of the arrangement of connectors on blocks of various types
+//see constants in the BotSchemeEditorBaseComponent class definition
+//import BotSchemeEditorBaseComponent from './classes/retecomponents/botschemeeditorbasecomponent';
+//unfortunately it is impossible to importBotSchemeEditorBaseComponent 
+Vue.prototype.$config.connectorsLocation = {
+	//"Begin" block
+	//BeginComponent: BotSchemeEditorBaseComponent.SOCKET_POSITION_H_L2R,
+	BeginComponent: 'SOCKET_POSITION_H_L2R',
+
+	//"Сообщение" block
+	MessageComponent: 'SOCKET_POSITION_H_L2R',
+
+	//"Timer" block
+	TimerComponent: 'SOCKET_POSITION_V_T2B',
+
+	//"Condition" block
+	ConditionComponent: 'SOCKET_POSITION_H_L2R',
+
+	//"Action" block
+	ActionComponent: 'SOCKET_POSITION_H_L2R'
+};
+
+````
+
+Constants defining the sides on which the connectors are located can be found in the class definition`BotSchemeEditorBaseComponent`; Their meanings are equal to their names.
+
+
+##### About implementation
 
 All classes implementing items of circuit extends class `BotSchemeEditorBaseComponent` (and `BotSchemeEditorBaseComponent` extends `Rete.Component` class).
 

@@ -304,15 +304,15 @@
 
 			this.engine = new Rete.Engine('demo@0.1.0');
 
+			let componentPositionType = '', aComponents, i;
 
 			/** @property {Array} aComponents  массив экземпляров объектов компонентов, наследников Rete.Component */
-			let aComponents = this.aComponents = [new BotSchemeEditorMessageComponent('MessageComponent', this.botSchemeEditorSocket, this.$t),
-								new BotSchemeEditorBeginComponent('BeginComponent', this.botSchemeEditorSocket, this.$t),
-								new BotSchemeEditorTimerComponent('TimerComponent', this.botSchemeEditorSocket, this.$t, this.$config.imageCatalog),
-								new BotSchemeEditorConditionComponent('ConditionComponent', this.botSchemeEditorSocket, this.$t),
-							 	new BotSchemeEditorActionComponent('ActionComponent', this.botSchemeEditorSocket, this.$t)
-							],
-							i;
+			aComponents = this.aComponents = [new BotSchemeEditorMessageComponent('MessageComponent', this.botSchemeEditorSocket, this.$t, this.$config),
+								new BotSchemeEditorBeginComponent('BeginComponent', this.botSchemeEditorSocket, this.$t, this.$config),
+								new BotSchemeEditorTimerComponent('TimerComponent', this.botSchemeEditorSocket, this.$t, this.$config),
+								new BotSchemeEditorConditionComponent('ConditionComponent', this.botSchemeEditorSocket, this.$t, this.$config),
+							 	new BotSchemeEditorActionComponent('ActionComponent', this.botSchemeEditorSocket, this.$t, this.$config)
+							]
 			aComponents.forEach((item, i, arr) => {
 				this.editor.register(item);
 				this.engine.register(item);
