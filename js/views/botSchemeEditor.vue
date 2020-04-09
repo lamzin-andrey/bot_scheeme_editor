@@ -105,13 +105,19 @@
 			*/
 			onClickImportFromJSONButton(file){
 				let fr = new FileReader(), success;
-				//здесь normalize JSON если понадобится, мне rete формат кажется вполне логичным
 				fr.onloadend = (result) => {
 					//Сохранили текущую схему.
 					this.confirmSaveCurrentScheme();
 
+
+					//здесь normalize JSON если понадобится, мне rete формат кажется вполне логичным
+					//например так:
+					//let oJSONConverter = new JSONConverter();//JSONConverter - класс, который конвертирует JSON  rete в желаемый JSON
+					//let JSONData = oJSONConverter.toReteFormat(fr.result);
+
+					let JSONData = fr.result;
 					//Установили данные из файла
-					success = this.$refs.editorArea.setJSON(fr.result);
+					success = this.$refs.editorArea.setJSON(JSONData);
 					if (success) {
 						this.hideAllEditors();
 						this.isSchemeLoaded = true;
@@ -130,8 +136,14 @@
 					this.alert(this.$t('app.needCreateScheme'));
 					return;
 				}
+				
+				let jsonData = this.$refs.editorArea.getJSON();
 				//здесь normalize JSON если понадобится, мне rete формат кажется вполне логичным
-				let blob = new Blob([this.$refs.editorArea.getJSON()], {type: "text/plain;charset=utf-8"});
+				//например так:
+				//let oJSONConverter = new JSONConverter();//JSONConverter - класс, который конвертирует JSON  rete в желаемый JSON
+				//let jsonData = oJSONConverter.fromReteFormat(this.$refs.editorArea.getJSON() );
+
+				let blob = new Blob([jsonData], {type: "text/plain;charset=utf-8"});
 				FileSaver.saveAs(blob, "scheme.jss");
 			},
 			/**

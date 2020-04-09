@@ -2,7 +2,7 @@
 
 ## Что это
 
-Bot CircuitЦветовая схема и всё, что можно изменить с помощью css Designer
+Конструктор схем диалога для ботов
 
 ### Установка
 
@@ -16,7 +16,9 @@ Bot CircuitЦветовая схема и всё, что можно измени
 4 При необходимости конфигурируйте пути к каталогу с изображениями, которые использует редактор схем. Для этого переименуйте app.example.js в app.js, измените путь к каталогу с изображениями в секции конфигурации
 и пересобирите проект
 
-5 Кастомизируйте расположение коннекторов на сторонах блоков.
+5 Кастомизируйте расположение коннекторов на сторонах блоков
+
+6 Изменение экспортируемого и импортируемого JSON в более удобочитаемый формат.
 
 ### Сборка
 
@@ -225,13 +227,68 @@ Vue.prototype.$config.imageCatalog = './images/bot-scheme-toolbar';
 
 `/portfolio/web-razrabotka/bot_scheme_editor/images/bot-scheme-toolbar`
 
+### Изменение экспортируемого и импортируемого JSON в более удобочитаемый формат
+
+При необходимости получить более удобочитаемый формат JSON надо расширить функционал редактора.
+
+Сделать это просто: в компоненте `botSchemeEditor` существуют методы
+
+`onClickExportToJSONButton` и `onClickImportFromJSONButton`.
+
+````javascript
+/**
+ * @param {File} file
+*/
+onClickImportFromJSONButton(file){
+	
+	//...
+
+	fr.onloadend = (result) => {
+		//Сохранили текущую схему.
+		this.confirmSaveCurrentScheme();
+
+
+		//здесь normalize JSON если понадобится, мне rete формат кажется вполне логичным
+		//например так:
+		//let oJSONConverter = new JSONConverter();//JSONConverter - класс, который конвертирует JSON  rete в желаемый JSON
+		//let JSONData = oJSONConverter.toReteFormat(fr.result);
+
+		let JSONData = fr.result;
+
+		//...
+
+	};
+
+	//...
+},
+````
+
+
+````javascript
+/**
+ * @description Обработка кликов на кнопке Экспорт в JSON
+*/
+onClickExportToJSONButton() {
+	//...
+
+	let jsonData = this.$refs.editorArea.getJSON();
+	//здесь normalize JSON если понадобится, мне rete формат кажется вполне логичным
+	//например так:
+	//let oJSONConverter = new JSONConverter();//JSONConverter - класс, который конвертирует JSON  rete в желаемый JSON
+	//let jsonData = oJSONConverter.fromReteFormat(this.$refs.editorArea.getJSON() );
+	
+	//...
+},
+````
+
+Класс JSONConverter следует написать соответственно вашим пожеланиям к спецификации формата.
 
 
 # En
 
 ## About
 
-Bot Circuit Designer
+Constructor of dialog schemes for bots
 
 ### Installation
 
@@ -244,7 +301,9 @@ Bot Circuit Designer
 
 4 If necessary, configure the directory paths with the images that the schematic editor uses. To do this, rename app.example.js to app.js, change the path to the directory with images in the configuration section and rebuild the project
 
-5 Customize the location of the connectors on the sides of the blocks.
+5 Customize the location of the connectors on the sides of the blocks
+
+6 Changing the exported and imported JSON to a more readable format.
 
 ### Build
 
@@ -447,3 +506,59 @@ Vue.prototype.$config.imageCatalog = './images/bot-scheme-toolbar';
 for example, on my server it equal
 
 `/portfolio/web-razrabotka/bot_scheme_editor/images/bot-scheme-toolbar`
+
+### Changing exported and imported JSON to a more readable format
+
+If you need to get a more readable JSON format, you need to expand the editor's functionality.
+
+This is easy to do: there are methods in the `botSchemeEditor` component
+
+`onClickExportToJSONButton` and `onClickImportFromJSONButton`.
+
+````javascript
+/**
+ * @param {File} file
+*/
+onClickImportFromJSONButton(file){
+	
+	//...
+
+	fr.onloadend = (result) => {
+
+		//...
+
+
+		//normalize JSON here if `rete` JSON unreadable for you
+		//for example:
+		//let oJSONConverter = new JSONConverter();//JSONConverter - a class that converts JSON `rete` into the desired JSON
+		//let JSONData = oJSONConverter.toReteFormat(fr.result);
+
+		let JSONData = fr.result;
+
+		//...
+
+	};
+
+	//...
+},
+````
+
+
+````javascript
+/**
+ * @description Click on button Export to JSON
+*/
+onClickExportToJSONButton() {
+	//...
+
+	let jsonData = this.$refs.editorArea.getJSON();
+	//normalize JSON here if `rete` JSON unreadable for you
+	//for example:
+	//let oJSONConverter = new JSONConverter();//JSONConverter - a class that converts JSON `rete` into the desired JSON
+	//let jsonData = oJSONConverter.fromReteFormat(this.$refs.editorArea.getJSON() );
+	
+	//...
+},
+````
+
+The JSONConverter class should be written according to your wishes for the format specification.
