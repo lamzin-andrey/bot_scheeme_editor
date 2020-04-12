@@ -54,10 +54,15 @@
      * Этот комонент может быть сконфигурирован как для редактора блока условий, так и для редактора блока действий
     */
 	export default {
-		name: 'botSchemeCompoundEditor',
+		name: 'botSchemeCompoundObjectEditor',
 
 		//Аргументы (html атрибуты) извне
 		props:{
+			/** @property {String} id Уникальный в рамках компонента, использующего этот компонент идентификатор*/
+			id: {
+				type: String,
+				required: true
+			},
             /** @property {String} editor_title Текст в заголовке "окна" редактирования свойств*/
             editor_title: {
                 type: String,
@@ -232,14 +237,32 @@
 				this.cssContentEditorVisible = 'block';
 			},
 			/**
-			 * @description Обработка на клике кнопки Удалить списка условий или действий 
+			 * @description Обработка на клике кнопки Удалить из списка условий или действий 
 			 * @param  {Event} event {id}
 			*/
 			onClickDeleteItem(event) {
+				//Не используем стандартный window.confirm явно, вместо этого используем
+				//botSchemeEditor.confirm (это позволит заменить стандартный window.confirm например на бустраповский изменив код только компонента botSchemeEditor)
+				//Но этот компонент ничего не должен знать о существовании компонента botSchemeEditor
+
+				//Поэтому здесь эмитим событие, а при выборе пользователем OK вызовем context.removeItem(itemId);
+				this.$emit('editorpropertyevent', {
+					type: 'beforeDeleteItem',
+					oContext: this, 
+					sEditorId : this.id,
+					nItemId: event.id
+				});
+				
+			},
+			/**
+			 * @description Удалить списка условий или действий 
+			 * @param  {Number} itemId идентификатор элемента списка
+			*/
+			removeItem(itemId) {
 				this.content = '';
 				this.cssContentEditorVisible = 'none';
 				this.items = this.items.filter((item, index, arr) => {
-					return item.id != event.id;
+					return item.id != itemId;
 				});
 			}
 		},//end methods

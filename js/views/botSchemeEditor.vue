@@ -27,6 +27,7 @@
 		<!-- Редактор блока условий -->
 		<div class="property-editor-wrapper" :style="{'display':cssConditionEditorVisible}">
 			<bot-scheme-compound-object-editor ref="conditionEditor"
+											   id="conditionEditor"
 											   @editorpropertyevent="onPropertyEditorEvent"
 											   :editor_title="$t('app.EditConditionDialogTitle')"
 											   :str_value_label="$t('app.ConditionType')"
@@ -40,6 +41,7 @@
 		<!-- Редактор блока действий -->
 		<div class="property-editor-wrapper" :style="{'display':cssActionEditorVisible}">
 			<bot-scheme-compound-object-editor ref="actionEditor"
+											   id="actionEditor"
 											   @editorpropertyevent="onPropertyEditorEvent"
 											   :editor_title="$t('app.EditActionDialogTitle')"
 											   :str_value_label="$t('app.ActionType')"
@@ -305,12 +307,17 @@
 					case 'saveMessage':
 						this.$refs.editorArea.updateBlockMessageText(event.id, event.message);
 						break;
+
 					case 'saveCompoundObject':
 						this.$refs.editorArea.updateBlockCompoundData(event.nId, event.sTypeLabel, event.sDescription, event.aItems);
 						break;
+
 					case 'close':
 						this.hideAllEditors();
 						break;
+
+					case 'beforeDeleteItem':
+						this.confirmRemoveItemOfCompoundObject(event);
 				}
 			},
 			/**
@@ -356,6 +363,16 @@
 			*/
 			onPositionChanged(){
 				this.isCurrentSchemeModify = true;
+			},
+			/**
+			 * @description Подтвердить удаление элемента списка
+			 * @param {Object} event
+			*/
+			confirmRemoveItemOfCompoundObject(event) {
+				let sConfirmMessage = event.sEditorId == 'actionEditor' ? 'app.AreYouSureDeleteSubaction' : 'app.AreYouSureDeleteSubcondition';
+				if (this.confirm(this.$t(sConfirmMessage ))) {
+					event.oContext.removeItem(event.nItemId);
+				}
 			}
 		},//end methods
 		//вызывается после data, поля из data видны "напрямую" как this.fieldName
