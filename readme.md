@@ -1,5 +1,7 @@
 # Ru
 
+[En](#en)
+
 [Что это](#что-это)
 
 [Установка](#установка)
@@ -386,6 +388,24 @@ onClickExportToJSONButton() {
 
 # En
 
+[Ru](#ru)
+
+[About](#about)
+
+[Installation](#installation)
+
+[Build](#build)
+
+[Customization of the appearance of circuit blocks](#customization-of-the-appearance-of-circuit-blocks)
+
+[Setting the context menu of components](#setting-the-context-menu-of-components)
+
+[Image Directory Setup](#image-directory-setup)
+
+[Changing exported and imported JSON to a more readable format](#changing-exported-and-imported-json-to-a-more-readable-format)
+
+[Application architecture](#application-architecture)
+
 ## About
 
 Constructor of dialog schemes for bots
@@ -417,6 +437,12 @@ Open a terminal or command line in the directory with package.json and execute
 
 
 ### Customization of the appearance of circuit blocks
+
+[Color scheme and everything that can be changed using css](#color-scheme-and-everything-that-can-be-changed-using-css)
+
+[Custom connectors position on sides of block](#custom-connectors-position-on-sides-of-block)
+
+[About implementation](#about-implementation)
 
 #### Color scheme and everything that can be changed using css
 
@@ -668,6 +694,16 @@ The JSONConverter class should be written according to your wishes for the forma
 
 
 ## Application architecture
+
+[Configuration](#configuration)
+
+[Adding New Block Types](#adding-new-block-types)
+
+[Creating Property Editors for New Block Types](#creating-property-editors-for-new-block-types)
+
+[Hiding the property editor of the new component](#hiding-the-property-editor-of-the-new-component)
+
+[Where are the global variables reteeditor and reteengine?](#where-are-the-global-variables-reteeditor-and-reteengine)
 
 The design used the idea of the Mediator pattern. 
 
