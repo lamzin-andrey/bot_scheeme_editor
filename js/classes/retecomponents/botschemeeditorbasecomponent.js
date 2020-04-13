@@ -80,11 +80,11 @@ class BotSchemeEditorBaseComponent extends Rete.Component {
 	 * @param {Rete.node} node Узел (блок) схемы
 	*/
 	contextMenu(applicationContext, node) {
-		return {
-			'Удалить'() {
+		let oMenu = {
+			'app.Remove'() {
 				applicationContext.removeBlockById(node.id);
 			},
-			'Редактировать'() {
+			'app.Edit'() {
 				applicationContext.emitEditBlockEvent(node.id);
 			},
 			//"Глушим" стандартный пункт контекстного меню, чтобы была возможность его локализовать
@@ -92,6 +92,23 @@ class BotSchemeEditorBaseComponent extends Rete.Component {
 			//"Глушим" стандартный пункт контекстного меню, потому что он не нужен
 			'Clone': false,
 		};
+		return this.localizeMenu(oMenu);
+	}
+	/**
+	 * @description Локализация пунктов контекстного меню
+	 * @param {Object} oMenu 
+	 */
+	localizeMenu(oMenu) {
+		let oTranslatedMenu = {}, i;
+
+		for (i in oMenu) {
+			if (i.indexOf('app.') != -1) {
+				oTranslatedMenu[ this.$t(i) ] = oMenu[i];
+			} else {
+				oTranslatedMenu[i] = oMenu[i];
+			}
+		}
+		return oTranslatedMenu;
 	}
 	/**
 	 * @description Пытается найти в конфигурации данные о позиции коннекоторов на блоке

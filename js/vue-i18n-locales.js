@@ -37,6 +37,10 @@ var locales = {
 			'parallelExecuting' : 'Parallel execution',
 			'EditMessageText' : 'Edit message text',
 			'EditConditionDialogTitle' : 'Edit condition',
+
+			'Remove' : 'Remove',
+			'Edit' : 'Edit',
+
 			'AreYouSureDeleteSubcondition' : 'Are you sure you want to delete part of the condition?',
 			'AreYouSureDeleteSubaction' : 'Are you sure you want to delete part of the action?',
 			'currentSchemeIsChangedWantSaveCurrentScheme' : 'Current scheme has been changed. Want you save it before continue?',
@@ -83,6 +87,10 @@ var locales = {
 			'AreYouSureDeleteSubcondition' : 'Вы уверены, что хотите удалить часть условия?',
 			'AreYouSureDeleteSubaction' : 'Вы уверены, что хотите удалить часть действия?',
 			'parallelExecuting' : 'Параллельное выполнение',
+
+			'Remove' : 'Удалить',
+			'Edit' : 'Редактировать',
+
 			'currentSchemeIsChangedWantSaveCurrentScheme' : 'Текущая схема была изменена. Хотите сохранить его, прежде чем продолжить?',
 			'newSchemeCreate': 'Создать новую схему'
 		},

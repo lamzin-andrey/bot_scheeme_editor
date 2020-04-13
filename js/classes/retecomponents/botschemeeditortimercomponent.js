@@ -37,15 +37,15 @@ class BotSchemeEditorTimerComponent extends BotSchemeEditorBaseComponent {
 	 * @param {Rete.node} node Узел (блок) схемы
 	*/
 	contextMenu(applicationContext, node) {
-		return {
-			'Удалить'() {
+		return this.localizeMenu({
+			'app.Remove'() {
 				applicationContext.removeBlockById(node.id);
 			},
 			//"Глушим" стандартный пункт контекстного меню, чтобы была возможность его локализовать
 			'Delete': false,
 			//"Глушим" стандартный пункт контекстного меню, потому что он не нужен
 			'Clone': false,
-		};
+		});
 	}
 }
 export default BotSchemeEditorTimerComponent;

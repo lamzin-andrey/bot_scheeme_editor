@@ -268,6 +268,20 @@
 				}
 
 				return isCorrectReteJSON;
+			},
+			/**
+			 * @description Регистрация компонентов rete
+			 * @return Array this.aComponents
+			*/
+			registerReteComponents() {
+				/** @property {Array} aComponents  массив экземпляров объектов компонентов, наследников Rete.Component */
+				this.aComponents = [new BotSchemeEditorMessageComponent('MessageComponent', this.botSchemeEditorSocket, this.$t, this.$config),
+					new BotSchemeEditorBeginComponent('BeginComponent', this.botSchemeEditorSocket, this.$t, this.$config),
+					new BotSchemeEditorTimerComponent('TimerComponent', this.botSchemeEditorSocket, this.$t, this.$config),
+					new BotSchemeEditorConditionComponent('ConditionComponent', this.botSchemeEditorSocket, this.$t, this.$config),
+					new BotSchemeEditorActionComponent('ActionComponent', this.botSchemeEditorSocket, this.$t, this.$config)
+				];
+				return this.aComponents;
 			}
 		},//end methods
 		//вызывается после data, поля из data видны "напрямую" как this.fieldName
@@ -306,13 +320,7 @@
 
 			let componentPositionType = '', aComponents, i;
 
-			/** @property {Array} aComponents  массив экземпляров объектов компонентов, наследников Rete.Component */
-			aComponents = this.aComponents = [new BotSchemeEditorMessageComponent('MessageComponent', this.botSchemeEditorSocket, this.$t, this.$config),
-								new BotSchemeEditorBeginComponent('BeginComponent', this.botSchemeEditorSocket, this.$t, this.$config),
-								new BotSchemeEditorTimerComponent('TimerComponent', this.botSchemeEditorSocket, this.$t, this.$config),
-								new BotSchemeEditorConditionComponent('ConditionComponent', this.botSchemeEditorSocket, this.$t, this.$config),
-							 	new BotSchemeEditorActionComponent('ActionComponent', this.botSchemeEditorSocket, this.$t, this.$config)
-							]
+			aComponents = this.registerReteComponents();
 			aComponents.forEach((item, i, arr) => {
 				this.editor.register(item);
 				this.engine.register(item);
